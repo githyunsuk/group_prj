@@ -1,10 +1,9 @@
 package kr.co.sist.jhs;
 
-public class Jhs2 {
+public class Jhs3 {
 
 	public static void main(String[] args) {
 
-		System.out.println("내이름은 주현석");
 		System.out.println("배고프다");
 	}
 
