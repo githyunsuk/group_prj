@@ -66,7 +66,7 @@ public class DbConnection {
 		return con;
 	}//getConn
 	
-	public void closdDB(ResultSet rs, Statement stmt, Connection conn) throws SQLException{
+	public void closeDB(ResultSet rs, Statement stmt, Connection conn) throws SQLException{
 		try {
 			if(rs != null) rs.close();
 			if(stmt != null) stmt.close();
@@ -75,6 +75,7 @@ public class DbConnection {
 		}
 	}//closeDB
 	
+	//db연결 테스트
 	public static void main(String[] args) {
 		try {
 			DbConnection.getInstance().getConn();

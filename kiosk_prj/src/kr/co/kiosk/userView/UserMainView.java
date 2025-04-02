@@ -3,8 +3,6 @@ package kr.co.kiosk.userView;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import kr.co.kiosk.userEvt.UserMainEvt;
 
 @SuppressWarnings("serial")
-public class UserMainView extends JFrame implements ActionListener{
+public class UserMainView extends JFrame {
 
 	private JFrame frame;
 	private JTextField jtfTotalQuantity, jtfTotalPrice;
@@ -189,57 +187,18 @@ public class UserMainView extends JFrame implements ActionListener{
 		jpnlMain.add(bmv,"bmv");
 		jpnlMain.add(smv,"smv");
 		jpnlMain.add(dmv,"dmv");
-		
-		btnRecommendView.addActionListener(this);
-		btnBurgerView.addActionListener(this);
-		btnSideView.addActionListener(this);
-		btnDrinkView.addActionListener(this);
-		
+
 		UserMainEvt ume = new UserMainEvt(this);
 		addWindowListener(ume);
+		btnRecommendView.addActionListener(ume);
+		btnBurgerView.addActionListener(ume);
+		btnSideView.addActionListener(ume);
+		btnDrinkView.addActionListener(ume);
+		btnCancelAll.addActionListener(ume);
 		
 		frame.setVisible(true);
 		
-		//임시데이터
-//		dtm.addRow(new Object[]{"자바버거 세트", 1, "8,000"});
-//		dtm.addRow(new Object[]{"새우버거 세트", 3, "8,000"});
-//		dtm.addRow(new Object[]{"불고기버거 세트", 2, "8,000"});
-//		dtm.addRow(new Object[]{"자바버거 세트", 1, "8,000"});
-//		dtm.addRow(new Object[]{"새우버거 세트", 3, "8,000"});
-		
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		resetButtonColors();
-		//이벤트가 발생하면 Card에 보여줄 패널을 설정하여 보여준다
-		if(e.getSource()==btnRecommendView) {
-			cl.show(jpnlMain, "rmv");
-			btnRecommendView.setBackground(Color.decode("#2196F3"));
-		}
-		if(e.getSource()==btnBurgerView) {
-			cl.show(jpnlMain, "bmv");
-			btnBurgerView.setBackground(Color.decode("#2196F3"));
-			
-		}
-		if(e.getSource()==btnSideView) {
-			cl.show(jpnlMain, "smv");
-			btnSideView.setBackground(Color.decode("#2196F3"));
-		}
-		if(e.getSource()==btnDrinkView) {
-			cl.show(jpnlMain, "dmv");
-			btnDrinkView.setBackground(Color.decode("#2196F3"));
-		}
-
-	}//actionPerformed
-	
-	private void resetButtonColors() {
-	    btnRecommendView.setBackground(null);
-	    btnBurgerView.setBackground(null);
-	    btnSideView.setBackground(null);
-	    btnDrinkView.setBackground(null);
-	}
-
 
 	public JFrame getFrame() {
 		return frame;
