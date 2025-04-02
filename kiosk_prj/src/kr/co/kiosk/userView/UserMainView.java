@@ -36,9 +36,13 @@ public class UserMainView extends JFrame {
 	private BurgerMenuView bmv;
 	private SideMenuView smv;
 	private DrinkMenuView dmv;
+	
+	private boolean isHall;
 
 
-	public UserMainView() {
+	public UserMainView(boolean isHall) {
+		this.isHall = isHall;
+		
 		frame = new JFrame();
 		frame.setBounds(400, 10, 800, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,7 +89,7 @@ public class UserMainView extends JFrame {
 		frame.getContentPane().add(jlblTotalPrice);
 		
 		//dtm 설정
-		String[] columnName = {"메뉴","수량","가격"};
+		String[] columnName = {"메뉴","수량","가격","메뉴id"};
 		dtm = new DefaultTableModel(columnName, 0);
 		
 		table = new JTable(dtm);
@@ -95,6 +99,12 @@ public class UserMainView extends JFrame {
 		table.getColumnModel().getColumn(0).setMaxWidth(200); // 최대 너비
 		table.getColumnModel().getColumn(0).setPreferredWidth(200); // 기본 너비
 		
+		//메뉴Id컬럼 숨기기(메뉴ID를 받아와야해서 어쩔 수 없이 dtm에 저장은 하되, 사용자에게는 보이지 않게
+		table.getColumnModel().getColumn(3).setMinWidth(0);
+		table.getColumnModel().getColumn(3).setMaxWidth(0);
+		table.getColumnModel().getColumn(3).setWidth(0);
+		table.getColumnModel().getColumn(3).setPreferredWidth(0);
+		
 		//행의크기 설정.
 		table.setRowHeight(38);
 		
@@ -102,53 +112,7 @@ public class UserMainView extends JFrame {
 		jsp.setBounds(89, 517, 655, 225);
 		frame.getContentPane().add(jsp);
 		
-		btnPlusOne = new JButton("+");
-		btnPlusOne.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnPlusOne.setBounds(42, 543, 45, 35);
-//		btnNewButton_5.setVisible(false);
-		frame.getContentPane().add(btnPlusOne);
-		
-		//수량 변경 및 메뉴 취소 버튼들
-		btnPlusTwo = new JButton("+");
-		btnPlusTwo.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnPlusTwo.setBounds(42, 578, 45, 35);
-		frame.getContentPane().add(btnPlusTwo);
-		
-		btnPlusThree = new JButton("+");
-		btnPlusThree.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnPlusThree.setBounds(42, 611, 45, 35);
-		frame.getContentPane().add(btnPlusThree);
-		
-		btnMinusOne = new JButton("-");
-		btnMinusOne.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnMinusOne.setBounds(0, 543, 45, 35);
-		frame.getContentPane().add(btnMinusOne);
-		 
-		btnMinusTwo = new JButton("-");
-		btnMinusTwo.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnMinusTwo.setBounds(0, 578, 45, 35);
-		frame.getContentPane().add(btnMinusTwo);
-		
-		btnMinusThree = new JButton("-");
-		btnMinusThree.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnMinusThree.setBounds(0, 611, 45, 35);
-		frame.getContentPane().add(btnMinusThree);
-		
-		btnCancelOne = new JButton("x");
-		btnCancelOne.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnCancelOne.setBounds(745, 543, 39, 35);
-		frame.getContentPane().add(btnCancelOne);
-		
-		btnCancelTwo = new JButton("x");
-		btnCancelTwo.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnCancelTwo.setBounds(745, 578, 39, 35);
-		frame.getContentPane().add(btnCancelTwo);
-		
-		btnCancelThree = new JButton("x");
-		btnCancelThree.setFont(new Font("굴림", Font.PLAIN, 10));
-		btnCancelThree.setBounds(745, 611, 39, 35);
-		frame.getContentPane().add(btnCancelThree);
-		
+	
 		//상단 메뉴바
 		jpnlBtn = new JPanel();
 		jpnlBtn.setBounds(0, 45, 784, 114);
@@ -190,11 +154,13 @@ public class UserMainView extends JFrame {
 
 		UserMainEvt ume = new UserMainEvt(this);
 		addWindowListener(ume);
+		
 		btnRecommendView.addActionListener(ume);
 		btnBurgerView.addActionListener(ume);
 		btnSideView.addActionListener(ume);
 		btnDrinkView.addActionListener(ume);
 		btnCancelAll.addActionListener(ume);
+		btnOrder.addActionListener(ume);
 		
 		frame.setVisible(true);
 		
@@ -342,6 +308,10 @@ public class UserMainView extends JFrame {
 
 	public DrinkMenuView getDmv() {
 		return dmv;
+	}
+
+	public boolean isHall() {
+		return isHall;
 	}
 	
 	

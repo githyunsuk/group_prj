@@ -36,15 +36,19 @@ public class MainPageEvt extends WindowAdapter implements ActionListener {
 
 		if (e.getSource() == mpv.getBtnHall()) { // 매장식사 버튼 클릭시
 			isHall = true;
-			new UserMainView();
+			new UserMainView(isHall);
 			mpv.dispose();
 		}
 
 		if (e.getSource() == mpv.getBtnTakeout()) { // 포장주문 버튼 클릭시
 			isHall = false;
-			new UserMainView();
+			new UserMainView(isHall);
 			mpv.dispose();
 		}
+	}
+
+	public boolean isHall() {
+		return isHall;
 	}
 
 }
