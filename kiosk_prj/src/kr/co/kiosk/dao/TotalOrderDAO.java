@@ -23,7 +23,8 @@ public class TotalOrderDAO {
 		return toDAO;
 	}//getInstance
 	
-	public void insertTotalOrder(TotalOrderVO toVO) throws SQLException {
+	//회원 전용 insert
+	public void insertTotalOrderMember(TotalOrderVO toVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		
@@ -33,21 +34,50 @@ public class TotalOrderDAO {
 			con = dbCon.getConn();
 			StringBuilder insertTotalOrder = new StringBuilder();
 			insertTotalOrder
-			.append("	insert into total_order(order_id, order_type, order_status)	")
-			.append("	values(?,?,?)				");
+			.append("	insert into total_order(order_id, member_id, order_type, order_status)	")
+			.append("	values(?,?,?,?)				");
 			
 			pstmt = con.prepareStatement(insertTotalOrder.toString());
 			
 			pstmt.setInt(1, toVO.getOrderId());
-			pstmt.setString(2, toVO.getOrderType());
-			pstmt.setString(3, toVO.getOrderStatus());
+			pstmt.setInt(2, toVO.getMemberId());
+			pstmt.setString(3, toVO.getOrderType());
+			pstmt.setString(4, toVO.getOrderStatus());
 			
 			pstmt.executeUpdate();
 			
 		} finally{
 			dbCon.closeDB(null, pstmt, con);
 		}
-	}//insertMenuOrder
+	}//insertTotalOrderMember
+	
+	//비회원 전용 insert
+	public void insertTotalOrderGuest(TotalOrderVO toVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			con = dbCon.getConn();
+			StringBuilder insertTotalOrder = new StringBuilder();
+			insertTotalOrder
+			.append("	insert into total_order(order_id,order_type, order_status, guest_id)	")
+			.append("	values(?,?,?,?)				");
+			
+			pstmt = con.prepareStatement(insertTotalOrder.toString());
+			
+			pstmt.setInt(1, toVO.getOrderId());
+			pstmt.setString(2, toVO.getOrderType());
+			pstmt.setString(3, toVO.getOrderStatus());
+			pstmt.setInt(4, toVO.getGuestId());
+			
+			pstmt.executeUpdate();
+			
+		} finally{
+			dbCon.closeDB(null, pstmt, con);
+		}
+	}//insertTotalOrderGuest
 	
 	public void updateTotalOrder(int orderId) {
 		

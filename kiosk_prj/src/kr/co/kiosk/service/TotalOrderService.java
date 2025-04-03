@@ -11,18 +11,31 @@ public class TotalOrderService {
 
 	}// TotalOrderService
 
-	public boolean addTotalOrder(TotalOrderVO toVO) {
+	public boolean addTotalOrderMember(TotalOrderVO toVO) {
 		boolean flag = false;
 		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
 
 		try {
-			toDAO.insertTotalOrder(toVO);
+			toDAO.insertTotalOrderMember(toVO);
 			flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return flag;
-	}// addTotalOrder
+	}// addTotalOrderMember
+	
+	public boolean addTotalOrderGuest(TotalOrderVO toVO) {
+		boolean flag = false;
+		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
+
+		try {
+			toDAO.insertTotalOrderGuest(toVO);
+			flag = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}// addTotalOrderGuest
 
 	public int acquireNextOrderId() {
 		int orderId = -1;

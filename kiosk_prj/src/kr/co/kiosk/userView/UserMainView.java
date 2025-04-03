@@ -29,8 +29,8 @@ public class UserMainView extends JFrame {
 	private JPanel jpnlMain, jpnlBtn;
 	
 	private JButton btnOrder, btnStamp, btnCancelAll, btnRecommendView, btnBurgerView, btnSideView, btnDrinkView;
-	private JButton btnPlusOne, btnPlusTwo, btnPlusThree, btnMinusOne, btnMinusTwo, btnMinusThree,
-					btnCancelOne, btnCancelTwo, btnCancelThree;
+	private JButton btnPlus, btnMinus, btnCancel;
+	
 	
 	private RecommendMenuView rmv;
 	private BurgerMenuView bmv;
@@ -44,7 +44,7 @@ public class UserMainView extends JFrame {
 		this.isHall = isHall;
 		
 		frame = new JFrame();
-		frame.setBounds(400, 10, 800, 900);
+		frame.setBounds(400, 10, 800, 950);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -55,37 +55,37 @@ public class UserMainView extends JFrame {
 		
 		btnOrder = new JButton("주 문");
 		btnOrder.setFont(new Font("굴림", Font.PLAIN, 18));
-		btnOrder.setBounds(657, 754, 115, 97);
+		btnOrder.setBounds(657, 804, 115, 97);
 		frame.getContentPane().add(btnOrder);
 		
 		btnStamp = new JButton("스탬프");
 		btnStamp.setFont(new Font("굴림", Font.PLAIN, 18));
-		btnStamp.setBounds(530, 754, 115, 97);
+		btnStamp.setBounds(530, 804, 115, 97);
 		frame.getContentPane().add(btnStamp);
 		
 		btnCancelAll = new JButton("전체 취소");
 		btnCancelAll.setFont(new Font("굴림", Font.PLAIN, 18));
-		btnCancelAll.setBounds(403, 754, 115, 97);
+		btnCancelAll.setBounds(403, 804, 115, 97);
 		frame.getContentPane().add(btnCancelAll);
 		
 		jtfTotalQuantity = new JTextField();
-		jtfTotalQuantity.setBounds(177, 754, 215, 35);
-		frame.getContentPane().add(jtfTotalQuantity);
 		jtfTotalQuantity.setColumns(10);
+		jtfTotalQuantity.setBounds(177, 804, 215, 35);
+		frame.getContentPane().add(jtfTotalQuantity);
 		
 		jtfTotalPrice = new JTextField();
 		jtfTotalPrice.setColumns(10);
-		jtfTotalPrice.setBounds(177, 816, 215, 35);
+		jtfTotalPrice.setBounds(177, 864, 215, 35);
 		frame.getContentPane().add(jtfTotalPrice);
 		
 		JLabel jlblTotalQuantity = new JLabel("수 량");
 		jlblTotalQuantity.setFont(new Font("굴림", Font.PLAIN, 20));
-		jlblTotalQuantity.setBounds(65, 752, 85, 35);
+		jlblTotalQuantity.setBounds(65, 804, 85, 35);
 		frame.getContentPane().add(jlblTotalQuantity);
 		
 		JLabel jlblTotalPrice = new JLabel("금 액");
 		jlblTotalPrice.setFont(new Font("굴림", Font.PLAIN, 20));
-		jlblTotalPrice.setBounds(65, 816, 85, 35);
+		jlblTotalPrice.setBounds(65, 864, 85, 35);
 		frame.getContentPane().add(jlblTotalPrice);
 		
 		//dtm 설정
@@ -95,9 +95,9 @@ public class UserMainView extends JFrame {
 		table = new JTable(dtm);
 		
 		table.setDefaultEditor(Object.class, null);
-		table.getColumnModel().getColumn(0).setMinWidth(200); // 최소 너비
-		table.getColumnModel().getColumn(0).setMaxWidth(200); // 최대 너비
-		table.getColumnModel().getColumn(0).setPreferredWidth(200); // 기본 너비
+		table.getColumnModel().getColumn(0).setMinWidth(400); // 최소 너비
+		table.getColumnModel().getColumn(0).setMaxWidth(400); // 최대 너비
+		table.getColumnModel().getColumn(0).setPreferredWidth(400); // 기본 너비
 		
 		//메뉴Id컬럼 숨기기(메뉴ID를 받아와야해서 어쩔 수 없이 dtm에 저장은 하되, 사용자에게는 보이지 않게
 		table.getColumnModel().getColumn(3).setMinWidth(0);
@@ -109,9 +109,18 @@ public class UserMainView extends JFrame {
 		table.setRowHeight(38);
 		
 		jsp = new JScrollPane(table);
-		jsp.setBounds(89, 517, 655, 225);
+		jsp.setBounds(15, 517, 755, 225);
 		frame.getContentPane().add(jsp);
 		
+		btnMinus = new JButton("-");
+		btnMinus.setBounds(307,754,50,30);
+		frame.getContentPane().add(btnMinus);
+		btnPlus = new JButton("+");
+		btnPlus.setBounds(367, 754,50,30);
+		frame.getContentPane().add(btnPlus);
+		btnCancel = new JButton("x");
+		btnCancel.setBounds(427,754,50,30);
+		frame.getContentPane().add(btnCancel);
 	
 		//상단 메뉴바
 		jpnlBtn = new JPanel();
@@ -138,7 +147,7 @@ public class UserMainView extends JFrame {
 		
 		cl=new CardLayout();
 		jpnlMain = new JPanel(cl);
-		jpnlMain.setBounds(0, 161, 772, 346);
+		jpnlMain.setBounds(6, 161, 772, 346);
 		frame.getContentPane().add(jpnlMain);
 		
 		//카드레이아웃 패널 생성
@@ -161,10 +170,14 @@ public class UserMainView extends JFrame {
 		btnDrinkView.addActionListener(ume);
 		btnCancelAll.addActionListener(ume);
 		btnOrder.addActionListener(ume);
+		btnPlus.addActionListener(ume);
+		btnMinus.addActionListener(ume);
+		btnCancel.addActionListener(ume);
 		
 		frame.setVisible(true);
 		
 	}
+
 
 	public JFrame getFrame() {
 		return frame;
@@ -246,48 +259,18 @@ public class UserMainView extends JFrame {
 	}
 
 
-	public JButton getBtnPlusOne() {
-		return btnPlusOne;
+	public JButton getBtnPlus() {
+		return btnPlus;
 	}
 
 
-	public JButton getBtnPlusTwo() {
-		return btnPlusTwo;
+	public JButton getBtnMinus() {
+		return btnMinus;
 	}
 
 
-	public JButton getBtnPlusThree() {
-		return btnPlusThree;
-	}
-
-
-	public JButton getBtnMinusOne() {
-		return btnMinusOne;
-	}
-
-
-	public JButton getBtnMinusTwo() {
-		return btnMinusTwo;
-	}
-
-
-	public JButton getBtnMinusThree() {
-		return btnMinusThree;
-	}
-
-
-	public JButton getBtnCancelOne() {
-		return btnCancelOne;
-	}
-
-
-	public JButton getBtnCancelTwo() {
-		return btnCancelTwo;
-	}
-
-
-	public JButton getBtnCancelThree() {
-		return btnCancelThree;
+	public JButton getBtnCancel() {
+		return btnCancel;
 	}
 
 
@@ -310,9 +293,11 @@ public class UserMainView extends JFrame {
 		return dmv;
 	}
 
+
 	public boolean isHall() {
 		return isHall;
 	}
+	
 	
 	
 }

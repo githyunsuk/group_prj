@@ -12,10 +12,20 @@ public class TotalOrderVO {
 		super();
 	}
 	
-	public TotalOrderVO(int orderId, String orderType, String orderStatus) {
+	//회원전용 생성자
+	public TotalOrderVO(int orderId, int memberId, String orderType, String orderStatus) {
+		this.orderId = orderId;
+		this.memberId = memberId;
+		this.orderType = orderType;
+		this.orderStatus = orderStatus;
+	}
+	
+	//비회원전용 생성자
+	public TotalOrderVO(int orderId, String orderType, String orderStatus, int guestId) {
 		this.orderId = orderId;
 		this.orderType = orderType;
 		this.orderStatus = orderStatus;
+		this.guestId = guestId;
 	}
 
 	public TotalOrderVO(int memberId, int price, int orderWaitingNumber, int guestId, String orderType,
