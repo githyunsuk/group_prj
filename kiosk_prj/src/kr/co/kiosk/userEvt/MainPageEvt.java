@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.co.kiosk.adminView.AdminMainView;
 import kr.co.kiosk.dao.MenuDAO;
 import kr.co.kiosk.userView.MainPageView;
 import kr.co.kiosk.userView.UserMainView;
@@ -31,7 +32,8 @@ public class MainPageEvt extends WindowAdapter implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == mpv.getBtnAdminView()) { // 관리자모드 버튼 클릭시
-
+			mpv.dispose();
+			new AdminMainView().setVisible(true);
 		}
 
 		if (e.getSource() == mpv.getBtnHall()) { // 매장식사 버튼 클릭시
