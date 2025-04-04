@@ -48,7 +48,7 @@ public class AdminOrderDAO {
 			
 			while(rs.next()) {
 				TotalOrderVO toVO = new TotalOrderVO();
-				toVO.setGuestId(0);
+				//toVO.setGuestId(0);
 				toVO.setOrderId(rs.getInt("ORDER_ID"));
 				toVO.setMemberId((rs.getInt("MEMBER_ID"))); //null -> return 0
 				toVO.setOrderType((rs.getString("ORDER_TYPE")));
