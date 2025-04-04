@@ -4,22 +4,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import kr.co.kiosk.adminView.MemberManageView;
 import kr.co.kiosk.adminView.MenuManageView;
+import kr.co.kiosk.service.MemberService;
+import kr.co.kiosk.vo.MemberVO;
+import kr.co.kiosk.vo.MenuVO;
 
 public class MemberManageEvt implements ActionListener, MouseListener{
 	
 	private MemberManageView mmv;
+//	private MemberService memberService;
 	
 	public MemberManageEvt(MemberManageView mmv) {
 		
 		this.mmv=mmv;
+//		this.memberService=new MemberService();
+		
 		
 		this.mmv.getJbtnSearch().addActionListener(this);
 		this.mmv.getJbtnselect().addActionListener(this);
@@ -30,8 +38,17 @@ public class MemberManageEvt implements ActionListener, MouseListener{
 		this.mmv.getJbtnStempAdd().addActionListener(this);
 		this.mmv.getJbtnStempSubtract().addActionListener(this);
 
+//		loadMember();
 		
 		
+	}
+	
+	//DB 연결
+	private void loadMember() {
+
+		
+		
+
 	}
 	
 
@@ -123,12 +140,8 @@ public class MemberManageEvt implements ActionListener, MouseListener{
 	      
 	}
 
-
-
-
-
 	private void Delete() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

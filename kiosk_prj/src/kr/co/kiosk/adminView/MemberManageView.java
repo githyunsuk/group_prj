@@ -40,12 +40,12 @@ public class MemberManageView extends Panel  {
 
 		    // 검색 텍스트 필드 설정
 			jtfSearch = new JTextField();
-	        jtfSearch.setBounds(80, 20, 200, 25);
+	        jtfSearch.setBounds(400, 20, 200, 25);
 	        add(jtfSearch);
 	        
 	        // 검색 버튼 설정
 	        jbtnSearch=new JButton("검색");
-	        jbtnSearch.setBounds(290, 20, 80, 25);
+	        jbtnSearch.setBounds(600, 20, 80, 25);
 	        add(jbtnSearch);
 
 	     // 테이블의 열(column)을 정의하고, 테이블 모델을 생성
@@ -55,56 +55,56 @@ public class MemberManageView extends Panel  {
 	        
 	        // 테이블을 스크롤 페인에 넣어 화면에 표시
 	        JScrollPane jsp=new JScrollPane(jtblMember);
-	        jsp.setBounds(20, 60, 370, 400);
+	        jsp.setBounds(50, 60, 700, 400);
 	        add(jsp);
 	        
 	        
 	        // 일괄 선택 버튼 추가
 	        jbtnselect=new JButton("일괄 선택");
-	        jbtnselect.setBounds(400, 110, 100, 30);
+	        jbtnselect.setBounds(180, 500, 100, 30);
 	        add(jbtnselect);
 	        
 	        // 회원 삭제 버튼 추가
 	        jbtnDelete=new JButton("회원 삭제");
-	        jbtnDelete.setBounds(530, 110, 100, 30);
+	        jbtnDelete.setBounds(350, 500, 100, 30);
 	        add(jbtnDelete);
 	        
 	        // 초기화 버튼 추가
 	        jbtnReset=new JButton("초기화");
-	        jbtnReset.setBounds(660, 110, 100, 30);
+	        jbtnReset.setBounds(520, 500, 100, 30);
 	        add(jbtnReset);
 	        
 	        // 포인트 지급/차감 관련 레이블 및 텍스트 필드 추가
 	        JLabel jlblpoint = new JLabel("포인트 지급/차감");
-	        jlblpoint.setBounds(400,290,100, 30);
+	        jlblpoint.setBounds(180,570,100, 30);
 	        add(jlblpoint);
 	        
 	        jtfPoint=new JTextField();
-	        jtfPoint.setBounds(500,290,100, 25);
+	        jtfPoint.setBounds(280,570,150, 30);
 	        add(jtfPoint);
 	        
 	        // 포인트 지급 및 차감 버튼 추가
 	        jbtnPointAdd=new JButton("지급");
 	        jbtnPointSubtract=new JButton("차감");
-	        jbtnPointAdd.setBounds(610, 290, 80, 25);
-	        jbtnPointSubtract.setBounds(695, 290, 80, 25);
+	        jbtnPointAdd.setBounds(440, 570, 80, 30);
+	        jbtnPointSubtract.setBounds(530, 570, 80, 30);
 	        add(jbtnPointAdd);
 	        add(jbtnPointSubtract);
 	        
 	     // 스탬프 지급/차감 관련 레이블 및 텍스트 필드 추가
 	        JLabel jlblStemp = new JLabel("스탬프 지급/차감");
-	        jlblStemp.setBounds(400,210,100, 30);
+	        jlblStemp.setBounds(180,630,100, 30);
 	        add(jlblStemp);
 	        
 	        jtfStemp=new JTextField();
-	        jtfStemp.setBounds(500,210,100, 25);
+	        jtfStemp.setBounds(280,630,150, 30);
 	        add(jtfStemp);
 	        
 	        // 스탬프 지급 및 차감 버튼 추가
 	        jbtnStempAdd=new JButton("지급");
 	        jbtnStempSubtract=new JButton("차감");
-	        jbtnStempAdd.setBounds(610, 210, 80, 25);
-	        jbtnStempSubtract.setBounds(695, 210, 80, 25);
+	        jbtnStempAdd.setBounds(440, 630, 80, 30);
+	        jbtnStempSubtract.setBounds(530, 630, 80, 30);
 	        add(jbtnStempAdd);
 	        add(jbtnStempSubtract);
 	        

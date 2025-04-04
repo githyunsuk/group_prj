@@ -3,6 +3,8 @@ package kr.co.kiosk.userView;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,8 +30,8 @@ public class UserMainView extends JFrame {
 	private CardLayout cl;
 	private JPanel jpnlMain, jpnlBtn;
 	
-	private JButton btnOrder, btnStamp, btnCancelAll, btnRecommendView, btnBurgerView, btnSideView, btnDrinkView;
-	private JButton btnPlus, btnMinus, btnCancel;
+	private JButton btnHome, btnOrder, btnStamp, btnCancelAll, btnRecommendView, btnBurgerView, btnSideView, btnDrinkView;
+	private JButton btnPlus, btnMinus, btnCancel; 
 	
 	
 	private RecommendMenuView rmv;
@@ -53,6 +55,10 @@ public class UserMainView extends JFrame {
 		jlblSsangyongBurger.setBounds(12, 10, 115, 45);
 		frame.getContentPane().add(jlblSsangyongBurger);
 		
+		btnHome = new JButton("HOME");
+		btnHome.setBounds(662,10,115,45);
+		frame.getContentPane().add(btnHome);
+		
 		btnOrder = new JButton("주 문");
 		btnOrder.setFont(new Font("굴림", Font.PLAIN, 18));
 		btnOrder.setBounds(657, 804, 115, 97);
@@ -70,11 +76,13 @@ public class UserMainView extends JFrame {
 		
 		jtfTotalQuantity = new JTextField();
 		jtfTotalQuantity.setColumns(10);
+		jtfTotalQuantity.setEditable(false);
 		jtfTotalQuantity.setBounds(177, 804, 215, 35);
 		frame.getContentPane().add(jtfTotalQuantity);
 		
 		jtfTotalPrice = new JTextField();
 		jtfTotalPrice.setColumns(10);
+		jtfTotalPrice.setEditable(false);
 		jtfTotalPrice.setBounds(177, 864, 215, 35);
 		frame.getContentPane().add(jtfTotalPrice);
 		
@@ -162,20 +170,28 @@ public class UserMainView extends JFrame {
 		jpnlMain.add(dmv,"dmv");
 
 		UserMainEvt ume = new UserMainEvt(this);
-		addWindowListener(ume);
+		frame.addWindowListener(ume);
 		
 		btnRecommendView.addActionListener(ume);
 		btnBurgerView.addActionListener(ume);
-		btnSideView.addActionListener(ume);
+		btnSideView.addActionListener(ume); 
 		btnDrinkView.addActionListener(ume);
 		btnCancelAll.addActionListener(ume);
 		btnOrder.addActionListener(ume);
 		btnPlus.addActionListener(ume);
 		btnMinus.addActionListener(ume);
 		btnCancel.addActionListener(ume);
+		btnHome.addActionListener(ume);
+		btnStamp.addActionListener(ume);
+		
 		
 		frame.setVisible(true);
 		
+	}
+
+
+	public JButton getBtnHome() {
+		return btnHome;
 	}
 
 
