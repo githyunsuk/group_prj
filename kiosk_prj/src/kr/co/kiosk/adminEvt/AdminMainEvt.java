@@ -4,19 +4,28 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
+import kr.co.kiosk.adminService.OrderManageService;
 import kr.co.kiosk.adminView.AdminCenterPanel;
 import kr.co.kiosk.adminView.AdminMainView;
+import kr.co.kiosk.adminView.OrderManageView;
 import kr.co.kiosk.userView.MainPageView;
+import kr.co.kiosk.vo.TotalOrderVO;
 
 public class AdminMainEvt extends WindowAdapter implements ActionListener {
 	
 	private AdminCenterPanel acp;
 	private AdminMainView amv;
+	private OrderManageView omv;
+	private OrderManageService oms;
 	
 	public AdminMainEvt(AdminMainView amv) {
 		this.amv = amv;
-		this.acp = new AdminCenterPanel();
+		this.acp = amv.getAdminCenterPanel();
+		this.omv = amv.getOrderManageView();
+		this.oms = new OrderManageService();
+		
 	}
 
 	@Override
@@ -36,6 +45,9 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 		if(e.getSource() == amv.getAdminMainButtons().getBtnOrder()) {
 			System.out.println("주문관리 버튼 클릭");
 			acp.showPanel("ORDER");
+			List<TotalOrderVO> voList = oms.totalOrderVOList();
+			omv.updateTable(voList);
+			
 		}
 		if(e.getSource() == amv.getAdminMainButtons().getBtnMenu()) {
 			System.out.println("메뉴관리 버튼 클릭");

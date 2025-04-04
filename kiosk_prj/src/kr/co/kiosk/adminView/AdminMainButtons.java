@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import kr.co.kiosk.adminEvt.OrderManageEvt;
+
 public class AdminMainButtons extends JPanel {
 	
 	private JButton btnLogout;
@@ -33,11 +35,11 @@ public class AdminMainButtons extends JPanel {
 		btnMember = new  JButton("회원관리");
 		
 		//버튼 색, 크기 설정
-		btnOrder.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-		btnMenu.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-		btnFinancial.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-		btnStock.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-		btnMember.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		btnOrder.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		btnMenu.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		btnFinancial.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		btnStock.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		btnMember.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		
 		add(btnLogout);
 		add(new JLabel(" "));
@@ -50,7 +52,6 @@ public class AdminMainButtons extends JPanel {
 		add(btnFinancial);
 		add(btnStock);
 		add(btnMember);
-		
 		
 	}
 

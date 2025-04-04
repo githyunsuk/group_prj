@@ -14,6 +14,12 @@ public class AdminCenterPanel extends JPanel {
 	private CardLayout cardLayout;
 	private JPanel orderPanel, menuPanel, financialPanel, stockPanel, memberPanel;
 	
+	private OrderManageView orderPage;
+	private MenuManageView menuPage;
+	private FinancialManageView financialPage;
+	private StockManageView stockPage;
+	private MemberManageView memberPage;
+	
 	public AdminCenterPanel() {
 		
 		//레이아웃을 카드레이아웃으로 변경
@@ -22,31 +28,31 @@ public class AdminCenterPanel extends JPanel {
 		
 		//주문관리
 		orderPanel = new JPanel();
-		OrderManageView orderPage = new OrderManageView();
+		orderPage = new OrderManageView();
 		orderPanel.add(orderPage);
 		
 		
 		//메뉴관리
 		menuPanel = new JPanel();
-		MenuManageView menuPage = new MenuManageView();
+		menuPage = new MenuManageView();
 		menuPanel.add(menuPage);
 		
 		
 		//정산관리
 		financialPanel = new JPanel();
-		FinancialManageView financialPage = new FinancialManageView();
+		financialPage = new FinancialManageView();
 		financialPanel.add(financialPage);
 		
 		
 		//재고관리
 		stockPanel = new JPanel();
-		StockManageView stockPage = new StockManageView();
+		stockPage = new StockManageView();
 		stockPanel.add(stockPage);
 		
 		
 		//회원관리
 		memberPanel = new JPanel();
-		MemberManageView memberPage = new MemberManageView();
+		memberPage = new MemberManageView();
 		memberPanel.add(memberPage);
 		
 		//cardLayout에 추가
@@ -65,6 +71,50 @@ public class AdminCenterPanel extends JPanel {
 	
 	public void showPanel(String panelName) {
 		cardLayout.show(this, panelName);
+	}
+
+	public CardLayout getCardLayout() {
+		return cardLayout;
+	}
+
+	public JPanel getOrderPanel() {
+		return orderPanel;
+	}
+
+	public JPanel getMenuPanel() {
+		return menuPanel;
+	}
+
+	public JPanel getFinancialPanel() {
+		return financialPanel;
+	}
+
+	public JPanel getStockPanel() {
+		return stockPanel;
+	}
+
+	public JPanel getMemberPanel() {
+		return memberPanel;
+	}
+
+	public OrderManageView getOrderPage() {
+		return orderPage;
+	}
+
+	public MenuManageView getMenuPage() {
+		return menuPage;
+	}
+
+	public FinancialManageView getFinancialPage() {
+		return financialPage;
+	}
+
+	public StockManageView getStockPage() {
+		return stockPage;
+	}
+
+	public MemberManageView getMemberPage() {
+		return memberPage;
 	}
 	
 	
