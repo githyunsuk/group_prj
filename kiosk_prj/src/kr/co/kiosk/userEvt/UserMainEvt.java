@@ -5,11 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
-import kr.co.kiosk.service.MemberService;
 import kr.co.kiosk.service.MenuOrderService;
 import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.service.TotalOrderService;
+import kr.co.kiosk.userView.AddIngredientsView;
+import kr.co.kiosk.userView.MainPageView;
 import kr.co.kiosk.userView.UserMainView;
 import kr.co.kiosk.vo.MenuOrderVO;
 import kr.co.kiosk.vo.MenuVO;
@@ -20,10 +22,11 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 	private UserMainView umv;
 	private String orderType;
 	private boolean isMember; // 회원한지 판단하는 변수
-	private int memberId; // 회원/비회원 id 저장하는 변수
+	private int memberId; // 회원 아이디
 
 	public UserMainEvt(UserMainView umv) {
 		this.umv = umv;
+		isMember = false;
 	}
 
 	// 패널 바꿀 때 마다 버튼 색 초기화 하는 method
@@ -36,12 +39,16 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 	}
 
 	@Override
-	public void windowClosing(WindowEvent e) {
-		umv.dispose();
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == umv.getBtnHome()) {
+			umv.getFrame().dispose();
+			new MainPageView();
+		}
+		
+		//우선 스탬프 버튼으로 jdialog 활성화
+		if(e.getSource() == umv.getBtnStamp()) {
+			new AddIngredientsView(umv);
+		}
 
 		// 이벤트가 발생하면 Card에 보여줄 패널을 설정하여 보여준다
 		if (e.getSource() == umv.getBtnRecommendView()) {
@@ -152,20 +159,17 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 			}
 
 			// 빈 주문관리 생성
-			MemberService memS = new MemberService();
 			TotalOrderVO toVO;
 			TotalOrderService tos = new TotalOrderService();
 
-//						//회원이면~?(나중에 구현 현재는 게스트만)
-//						if (isMember) {
-//							
-//						} else {
-//							
-//						}
-
-			memberId =memS.addGuest();
-			toVO = new TotalOrderVO(tos.acquireNextOrderId(), orderType, "주문중", memberId);
-			tos.addTotalOrderGuest(toVO);
+			// 회원이면
+			if (isMember) {
+				toVO = new TotalOrderVO(tos.acquireNextOrderId(), memberId, orderType, "주문중");
+				tos.addTotalOrderMember(toVO);
+			} else {
+				toVO = new TotalOrderVO(tos.acquireNextOrderId(), orderType, "주문중");
+				tos.addTotalOrderGuest(toVO);
+			}
 
 			// 메뉴별 주문 생성
 			MenuService ms = new MenuService();
@@ -173,7 +177,7 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 			for (int i = 0; i < umv.getDtm().getRowCount(); i++) {
 				MenuVO mVO = ms.searchMenu((int) umv.getDtm().getValueAt(i, 3));
 				MenuOrderVO moVO = new MenuOrderVO(toVO.getOrderId(), mVO.getMenuId(), mVO.getCategoryId(),
-						(int) umv.getDtm().getValueAt(i, 1));
+						(int) umv.getDtm().getValueAt(i, 1), (int) umv.getDtm().getValueAt(i, 2));
 				mos.addMenuOrder(moVO);
 			}
 		}

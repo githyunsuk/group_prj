@@ -36,6 +36,42 @@ public class TotalOrderService {
 		}
 		return flag;
 	}// addTotalOrderGuest
+	
+	public boolean modifyTotalOrder(TotalOrderVO toVO) {
+		boolean flag = false;
+		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
+		try {
+			toDAO.updateTotalOrder(toVO);
+			flag = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}//modifyTotalOrder
+	
+	public boolean removeTotalOrder(int orderId) {
+		boolean flag= false;
+		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
+		try {
+			toDAO.deleteTotalOrder(orderId);
+			flag = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}//removeTotalOrder
+	
+	public TotalOrderVO searchTotalOrder(int orderId) {
+		TotalOrderVO toVO = null;
+		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
+		try {
+			toVO = toDAO.selectTotalOrder(orderId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return toVO;
+	}//searchTotalOrder
 
 	public int acquireNextOrderId() {
 		int orderId = -1;
@@ -46,5 +82,6 @@ public class TotalOrderService {
 			e.printStackTrace();
 		}
 		return orderId;
-	}
+	}//acquireNextOrderId
+
 }

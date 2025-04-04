@@ -42,7 +42,7 @@ public class MenuDAO {
 			con = dbConn.getConn();
 
 			StringBuilder insertMenu = new StringBuilder();
-			insertMenu.append("insert into menu").append("(category_id,menu_name,unit_name,weight,calorie,price,");
+			insertMenu.append("insert into menu").append("(menu_id,category_id,menu_name,unit_name,weight,calorie,price,");
 			if (!mVO.getImgName().isEmpty()) {
 				insertMenu.append("image, img_name,");
 			}

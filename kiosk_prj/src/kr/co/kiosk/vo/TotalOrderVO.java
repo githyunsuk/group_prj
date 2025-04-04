@@ -4,12 +4,11 @@ import java.sql.Date;
 
 public class TotalOrderVO {
 
-	private int orderId, memberId, price, orderWaitingNumber, guestId;
+	private int orderId, memberId, price, orderWaitingNumber;
 	private String orderType, orderStatus;
 	private Date orderDateTime;
 	
 	public TotalOrderVO() {
-		super();
 	}
 	
 	//회원전용 생성자
@@ -20,20 +19,19 @@ public class TotalOrderVO {
 		this.orderStatus = orderStatus;
 	}
 	
-	//비회원전용 생성자
-	public TotalOrderVO(int orderId, String orderType, String orderStatus, int guestId) {
+	//비회원 전용 생성자
+	public TotalOrderVO(int orderId, String orderType, String orderStatus) {
 		this.orderId = orderId;
 		this.orderType = orderType;
 		this.orderStatus = orderStatus;
-		this.guestId = guestId;
 	}
+	
 
 	public TotalOrderVO(int memberId, int price, int orderWaitingNumber, int guestId, String orderType,
 			String orderStatus, Date orderDateTime) {
 		this.memberId = memberId;
 		this.price = price;
 		this.orderWaitingNumber = orderWaitingNumber;
-		this.guestId = guestId;
 		this.orderType = orderType;
 		this.orderStatus = orderStatus;
 		this.orderDateTime = orderDateTime;
@@ -71,13 +69,6 @@ public class TotalOrderVO {
 		this.orderWaitingNumber = orderWaitingNumber;
 	}
 
-	public int getGuestId() {
-		return guestId;
-	}
-
-	public void setGuestId(int guestId) {
-		this.guestId = guestId;
-	}
 
 	public String getOrderType() {
 		return orderType;
@@ -106,7 +97,7 @@ public class TotalOrderVO {
 	@Override
 	public String toString() {
 		return "TotalOrderVO [memberId=" + memberId + ", price=" + price + ", orderWaitingNumber=" + orderWaitingNumber
-				+ ", guestId=" + guestId + ", orderType=" + orderType + ", orderStatus=" + orderStatus
+				+ ", guestId=" + ", orderType=" + orderType + ", orderStatus=" + orderStatus
 				+ ", orderDateTime=" + orderDateTime + "]";
 	}
 	

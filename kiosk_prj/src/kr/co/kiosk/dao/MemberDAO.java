@@ -4,10 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * 회원 db를 처리하는 DAO, 겸사겸사 비회원도 처리한다
- */
+import kr.co.kiosk.vo.MemberVO;
+
 public class MemberDAO {
 
 	private static MemberDAO memDAO;
@@ -24,50 +25,149 @@ public class MemberDAO {
 		return memDAO;
 	}// getInstance()
 
-	// 비회원 테이블에 레코드 추가
-	public void insertGuest(int guestId) throws SQLException {
+	public void insertMember(MemberVO memVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
-
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
 			con = dbCon.getConn();
-			String insertGuest = "insert into guest(guest_id) values(?)";
+			String insertMember = "insert into members(member_id, phone_number) values (SEQ_MEMBERS_ID.nextval, ?)";
 
-			pstmt = con.prepareStatement(insertGuest);
-			pstmt.setInt(1, guestId);
+			pstmt = con.prepareStatement(insertMember);
+			pstmt.setString(1, memVO.getPhoneNumber());
 			pstmt.executeUpdate();
 
 		} finally {
 			dbCon.closeDB(null, pstmt, con);
-
 		}
-	}// insertGuest
+	}// insertMember
 
-	public int selectGuest() throws SQLException {
+	// 아쉽게도 전화번호 변경한 사람은 새로 회원을 파시길
+	public int updateMember(MemberVO memVO) throws SQLException {
+		int rowCnt = 0;
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		DbConnection dbCon = DbConnection.getInstance();
-		int guestId = -1;
 
 		try {
 			con = dbCon.getConn();
-			String sql = "SELECT seq_guest_guest_id.nextval FROM dual";
+			StringBuilder updateMember = new StringBuilder();
+			updateMember.append("	update members	").append("	set	total_amount=?,points=?,stamps=?,level_id=?		")
+					.append("	where member_id=?	");
+
+			pstmt = con.prepareStatement(updateMember.toString());
+
+			pstmt.setInt(1, memVO.getTotalAmount());
+			pstmt.setInt(2, memVO.getPoints());
+			pstmt.setInt(3, memVO.getStamps());
+			pstmt.setInt(4, memVO.getLevelId());
+			pstmt.setInt(5, memVO.getMemberId());
+
+			rowCnt = pstmt.executeUpdate();
+
+		} finally {
+			dbCon.closeDB(null, pstmt, con);
+		}
+
+		return rowCnt;
+	}// updateMember
+
+	public int deleteMember(int memberId) throws SQLException {
+		int rowCnt = 0;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			con = dbCon.getConn();
+
+			String sql = "delete from MEMBERS where MEMBER_ID=?";
 
 			pstmt = con.prepareStatement(sql);
+
+			pstmt.setInt(1, memberId);
+
+			rowCnt = pstmt.executeUpdate();
+		} finally {
+			dbCon.closeDB(null, pstmt, con);
+		}
+		return rowCnt;
+	}// deleteMember
+
+	public List<MemberVO> selectAllMember() throws SQLException {
+		List<MemberVO> list = new ArrayList<MemberVO>();
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			con = dbCon.getConn();
+			String sql = "select MEMBER_ID, PHONE_NUMBER, TOTAL_AMOUNT, POINTS, STAMPS, LEVEL_ID from members";
+			
+			pstmt = con.prepareStatement(sql);
+			
 			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				guestId = rs.getInt(1);
+			
+			MemberVO moVO = null;
+			while(rs.next()) {
+				moVO = new MemberVO();
+				moVO.setMemberId(rs.getInt("member_id"));
+				moVO.setPhoneNumber(rs.getString("phone_number"));
+				moVO.setTotalAmount(rs.getInt("total_amount"));
+				moVO.setPoints(rs.getInt("points"));
+				moVO.setStamps(rs.getInt("stamps"));
+				moVO.setLevelId(rs.getInt("level_id"));
+				
+				list.add(moVO);
 			}
-
 		} finally {
 			dbCon.closeDB(rs, pstmt, con);
 		}
 
-		return guestId;
-	}
-	
+		return list;
+
+	}//selectAllMember
+
+	public MemberVO selectMember(int memberId) throws SQLException {
+		MemberVO memVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			con = dbCon.getConn();
+			StringBuilder selectMember = new StringBuilder();
+			selectMember.append("	select MEMBER_ID, PHONE_NUMBER, TOTAL_AMOUNT, POINTS, STAMPS, LEVEL_ID	")
+					.append("	from MEMBERS where MEMBER_ID=?										  	");
+
+			pstmt = con.prepareStatement(selectMember.toString());
+
+			pstmt.setInt(1, memberId);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				memVO = new MemberVO();
+				memVO.setMemberId(rs.getInt("member_id"));
+				memVO.setPhoneNumber(rs.getString("phone_number"));
+				memVO.setTotalAmount(rs.getInt("total_amount"));
+				memVO.setPoints(rs.getInt("points"));
+				memVO.setStamps(rs.getInt("stamps"));
+				memVO.setLevelId(rs.getInt("level_id"));
+			}
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+		return memVO;
+	}// selectMember
+
 }
