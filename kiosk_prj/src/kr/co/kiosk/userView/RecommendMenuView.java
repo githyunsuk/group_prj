@@ -10,14 +10,15 @@ import kr.co.kiosk.userEvt.RecommendMenuEvt;
 
 @SuppressWarnings("serial")
 public class RecommendMenuView extends Panel {
-	private JPanel menuPanel;
+	
 	private UserMainView umv;
+	private JPanel menuPanel;
 
 	public RecommendMenuView(UserMainView umv) {
 		this.umv = umv;
 		setLayout(new BorderLayout());
 		
-		menuPanel = new JPanel(new GridLayout(3,1,5,5));
+		menuPanel = new JPanel(new GridLayout(2,1,5,5));
 		add(menuPanel);
 		
 		RecommendMenuEvt rme = new RecommendMenuEvt(this, umv);

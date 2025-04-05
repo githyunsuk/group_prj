@@ -26,6 +26,18 @@ public class MenuOrderService {
 		return flag;
 	}//addMenuOrder
 	
+	public boolean modifyMenuOrder(MenuOrderVO moVO) {
+		boolean flag = false;
+		MenuOrderDAO moDAO = MenuOrderDAO.getInstance();
+		try {
+			moDAO.updateMenuOrder(moVO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return flag;
+	}//modifyMenuOrder
+	
 	public boolean removeMenuOrder(int orderId) {
 		boolean flag = false;
 		MenuOrderDAO moDAO = MenuOrderDAO.getInstance();
@@ -49,4 +61,15 @@ public class MenuOrderService {
 		return list;
 	}//searchMenuOrder
 	
-}
+	public MenuOrderVO searchOneMenuOrder(int orderId, int menuId) {
+		MenuOrderVO moVO = null;
+		MenuOrderDAO moDAO = MenuOrderDAO.getInstance();
+		try {
+			moVO = moDAO.selectOneMenuOrder(orderId, menuId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return moVO;
+	}//searchOneMenuOrder
+	
+}//class

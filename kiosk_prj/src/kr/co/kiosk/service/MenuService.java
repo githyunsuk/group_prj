@@ -79,4 +79,18 @@ public class MenuService {
 		return mVO;
 	}//searchMenu
 	
+	public MenuVO searchMenuWithName(String menuName) {
+		MenuVO mVO = null;
+		MenuDAO mDAO = MenuDAO.getInstance();
+		try {
+			mVO = mDAO.selectMenuWithName(menuName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return mVO;
+				
+	}//searchMenuWithName
+	
 }//class

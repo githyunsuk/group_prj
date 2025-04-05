@@ -4,32 +4,28 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import kr.co.kiosk.userEvt.AddIngredientsEvt;
+import kr.co.kiosk.userEvt.ChangeSideEvt;
 
 @SuppressWarnings("serial")
-public class AddIngredientsView extends JDialog {
+public class ChangeSideView extends JDialog {
 
 	private JPanel menuPanel;
 	private UserMainView umv;
-	private int categoryId;
 
-	public AddIngredientsView(UserMainView umv, StringBuilder menuName, AtomicInteger menuPrice, int categoryId) {
-		super(umv, "재료추가", true);
+	public ChangeSideView(UserMainView umv, StringBuilder menuName, AtomicInteger menuPrice) {
+		super(umv, "사이드 선택", true);
 		this.umv = umv;
-
-		this.categoryId = categoryId;
 
 		setLayout(new BorderLayout());
 
 		menuPanel = new JPanel(new GridLayout(3, 3, 10, 10));
 		add(menuPanel);
 
-		AddIngredientsEvt aie = new AddIngredientsEvt(this, menuName, menuPrice, umv);
-		aie.addMenuItem();
+		ChangeSideEvt cse = new ChangeSideEvt(this, menuName, menuPrice, umv);
+		cse.addMenuItem();
 
 		setBounds(300, 300, 772, 346);
 		setVisible(true);
@@ -49,14 +45,6 @@ public class AddIngredientsView extends JDialog {
 
 	public void setUmv(UserMainView umv) {
 		this.umv = umv;
-	}
-
-	public int getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
 	}
 
 }

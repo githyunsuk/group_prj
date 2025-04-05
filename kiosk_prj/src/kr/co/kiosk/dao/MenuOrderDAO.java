@@ -50,6 +50,33 @@ public class MenuOrderDAO {
 		}
 	}// insertMenuOrder
 
+	public int updateMenuOrder(MenuOrderVO moVO) throws SQLException {
+		int rowCnt = 0;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			con = dbCon.getConn();
+			String sql = "UPDATE MENU_ORDER SET QUANTITY=?, TOTAL_PRICE=? WHERE ORDER_ID=? AND MENU_ID=?";
+			
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setInt(1, moVO.getQuantity());
+			pstmt.setInt(2, moVO.getTotalPrice());
+			pstmt.setInt(3, moVO.getOrderId());
+			pstmt.setInt(4, moVO.getMenuId());
+			
+			rowCnt = pstmt.executeUpdate();
+		} finally {
+			dbCon.closeDB(null, pstmt, con);
+		}
+		
+		return rowCnt;
+	}//updateMenuOrder
+
 	public int deleteMenuOrder(int orderId) throws SQLException {
 		int rowCnt = 0;
 
@@ -71,7 +98,7 @@ public class MenuOrderDAO {
 			dbCon.closeDB(null, pstmt, con);
 		}
 		return rowCnt;
-	}//deleteMenuOrder
+	}// deleteMenuOrder
 
 	// 해당 orderId와 같은 menu_order 목록만 찾기
 	public List<MenuOrderVO> selectMenuOrder(int orderId) throws SQLException {
@@ -111,4 +138,39 @@ public class MenuOrderDAO {
 
 		return list;
 	}// selectMenuOrder
+	
+	//주문번호랑 메뉴아이디로 한가지 주문메뉴 찾기
+	public MenuOrderVO selectOneMenuOrder(int orderId, int menuId) throws SQLException {
+		MenuOrderVO moVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		try {
+			con = dbCon.getConn();
+			String sql = "select ORDER_ID, MENU_ID, CATEGORY_ID, QUANTITY, TOTAL_PRICE from MENU_ORDER where ORDER_ID=? and MENU_ID=?";
+			
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setInt(1, orderId);
+			pstmt.setInt(2, menuId);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				moVO = new MenuOrderVO();
+				moVO.setOrderId(rs.getInt("order_id"));
+				moVO.setMenuId(rs.getInt("menu_id"));
+				moVO.setCategoryId(rs.getInt("CATEGORY_ID"));
+				moVO.setQuantity(rs.getInt("QUANTITY"));
+				moVO.setTotalPrice(rs.getInt("TOTAL_PRICE"));
+			}
+		}finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+		return moVO;
+		
+	}//selectOneMenuOrder
 }

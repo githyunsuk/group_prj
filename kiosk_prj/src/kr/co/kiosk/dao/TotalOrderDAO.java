@@ -103,7 +103,7 @@ public class TotalOrderDAO {
 
 			rowCnt = pstmt.executeUpdate();
 		} finally {
-
+			dbCon.closeDB(null, pstmt, con);
 		}
 		return rowCnt;
 	}// updateTotalOrder

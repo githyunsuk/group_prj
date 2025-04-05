@@ -1,136 +1,159 @@
 package kr.co.kiosk.userEvt;
 
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import kr.co.kiosk.service.MenuService;
+import kr.co.kiosk.userView.AddIngredientsView;
 import kr.co.kiosk.userView.BurgerMenuView;
 import kr.co.kiosk.userView.UserMainView;
 import kr.co.kiosk.vo.MenuVO;
 
 public class BurgerMenuEvt implements ActionListener {
 
-	private BurgerMenuView bmv;
 	private UserMainView umv;
-	private List<MenuVO> burgerList; //버거 메뉴를 담는 VO 리스트
+	private JButton btnPrev, btnNext;
+	private JPanel menuPanel;
+	private DefaultTableModel dtm;
+	private List<MenuVO> burgerList; // 버거 메뉴를 담는 VO 리스트
+
+	private int maxPage = 9; // 한 페이지당 최대 메뉴 개수
+	private int currentPage = 0; // 현재 페이지 번호
 
 	public BurgerMenuEvt(BurgerMenuView bmv, UserMainView umv) {
-		this.bmv = bmv;
 		this.umv = umv;
-		this.burgerList = getBurgerMenuFromDB();
+		this.btnPrev = bmv.getBtnPrev();
+		this.btnNext = bmv.getBtnNext();
+		this.menuPanel = bmv.getMenuPanel();
+		this.dtm = umv.getDtm();
+		this.burgerList = getBurgerMenu();
 	}// BurgerMenuEvt
-	
-	//데이터베이스에서 버거 메뉴를 가져오는 method
-	private List<MenuVO> getBurgerMenuFromDB(){
+
+	// 버거 메뉴를 가져오는 method
+	private List<MenuVO> getBurgerMenu() {
 		List<MenuVO> burgerList = new ArrayList<MenuVO>();
-		List<MenuVO> allMenuList = new ArrayList<MenuVO>();
-		
-		MenuService ms = new MenuService();
-		allMenuList = ms.searchAllMenu();
-		for(MenuVO mVO : allMenuList) {
+
+		for (MenuVO mVO : umv.getAllMenuList()) {
 			if (mVO.getCategoryId() == 1 || mVO.getCategoryId() == 2) {
 				burgerList.add(mVO);
 			}
 		}
 		return burgerList;
-	}//getBurgerMenuFromDB
+	}// getBurgerMenu
 
 	// 데이터를 가져와서 메뉴판을 채우는 method
 	public void loadMenu() {
-		bmv.getMenuPanel().removeAll(); // 기존 메뉴 삭제
+		menuPanel.removeAll(); // 기존 메뉴 삭제
 
-		int start = bmv.getCurrentPage() * BurgerMenuView.getMaxPerPage(); 
-		int end = Math.min(start + BurgerMenuView.getMaxPerPage(), burgerList.size());
+		int start = currentPage * maxPage;
+		int end = Math.min(start + maxPage, burgerList.size());
 
-		for(int i = start; i < end; i++) {
+		for (int i = start; i < end; i++) {
 			addMenuItem(burgerList.get(i));
 		}
-		
-		//부족한 공간 빈패널로 채우기
-		while(bmv.getMenuPanel().getComponentCount() < BurgerMenuView.getMaxPerPage()) {
-			bmv.getMenuPanel().add(new JPanel());
+
+		// 부족한 공간 빈패널로 채우기
+		while (menuPanel.getComponentCount() < maxPage) {
+			menuPanel.add(new JPanel());
 		}
 
 		// 버튼 활성화/비활성화 조정
-		bmv.getBtnPrev().setEnabled(bmv.getCurrentPage() > 0);
-		bmv.getBtnNext().setEnabled((bmv.getCurrentPage() + 1) * BurgerMenuView.getMaxPerPage() < burgerList.size());
+		btnPrev.setEnabled(currentPage > 0);
+		btnNext.setEnabled((currentPage + 1) * maxPage < burgerList.size());
 
 		// 메뉴 채우기
-		bmv.getMenuPanel().revalidate();
-		bmv.getMenuPanel().repaint();
+		menuPanel.revalidate();
+		menuPanel.repaint();
 	}// loadMenu
-	
-	//메뉴판용 버튼 개별 생성 method
+
+	// 메뉴판용 버튼 개별 생성 method
 	public void addMenuItem(MenuVO burgerList) {
-		JButton btn = new JButton("이미지");
+		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
+		if (burgerList.getImgName() != null) {
+			File file = new File("c:/dev/img/kiosk" + File.separator + burgerList.getImgName());
+			if (file.exists()) {
+				String iconPath = file.getAbsolutePath();
+				icon = new ImageIcon(iconPath);
+			}
+		}
+		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
+		ImageIcon img = new ImageIcon(scaledImg);
+		JButton btn = new JButton(img);
 		btn.addActionListener(e -> menuBtnClicked(burgerList));
-		JLabel lbl = new JLabel(("<html>" + burgerList.getMenuName() + "<br>" + burgerList.getPrice() + "<html>"), SwingConstants.CENTER);
-        JPanel itemPanel = new JPanel(new GridLayout(1, 1));
-        
-        itemPanel.add(btn);
-        itemPanel.add(lbl);
-        
-        bmv.getMenuPanel().add(itemPanel);
-	}//addMenuItem
-	
-	//메뉴 버튼 클릭 이벤트
+		JLabel lbl = new JLabel(("<html>" + burgerList.getMenuName() + "<br>" + burgerList.getPrice() + "<html>"),
+				SwingConstants.CENTER);
+		JPanel itemPanel = new JPanel(new GridLayout(1, 1));
+
+		itemPanel.add(btn);
+		itemPanel.add(lbl);
+
+		menuPanel.add(itemPanel);
+	}// addMenuItem
+
+	// 메뉴 버튼 클릭 이벤트
 	public void menuBtnClicked(MenuVO burgerList) {
-	    DefaultTableModel model = umv.getDtm();
-	    boolean found = false;
-	    int totalQuantity = 0, totalPrice = 0;
+		boolean found = false;
+		int totalQuantity = 0, totalPrice = 0;
 
-	    //이미 장바구니에 추가된 메뉴면 수량 및 금액 증가
-	    for (int i = 0; i < model.getRowCount(); i++) {
-            String itemName = (String) model.getValueAt(i, 0);
-            int quantity = (int) model.getValueAt(i, 1);
-            int price = (int) model.getValueAt(i, 2);
+		StringBuilder menuName = new StringBuilder();
+		menuName.append(burgerList.getMenuName());
+		AtomicInteger menuPrice = new AtomicInteger(burgerList.getPrice()); //이런게 있었네...
 
-            if (itemName.equals(burgerList.getMenuName())) {
-                model.setValueAt(quantity + 1, i, 1);
-                model.setValueAt(price + burgerList.getPrice(), i, 2);
-                found = true;
-            }
-            totalQuantity += (int) model.getValueAt(i, 1);
-            totalPrice += (int) model.getValueAt(i, 2);
-        }
+		new AddIngredientsView(umv, menuName, menuPrice, burgerList.getCategoryId());
 
+		// 이미 장바구니에 추가된 메뉴면 수량 및 금액 증가
+		for (int i = 0; i < dtm.getRowCount(); i++) {
+			String itemName = (String) dtm.getValueAt(i, 0);
+			int quantity = (int) dtm.getValueAt(i, 1);
+			int price = (int) dtm.getValueAt(i, 2);
 
-	    //아니면 새로 장바구니에 추가
-	    if (!found) {
-            model.addRow(new Object[]{burgerList.getMenuName(), 1, burgerList.getPrice(), burgerList.getMenuId()});
-            totalQuantity++;
-            totalPrice += burgerList.getPrice();
-        }
+			if (itemName.equals(menuName.toString())) {
+				dtm.setValueAt(quantity + 1, i, 1);
+				dtm.setValueAt(price + menuPrice.get(), i, 2);
+				found = true;
+			}
+			totalQuantity += (int) dtm.getValueAt(i, 1);
+			totalPrice += (int) dtm.getValueAt(i, 2);
+		}
 
-	    //총수량 및 총금액 업데이트
-	    umv.getJtfTotalQuantity().setText(String.valueOf(totalQuantity));
-	    umv.getJtfTotalPrice().setText(String.valueOf(totalPrice));
-	}//menuBtnClicked
+		// 아니면 새로 장바구니에 추가
+		if (!found) {
+			dtm.addRow(new Object[] { menuName.toString(), 1, menuPrice.get(), burgerList.getMenuId() });
+			totalQuantity++;
+			totalPrice += menuPrice.get();
+		}
 
-	
+		// 총수량 및 총금액 업데이트
+		umv.getJtfTotalQuantity().setText(String.valueOf(totalQuantity));
+		umv.getJtfTotalPrice().setText(String.valueOf(totalPrice));
+	}// menuBtnClicked
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		//다음 버튼 클릭
-		if (e.getSource() == bmv.getBtnNext() && (bmv.getCurrentPage() + 1) * BurgerMenuView.getMaxPerPage() < burgerList.size()) {
-				bmv.setCurrentPage(bmv.getCurrentPage() + 1);
-				loadMenu();
+		// 다음 버튼 클릭
+		if (e.getSource() == btnNext && (currentPage + 1) * maxPage < burgerList.size()) {
+			currentPage += 1;
+			loadMenu();
 		}
-		//이전 버튼 클릭
-		if (e.getSource() == bmv.getBtnPrev() && bmv.getCurrentPage() > 0) {
-				bmv.setCurrentPage(bmv.getCurrentPage() - 1);
-				loadMenu();
+		// 이전 버튼 클릭
+		if (e.getSource() == btnPrev && currentPage > 0) {
+			currentPage -= 1;
+			loadMenu();
 		}
 
 	}// actionPerformed
 
-}
+}// class

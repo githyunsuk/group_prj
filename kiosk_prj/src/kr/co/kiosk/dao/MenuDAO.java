@@ -42,7 +42,8 @@ public class MenuDAO {
 			con = dbConn.getConn();
 
 			StringBuilder insertMenu = new StringBuilder();
-			insertMenu.append("insert into menu").append("(menu_id,category_id,menu_name,unit_name,weight,calorie,price,");
+			insertMenu.append("insert into menu")
+					.append("(menu_id,category_id,menu_name,unit_name,weight,calorie,price,");
 			if (!mVO.getImgName().isEmpty()) {
 				insertMenu.append("image, img_name,");
 			}
@@ -98,8 +99,8 @@ public class MenuDAO {
 			con = dbCon.getConn();
 			StringBuilder updateMenu = new StringBuilder();
 			updateMenu.append("	update menu																	")
-					  .append("	set menu_name=?, weight=?, calorie=?, price=?, notes=?, image=?, img_name=?	")
-					  .append("	where menu_id=?																");
+					.append("	set menu_name=?, weight=?, calorie=?, price=?, notes=?, image=?, img_name=?	")
+					.append("	where menu_id=?																");
 
 			pstmt = con.prepareStatement(updateMenu.toString());
 
@@ -126,7 +127,7 @@ public class MenuDAO {
 		}
 
 		return rowCnt;
-	}//updateMenu
+	}// updateMenu
 
 	public int deleteMenu(int menuId) throws SQLException {
 		int rowCnt = 0;
@@ -153,7 +154,6 @@ public class MenuDAO {
 		return rowCnt;
 	}// deleteMenu
 
-	// 모든 메뉴 불러오기
 	public List<MenuVO> selectAllMenu() throws SQLException, IOException {
 		List<MenuVO> list = new ArrayList<MenuVO>();
 
@@ -161,18 +161,16 @@ public class MenuDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		InputStream is = null; // blob
-		FileOutputStream fos = null; // blob
-
-		BufferedReader br = null; // clob
+		BufferedReader br = null;
 
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
 			con = dbCon.getConn();
 			StringBuilder selectMenu = new StringBuilder();
-			selectMenu.append("	select menu_id, category_id, menu_name, unit_name, weight, calorie, price, notes, image, img_name	")
-					  .append("	from menu 																							");
+			selectMenu.append(
+					"	select menu_id, category_id, menu_name, unit_name, weight, calorie, price, notes, image, img_name	")
+					.append("	from menu 																							");
 
 			pstmt = con.prepareStatement(selectMenu.toString());
 
@@ -204,26 +202,6 @@ public class MenuDAO {
 					mVO.setNotes(sbNotes.toString());
 				}
 
-				// blob
-				is = rs.getBinaryStream("image");
-				if (is != null) {
-					File dir = new File("c:/dev/img");
-					if (!(dir.exists())) {
-						dir.mkdirs();
-					}
-					File saveFile = new File(dir.getAbsoluteFile() + File.separator + mVO.getImgName());
-					fos = new FileOutputStream(saveFile);
-
-					byte[] readImg = new byte[512];
-
-					int dataLength = 0;
-
-					while ((dataLength = is.read(readImg)) != -1) {
-						fos.write(readImg, 0, dataLength);
-					}
-					fos.flush();
-				}
-
 				list.add(mVO);
 			}
 
@@ -241,22 +219,20 @@ public class MenuDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		InputStream is = null; // blob
-		FileOutputStream fos = null; // blob
-
-		BufferedReader br = null; // clob
+		BufferedReader br = null;
 
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
 			con = dbCon.getConn();
 			StringBuilder selectMenu = new StringBuilder();
-			selectMenu.append("	select menu_id, category_id, menu_name, unit_name, weight, calorie, price, notes, image, img_name	")
-					  .append("	from menu  																							")
-					  .append(" where menu_id=? 																					");
+			selectMenu.append(
+					"	select menu_id, category_id, menu_name, unit_name, weight, calorie, price, notes, image, img_name	")
+					.append("	from menu  																							")
+					.append(" where menu_id=? 																					");
 
 			pstmt = con.prepareStatement(selectMenu.toString());
-			
+
 			pstmt.setInt(1, num);
 
 			rs = pstmt.executeQuery();
@@ -286,24 +262,64 @@ public class MenuDAO {
 					mVO.setNotes(sbNotes.toString());
 				}
 
-				// blob
-				is = rs.getBinaryStream("image");
-				if (is != null) {
-					File dir = new File("c:/dev/img");
-					if (!(dir.exists())) {
-						dir.mkdirs();
+			}
+
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+
+		return mVO;
+	}// selectMenu
+	
+	//메뉴명으로 메뉴 찾는건 최대안 안하려했지만...
+	public MenuVO selectMenuWithName(String menuName) throws SQLException, IOException {
+		MenuVO mVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		BufferedReader br = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			con = dbCon.getConn();
+			StringBuilder selectMenu = new StringBuilder();
+			selectMenu.append(
+					"	select menu_id, category_id, menu_name, unit_name, weight, calorie, price, notes, image, img_name	")
+					.append("	from menu  																							")
+					.append(" where menu_name=? 																					");
+
+			pstmt = con.prepareStatement(selectMenu.toString());
+
+			pstmt.setString(1, menuName);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				mVO = new MenuVO();
+				mVO.setMenuId(rs.getInt("menu_id"));
+				mVO.setCategoryId(rs.getInt("category_id"));
+				mVO.setMenuName(rs.getString("menu_name"));
+				mVO.setUnitName(rs.getString("unit_name"));
+				mVO.setWeight(rs.getInt("weight"));
+				mVO.setCalorie(rs.getInt("calorie"));
+				mVO.setPrice(rs.getInt("price"));
+				mVO.setImgName(rs.getString("img_name"));
+
+				// clob
+				Clob clobNotes = rs.getClob("notes");
+				if (clobNotes != null) {
+					br = new BufferedReader(clobNotes.getCharacterStream());
+
+					String tempNotes = "";
+					StringBuilder sbNotes = new StringBuilder();
+
+					while ((tempNotes = br.readLine()) != null) {
+						sbNotes.append(tempNotes).append("\n");
 					}
-					File saveFile = new File(dir.getAbsoluteFile() + File.separator + mVO.getImgName());
-					fos = new FileOutputStream(saveFile);
-
-					byte[] readImg = new byte[512];
-
-					int dataLength = 0;
-
-					while ((dataLength = is.read(readImg)) != -1) {
-						fos.write(readImg, 0, dataLength);
-					}
-					fos.flush();
+					mVO.setNotes(sbNotes.toString());
 				}
 
 			}
@@ -313,5 +329,7 @@ public class MenuDAO {
 		}
 
 		return mVO;
-	}// selectMenu
+	}// selectMenuWithName
+	
+
 }// class

@@ -1,11 +1,14 @@
 package kr.co.kiosk.userEvt;
 
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,24 +21,24 @@ import kr.co.kiosk.vo.MenuVO;
 
 public class RecommendMenuEvt {
 
-	private RecommendMenuView rmv;
 	private UserMainView umv;
+	
+	private JPanel menuPanel;
+	private DefaultTableModel dtm;
 	private List<MenuVO> recommendList;
 
 	public RecommendMenuEvt(RecommendMenuView rmv, UserMainView umv) {
-		this.rmv = rmv;
 		this.umv = umv;
-		recommendList = getRecommendMenuFromDB();
+		this.dtm = umv.getDtm();
+		this.menuPanel = rmv.getMenuPanel();
+		
+		this.recommendList = getRecommendMenu();
 	}// RecommendMenuEvt
 
-	private List<MenuVO> getRecommendMenuFromDB() {
+	private List<MenuVO> getRecommendMenu() {
 		List<MenuVO> recommendList = new ArrayList<MenuVO>();
-		List<MenuVO> allMenuList = new ArrayList<MenuVO>();
 
-		MenuService ms = new MenuService();
-		allMenuList = ms.searchAllMenu();
-
-		for (MenuVO mVO : allMenuList) {
+		for (MenuVO mVO : umv.getAllMenuList()) {
 			if (mVO.getCategoryId() != 5) {
 				recommendList.add(mVO);
 			}
@@ -51,9 +54,19 @@ public class RecommendMenuEvt {
 		Collections.shuffle(recommendList, random);
 		List<MenuVO> randomMenu = recommendList.subList(0, 3);
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 2; i++) {
 			MenuVO menu = randomMenu.get(i);
-			JButton btnMenu = new JButton("이미지");
+			ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogo.png"));
+			if (menu.getImgName() != null) {
+				File file = new File("c:/dev/img/kiosk" + File.separator + menu.getImgName());
+				if (file.exists()) {
+					String iconPath = file.getAbsolutePath();
+					icon = new ImageIcon(iconPath);
+				}
+			}
+			Image scaledImg = icon.getImage().getScaledInstance(300, 180, Image.SCALE_SMOOTH);
+			ImageIcon img = new ImageIcon(scaledImg);
+			JButton jlblImg = new JButton(img);
 			JLabel jlblMenu = new JLabel(menu.getMenuName() + " / " + menu.getPrice());
 			JButton btnOrder = new JButton("주문하기");
 			btnOrder.addActionListener(e -> orderBtnClicked(menu));
@@ -61,38 +74,37 @@ public class RecommendMenuEvt {
 			btnOrder.setBorderPainted(false);
 			JPanel itemPanel = new JPanel(new GridLayout(1, 3));
 
-			itemPanel.add(btnMenu);
+			itemPanel.add(jlblImg);
 			itemPanel.add(jlblMenu);
 			itemPanel.add(btnOrder);
 
-			rmv.getMenuPanel().add(itemPanel);
+			menuPanel.add(itemPanel);
 		}
 
 	}//addMenuItem
 
 	public void orderBtnClicked(MenuVO randomMenu) {
-		DefaultTableModel model = umv.getDtm();
 		boolean found = false;
 		int totalQuantity = 0, totalPrice = 0;
 
 		// 이미 장바구니에 추가된 메뉴면 수량 및 금액 증가
-		for (int i = 0; i < model.getRowCount(); i++) {
-			String itemName = (String) model.getValueAt(i, 0);
-			int quantity = (int) model.getValueAt(i, 1);
-			int price = (int) model.getValueAt(i, 2);
+		for (int i = 0; i < dtm.getRowCount(); i++) {
+			String itemName = (String) dtm.getValueAt(i, 0);
+			int quantity = (int) dtm.getValueAt(i, 1);
+			int price = (int) dtm.getValueAt(i, 2);
 
 			if (itemName.equals(randomMenu.getMenuName())) {
-				model.setValueAt(quantity + 1, i, 1);
-				model.setValueAt(price + randomMenu.getPrice(), i, 2);
+				dtm.setValueAt(quantity + 1, i, 1);
+				dtm.setValueAt(price + randomMenu.getPrice(), i, 2);
 				found = true;
 			}
-			totalQuantity += (int) model.getValueAt(i, 1);
-			totalPrice += (int) model.getValueAt(i, 2);
+			totalQuantity += (int) dtm.getValueAt(i, 1);
+			totalPrice += (int) dtm.getValueAt(i, 2);
 		}
 
 		// 아니면 새로 장바구니에 추가
 		if (!found) {
-			model.addRow(new Object[] { randomMenu.getMenuName(), 1, randomMenu.getPrice(), randomMenu.getMenuId() });
+			dtm.addRow(new Object[] { randomMenu.getMenuName(), 1, randomMenu.getPrice(), randomMenu.getMenuId() });
 			totalQuantity++;
 			totalPrice += randomMenu.getPrice();
 		}

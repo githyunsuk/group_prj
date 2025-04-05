@@ -14,40 +14,40 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import kr.co.kiosk.userView.AddIngredientsView;
+import kr.co.kiosk.userView.ChangeDrinkView;
 import kr.co.kiosk.userView.ChangeSideView;
 import kr.co.kiosk.userView.UserMainView;
 import kr.co.kiosk.vo.MenuVO;
 
-public class AddIngredientsEvt {
+public class ChangeSideEvt {
 
 	private JPanel menuPanel;
-
-	private AddIngredientsView aiv;
+	private ChangeSideView csv;
 	private UserMainView umv;
 	private StringBuilder menuName;
 	private AtomicInteger menuPrice;
-	private List<MenuVO> ingredList;
+	private List<MenuVO> sideList;
+	private int basicPrice; // 세트 기본 메뉴의 가격
 
-	public AddIngredientsEvt(AddIngredientsView aiv, StringBuilder menuName, AtomicInteger menuPrice, UserMainView umv) {
-		this.aiv = aiv;
+	public ChangeSideEvt(ChangeSideView csv, StringBuilder menuName, AtomicInteger menuPrice, UserMainView umv) {
+		this.csv = csv;
 		this.umv = umv;
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
-		this.menuPanel = aiv.getMenuPanel();
-		this.ingredList = getIngredMenu();
+		this.menuPanel = csv.getMenuPanel();
+		this.sideList = getSideMenu();
 	}
 
-	private List<MenuVO> getIngredMenu() {
-		List<MenuVO> ingredList = new ArrayList<MenuVO>();
+	private List<MenuVO> getSideMenu() {
+		List<MenuVO> sideList = new ArrayList<MenuVO>();
 
 		for (MenuVO mVO : umv.getAllMenuList()) {
-			if (mVO.getCategoryId() == 5) {
-				ingredList.add(mVO);
+			if (mVO.getCategoryId() == 3) {
+				sideList.add(mVO);
 			}
 		}
-		return ingredList;
-	}// getIngredMenu
+		return sideList;
+	}// getSideMenu
 
 	public void addMenuItem() {
 
@@ -55,20 +55,16 @@ public class AddIngredientsEvt {
 		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
 		ImageIcon img = new ImageIcon(scaledImg);
 
-		// "변경안함" 버튼
-		JButton btnNotChange = new JButton(img);
-		btnNotChange.addActionListener(e -> openViewAfterSelect());
-
-		JLabel lblNotChange = new JLabel("<html>추가안함<br>+0</html>", SwingConstants.CENTER);
-
-		JPanel noChangePanel = new JPanel(new GridLayout(1, 1));
-		noChangePanel.add(btnNotChange);
-		noChangePanel.add(lblNotChange);
-
-		aiv.getMenuPanel().add(noChangePanel);
-
+		//우선 세트 기본 메뉴를 찾아서 기본 가격을 설정
+		for (MenuVO mv : sideList) {
+		    if (mv.getMenuName().equals("감자튀김M")) {
+		        basicPrice = mv.getPrice();
+		        break; // 먼저 찾고 종료
+		    }
+		}
 		// 재료 버튼들
-		for (MenuVO mv : ingredList) {
+		for (MenuVO mv : sideList) {
+		
 			ImageIcon menuIcon = img;
 
 			if (mv.getImgName() != null) {
@@ -83,14 +79,14 @@ public class AddIngredientsEvt {
 			JButton btn = new JButton(menuIcon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
 
-			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + mv.getPrice() + "</html>",
+			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + (mv.getPrice() - basicPrice) + "</html>",
 					SwingConstants.CENTER);
 
 			JPanel itemPanel = new JPanel(new GridLayout(1, 1));
 			itemPanel.add(btn);
 			itemPanel.add(lbl);
 
-			aiv.getMenuPanel().add(itemPanel);
+			menuPanel.add(itemPanel);
 		}
 
 		// 빈공간 채우기
@@ -99,20 +95,11 @@ public class AddIngredientsEvt {
 		}
 	}// addMenuItem
 
-	public void menuBtnClicked(MenuVO ingredList) {
-		menuName.append(" / (추가)").append(ingredList.getMenuName());
-		menuPrice.addAndGet(ingredList.getPrice());
-		openViewAfterSelect();
-
-	}// menuBtnClicked
-
-	public void openViewAfterSelect() {
-		if (aiv.getCategoryId() == 2) {
-			aiv.dispose();
-		} else {
-			aiv.dispose();
-			new ChangeSideView(umv, menuName, menuPrice);
-		}
-	}// openViewAfterSelect
+	public void menuBtnClicked(MenuVO sideList) {
+		menuName.append(" / (사이드)").append(sideList.getMenuName());
+		menuPrice.addAndGet(sideList.getPrice()-basicPrice);
+		csv.dispose();
+		new ChangeDrinkView(umv,menuName, menuPrice);
+	}
 
 }
