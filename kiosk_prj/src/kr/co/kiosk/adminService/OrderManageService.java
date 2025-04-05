@@ -22,11 +22,16 @@ public class OrderManageService {
 	}
 	
 	//조리중인 리스트 가져오기: 주문번호, 대기번호, 주문자ID, 홀포장, 주문일시, 상태, 총가격 
-	public List<TotalOrderVO> totalOrderVOList(){
+	public List<TotalOrderVO> totalOrderVOList(int number){
 		List<TotalOrderVO> voList = new ArrayList<TotalOrderVO>();
 		
 		try {
-			voList = aoDAO.getOrderList();
+			if(number == 0) {
+				voList = aoDAO.getOrderList();
+			}
+			if(number == 1) {
+				voList = aoDAO.getOrderListAll();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

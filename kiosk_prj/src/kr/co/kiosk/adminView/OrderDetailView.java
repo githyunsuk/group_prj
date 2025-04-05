@@ -81,24 +81,31 @@ public class OrderDetailView extends JPanel{
 		JLabel jlbOrderId = new JLabel("주문번호 : ", JLabel.CENTER );
 		jlbOrderId.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfOrderId = new JTextField(10);
+		jtfOrderId.setEditable(false);
 		JLabel jlbOrderWaitingNum = new JLabel("대기번호 : ", JLabel.CENTER);
 		jlbOrderWaitingNum.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfOrderWaitingNum = new JTextField(10);
+		jtfOrderWaitingNum.setEditable(false);
 		JLabel jlbTakeOut = new JLabel("홀/포장 : ", JLabel.CENTER);
 		jlbTakeOut.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfTakeOut = new JTextField(10);
+		jtfTakeOut.setEditable(false);
 		JLabel jlbOrderDate = new JLabel("주문일시 : ", JLabel.CENTER);
 		jlbOrderDate.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfOrderDate = new JTextField(10);
+		jtfOrderDate.setEditable(false);
 		JLabel jlbOrderStatus = new JLabel("주문상태 : ", JLabel.CENTER);
 		jlbOrderStatus.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfOrderStatus = new JTextField(10);
+		jtfOrderStatus.setEditable(false);
 		JLabel jlbMemberID = new JLabel("주문자ID : ", JLabel.CENTER);
 		jlbMemberID.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
-		jtfMemberID = new JTextField(10);;
+		jtfMemberID = new JTextField(10);
+		jtfMemberID.setEditable(false);
 		JLabel jlbTotalPrice = new JLabel("총가격 : ", JLabel.CENTER);
 		jlbTotalPrice.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfTotalPrice = new JTextField(10);
+		jtfTotalPrice.setEditable(false);
 		
 		JPanel jpOrderId = new JPanel();
 		jpOrderId.setLayout(new GridLayout(1,2));
@@ -129,6 +136,9 @@ public class OrderDetailView extends JPanel{
 		jpOrderStatus2.setLayout(new GridLayout(2,1));
 		jrbMaking = new JRadioButton("조리중");
 		jrbDone = new JRadioButton("완료");
+		//jrbMaking.setEnabled(false);
+		jrbDone = new JRadioButton("완료");
+		//jrbDone.setEnabled(false);
 		bgMakingDone = new ButtonGroup();
 		bgMakingDone.add(jrbMaking);
 		bgMakingDone.add(jrbDone);
@@ -147,10 +157,10 @@ public class OrderDetailView extends JPanel{
 		jpTotalPrice.add(jlbTotalPrice);
 		jpTotalPrice.add(jtfTotalPrice);
 		
-		jbtnNewList = new JButton("새로고침");
+		jbtnNewList = new JButton("목록갱신");
 		jbtnDelete = new JButton("주문삭제");
 		jbtnModify = new JButton("주문수정");
-		jbtnGuitar = new JButton("기타");
+		jbtnGuitar = new JButton("전체주문");
 		
 		//컴포넌트 배치 
 		jspOrderDetail.setBounds(0, 0, 250, 150); // 상세 메뉴 리스트 테이블

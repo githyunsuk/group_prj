@@ -45,7 +45,7 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 		if(e.getSource() == amv.getAdminMainButtons().getBtnOrder()) {
 			System.out.println("주문관리 버튼 클릭");
 			acp.showPanel("ORDER");
-			List<TotalOrderVO> voList = oms.totalOrderVOList();
+			List<TotalOrderVO> voList = oms.totalOrderVOList(0);
 			omv.updateTable(voList);
 			
 		}

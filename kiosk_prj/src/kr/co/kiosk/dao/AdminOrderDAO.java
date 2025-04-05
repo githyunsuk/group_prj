@@ -24,6 +24,46 @@ public class AdminOrderDAO {
 		}
 		return aOderDAO;
 	}
+	//금일의 모든 주문(조리중, 완료) 모두 가져오기 
+	public List<TotalOrderVO> getOrderListAll() throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		List<TotalOrderVO> totalOrderVOList = new ArrayList<TotalOrderVO>();
+		try {
+			con = dbCon.getConn();
+			StringBuilder getOrderListQuery = new StringBuilder();
+			getOrderListQuery
+				.append("	SELECT 	ORDER_ID, MEMBER_ID , ORDER_TYPE , ORDER_DATETIME , ORDER_STATUS , PRICE, ORDER_WAITING_NUMBER ")
+				.append("	FROM TOTAL_ORDER	")
+				.append("	WHERE to_char(ORDER_DATETIME, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')	")
+				.append("	ORDER BY ORDER_WAITING_NUMBER ASC	");
+			pstmt = con.prepareStatement(getOrderListQuery.toString());
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				TotalOrderVO toVO = new TotalOrderVO();
+				toVO.setOrderId(rs.getInt("ORDER_ID"));
+				toVO.setMemberId((rs.getInt("MEMBER_ID"))); //null -> return 0
+				toVO.setOrderType((rs.getString("ORDER_TYPE")));
+				toVO.setOrderDateTime(rs.getDate("ORDER_DATETIME"));
+				toVO.setOrderStatus(rs.getString("ORDER_STATUS"));
+				toVO.setOrderWaitingNumber(rs.getInt("ORDER_WAITING_NUMBER"));
+				toVO.setPrice(rs.getInt("PRICE"));
+				
+				totalOrderVOList.add(toVO);
+				
+			}
+			
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+		return totalOrderVOList;
+		
+	}
 	
 	//상태값 = '조리중'인 리스트 가져오기, 매개변수 = 주문일시(yy-mm-dd), 상태값(조리중)
 	// 주문번호, 대기번호, 주문자ID, 홀/포장, 주문일시, 상태(조리중,완료), 총가격
@@ -41,14 +81,14 @@ public class AdminOrderDAO {
 			getOrderListQuery
 				.append("	SELECT 	ORDER_ID, MEMBER_ID , ORDER_TYPE , ORDER_DATETIME , ORDER_STATUS , PRICE, ORDER_WAITING_NUMBER ")
 				.append("	FROM TOTAL_ORDER	")
-				.append("	WHERE ORDER_STATUS = '조리중' 	");
-			
+				.append("	WHERE ORDER_STATUS = '조리중' 	")
+				.append("	AND to_char(ORDER_DATETIME, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')	")
+				.append(" 	ORDER BY ORDER_WAITING_NUMBER ASC	");
 			pstmt = con.prepareStatement(getOrderListQuery.toString());
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				TotalOrderVO toVO = new TotalOrderVO();
-				//toVO.setGuestId(0);
 				toVO.setOrderId(rs.getInt("ORDER_ID"));
 				toVO.setMemberId((rs.getInt("MEMBER_ID"))); //null -> return 0
 				toVO.setOrderType((rs.getString("ORDER_TYPE")));

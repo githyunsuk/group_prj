@@ -103,20 +103,52 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		//수정
 		if(e.getSource() == odv.getJbtnModify()) {
+			System.out.println("수정 클릭 ");
+			String status = null;
+			int orderId = Integer.parseInt( odv.getJtfOrderId().getText().toString());
 			
+			if(odv.getJrbMaking().isSelected() && (!odv.getJtfOrderId().getText().isBlank()) && (orderId != 0)) {
+				status = "조리중";
+			} else if (odv.getJrbDone().isSelected() && (!odv.getJtfOrderId().getText().isBlank()) && (orderId != 0)) {
+				status = "조리완료";
+			} else {
+				JOptionPane.showMessageDialog(odv, "정확한 리스트 항목을 클릭해주세요");
+				return;
+			}
+			
+			int result = JOptionPane.showConfirmDialog(odv, 
+					orderId + "번 주문을 '" + status + "'로 상태를 변경하시겠습니까?",
+					"주문 상태 변경",
+					JOptionPane.YES_NO_OPTION
+					);
+			if(result == JOptionPane.YES_OPTION) {
+				oms.changeOrderStatus(status, orderId);
+				JOptionPane.showMessageDialog(odv, "성공적으로 변경되었습니다.");
+				//수정 후 갱신
+				List<TotalOrderVO> voList = oms.totalOrderVOList(0);
+				omv.updateTable(voList);
+			}
 		}
+		//삭제 
 		if(e.getSource() == odv.getJbtnDelete()) {
+			System.out.println("삭제 클릭 ");
+
 			
 		}
+		//목록 갱신
 		if(e.getSource() == odv.getJbtnNewList()) {
-			System.out.println("새로고침 클릭 ");
-			//List<TotalOrderVO> voList = oms.totalOrderVOList();
-			//omv.updateTable(voList);
+			System.out.println("목록갱신 클릭 ");
+			List<TotalOrderVO> voList = oms.totalOrderVOList(0);
+			omv.updateTable(voList);
 		}
+		//전체주문 리스트 
 		if(e.getSource() == odv.getJbtnGuitar()) {
-			System.out.println("기타 클릭 ");
-			JOptionPane.showMessageDialog(omv, "미구현 기능입니다.");
+			System.out.println("전체주문 클릭");
+			List<TotalOrderVO> voList = oms.totalOrderVOList(1);
+			omv.updateTable(voList);
+
 		}
 		
 	}

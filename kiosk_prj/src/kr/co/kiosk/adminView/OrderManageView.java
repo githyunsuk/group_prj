@@ -86,7 +86,9 @@ public class OrderManageView extends JPanel {
 		OrderManageEvt ome = new OrderManageEvt(this);
 		jtblOrderStatus.addMouseListener(ome);
 		odv.getJbtnGuitar().addActionListener(ome);
-		
+		odv.getJbtnModify().addActionListener(ome);
+		odv.getJbtnDelete().addActionListener(ome);
+		odv.getJbtnNewList().addActionListener(ome);
 		
 		
 	}
@@ -108,7 +110,6 @@ public class OrderManageView extends JPanel {
 	            vo.getOrderType(),
 	            vo.getOrderStatus()
 	        };
-	        System.out.println("row 값: " + row );
 	        dtm.addRow(row);
 	    }
 		
