@@ -134,7 +134,26 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 		//삭제 
 		if(e.getSource() == odv.getJbtnDelete()) {
 			System.out.println("삭제 클릭 ");
-
+			int orderId = Integer.parseInt( odv.getJtfOrderId().getText().toString());
+			String status = null;
+			if(odv.getJrbMaking().isSelected()) { //주문이 조리중일때만 status값을 조리중으로 변경 
+				status = odv.getJrbMaking().getText();
+			} else {
+				status = "예외";
+			}
+			System.out.println(status);
+			
+			if(!status.equals("조리중")) {
+				JOptionPane.showMessageDialog(odv, "'조리중'인 주문만 삭제하실 수 있습니다.");
+				return;
+			} else if((odv.getJtfOrderId().getText().isBlank()) || (orderId == 0)) {
+				JOptionPane.showMessageDialog(odv, "정확한 리스트 항목을 클릭해주세요");
+				return;
+			} else {
+				oms.deleteOrder(orderId);
+				JOptionPane.showMessageDialog(odv, orderId + "번 주문을 삭제하였습니다.");
+			}
+			
 			
 		}
 		//목록 갱신
