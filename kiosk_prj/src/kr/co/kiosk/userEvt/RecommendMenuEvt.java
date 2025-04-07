@@ -1,5 +1,6 @@
 package kr.co.kiosk.userEvt;
 
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
-import kr.co.kiosk.service.MenuService;
+import kr.co.kiosk.userView.AddIngredientsView;
 import kr.co.kiosk.userView.RecommendMenuView;
 import kr.co.kiosk.userView.UserMainView;
 import kr.co.kiosk.vo.MenuVO;
@@ -22,7 +24,7 @@ import kr.co.kiosk.vo.MenuVO;
 public class RecommendMenuEvt {
 
 	private UserMainView umv;
-	
+
 	private JPanel menuPanel;
 	private DefaultTableModel dtm;
 	private List<MenuVO> recommendList;
@@ -31,7 +33,7 @@ public class RecommendMenuEvt {
 		this.umv = umv;
 		this.dtm = umv.getDtm();
 		this.menuPanel = rmv.getMenuPanel();
-		
+
 		this.recommendList = getRecommendMenu();
 	}// RecommendMenuEvt
 
@@ -67,11 +69,16 @@ public class RecommendMenuEvt {
 			Image scaledImg = icon.getImage().getScaledInstance(300, 180, Image.SCALE_SMOOTH);
 			ImageIcon img = new ImageIcon(scaledImg);
 			JButton jlblImg = new JButton(img);
+
 			JLabel jlblMenu = new JLabel(menu.getMenuName() + " / " + menu.getPrice());
+			jlblMenu.setFont(new Font("맑은 고딕", Font.BOLD, 22));
+
 			JButton btnOrder = new JButton("주문하기");
+			btnOrder.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 			btnOrder.addActionListener(e -> orderBtnClicked(menu));
-			btnOrder.setContentAreaFilled(false); // 버튼의 배경을 투명하게 만듦
+//			btnOrder.setContentAreaFilled(false); // 버튼의 배경을 투명하게 만듦
 			btnOrder.setBorderPainted(false);
+
 			JPanel itemPanel = new JPanel(new GridLayout(1, 3));
 
 			itemPanel.add(jlblImg);
@@ -81,11 +88,19 @@ public class RecommendMenuEvt {
 			menuPanel.add(itemPanel);
 		}
 
-	}//addMenuItem
+	}// addMenuItem
 
 	public void orderBtnClicked(MenuVO randomMenu) {
 		boolean found = false;
 		int totalQuantity = 0, totalPrice = 0;
+
+		StringBuilder menuName = new StringBuilder();
+		menuName.append(randomMenu.getMenuName());
+		AtomicInteger menuPrice = new AtomicInteger(randomMenu.getPrice()); // 이런게 있었네...
+		
+		if (randomMenu.getCategoryId() == 1 || randomMenu.getCategoryId() == 2) {
+			new AddIngredientsView(umv, menuName, menuPrice, randomMenu.getCategoryId());
+		}
 
 		// 이미 장바구니에 추가된 메뉴면 수량 및 금액 증가
 		for (int i = 0; i < dtm.getRowCount(); i++) {
@@ -93,9 +108,9 @@ public class RecommendMenuEvt {
 			int quantity = (int) dtm.getValueAt(i, 1);
 			int price = (int) dtm.getValueAt(i, 2);
 
-			if (itemName.equals(randomMenu.getMenuName())) {
+			if (itemName.equals(menuName.toString())) {
 				dtm.setValueAt(quantity + 1, i, 1);
-				dtm.setValueAt(price + randomMenu.getPrice(), i, 2);
+				dtm.setValueAt(price + menuPrice.get(), i, 2);
 				found = true;
 			}
 			totalQuantity += (int) dtm.getValueAt(i, 1);
@@ -104,7 +119,7 @@ public class RecommendMenuEvt {
 
 		// 아니면 새로 장바구니에 추가
 		if (!found) {
-			dtm.addRow(new Object[] { randomMenu.getMenuName(), 1, randomMenu.getPrice(), randomMenu.getMenuId() });
+			dtm.addRow(new Object[] { menuName.toString(), 1, menuPrice.get(), randomMenu.getMenuId() });
 			totalQuantity++;
 			totalPrice += randomMenu.getPrice();
 		}
@@ -112,5 +127,5 @@ public class RecommendMenuEvt {
 		// 총수량 및 총금액 업데이트
 		umv.getJtfTotalQuantity().setText(String.valueOf(totalQuantity));
 		umv.getJtfTotalPrice().setText(String.valueOf(totalPrice));
-	}//orderBtnClicked
+	}// orderBtnClicked
 }

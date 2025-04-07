@@ -35,11 +35,20 @@ public class MenuDAO {
 	public void insertMenu(MenuVO mVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs=null;
 		DbConnection dbConn = DbConnection.getInstance();
 		FileInputStream fis = null;
 
 		try {
 			con = dbConn.getConn();
+			
+			String menuId="select  seq_menu_id.nextval nextval from dual";
+			
+			pstmt=con.prepareStatement(menuId);
+			rs=pstmt.executeQuery();
+			rs.next();
+			//번호를 전처리한 후
+			mVO.setMenuId( rs.getInt("nextval"));
 
 			StringBuilder insertMenu = new StringBuilder();
 			insertMenu.append("insert into menu")
@@ -47,7 +56,7 @@ public class MenuDAO {
 			if (!mVO.getImgName().isEmpty()) {
 				insertMenu.append("image, img_name,");
 			}
-			insertMenu.append("notes)").append("values").append("(seq_menu_id.nextval,?,?,?,?,?,?,");
+			insertMenu.append("notes)").append("values").append("(?,?,?,?,?,?,?,");
 			if (!mVO.getImgName().isEmpty()) {
 				insertMenu.append("?,?,");
 			}
@@ -56,6 +65,7 @@ public class MenuDAO {
 			pstmt = con.prepareStatement(insertMenu.toString());
 
 			int bindIdx = 0;
+			pstmt.setInt(++bindIdx, mVO.getMenuId());//전처리된 데이터 입력
 			pstmt.setInt(++bindIdx, mVO.getCategoryId());
 			pstmt.setString(++bindIdx, mVO.getMenuName());
 			pstmt.setString(++bindIdx, mVO.getUnitName());
@@ -73,10 +83,11 @@ public class MenuDAO {
 			pstmt.setString(++bindIdx, mVO.getNotes());
 
 			pstmt.executeUpdate();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			dbConn.closeDB(null, pstmt, con);
+			dbConn.closeDB(rs, pstmt, con);
 			try {
 				if (fis != null)
 					fis.close();

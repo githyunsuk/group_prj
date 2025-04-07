@@ -3,7 +3,6 @@ package kr.co.kiosk.userView;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -13,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import kr.co.kiosk.service.MenuService;
@@ -67,6 +67,7 @@ public class UserMainView extends JFrame {
 		btnOrder.setFont(new Font("굴림", Font.PLAIN, 18));
 		btnOrder.setBounds(657, 804, 115, 97);
 		frame.getContentPane().add(btnOrder);
+	
 
 		btnStamp = new JButton("스탬프");
 		btnStamp.setFont(new Font("굴림", Font.PLAIN, 18));
