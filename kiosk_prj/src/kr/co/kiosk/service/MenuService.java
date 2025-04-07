@@ -2,8 +2,10 @@ package kr.co.kiosk.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
+import kr.co.kiosk.dao.AdminStockDAO;
 import kr.co.kiosk.dao.MenuDAO;
 import kr.co.kiosk.vo.MenuVO;
 
@@ -16,11 +18,15 @@ public class MenuService {
 	public boolean addMenu(MenuVO mVO) {
 		boolean flag = false;
 		MenuDAO mDAO = MenuDAO.getInstance();
+		AdminStockDAO sDAO = AdminStockDAO.getInstatnce();
 		
 		try {
 			mDAO.insertMenu(mVO);
 			
-			System.out.println("---------mVO.getMenuId()------- "+mVO.getMenuId());
+			//카테고리가 3,4,5인 메뉴만 재고관리에 수량0으로 추가_신민기
+			if(Arrays.asList(3,4,5).contains(mVO.getCategoryId())) {
+				sDAO.insertNewStock(mVO);
+			}
 			
 			flag = true;
 		} catch (SQLException e) {

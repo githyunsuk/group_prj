@@ -44,7 +44,7 @@ public class MenuDAO {
 			
 			String menuId="select  seq_menu_id.nextval nextval from dual";
 			
-			pstmt=con.prepareStatement(menuId);
+			pstmt=con.prepareStatement(menuId); 
 			rs=pstmt.executeQuery();
 			rs.next();
 			//번호를 전처리한 후

@@ -42,7 +42,8 @@ public class MemberService {
 		MemberDAO memDAO = MemberDAO.getInstance();
 		try {
 			memDAO.deleteMember(memberId);
-			flag=true;
+
+			flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

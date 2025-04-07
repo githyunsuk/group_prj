@@ -2,6 +2,7 @@ package kr.co.kiosk.adminView;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -29,7 +30,7 @@ public class InOutDetailView extends JPanel {
 
 		this.countDataLogs = 20; //임시로 
 
-		String[] columnNames = {"전체", "카테고리", "상품", "발생날짜", "총량"};
+		String[] columnNames = {"재료명", "날짜", "입고건수", "출고건수", "연고"};
 		
 		dataLogs = new String[countDataLogs][columnNames.length]; 
 		
@@ -63,8 +64,14 @@ public class InOutDetailView extends JPanel {
 		
 		add(jspinOut, "Center");
 		
+		JPanel jplShowDetailOut = new JPanel();
+		jplShowDetailOut.setLayout(new GridLayout(1,4));
+		jplShowDetailOut.add(new JLabel(""));
+		jplShowDetailOut.add(new JLabel(""));
+		jplShowDetailOut.add(new JLabel(""));
 		showDetailOut = new JButton("자세히 보기");
-		add(showDetailOut, BorderLayout.SOUTH);
+		jplShowDetailOut.add(showDetailOut);
+		add(jplShowDetailOut, BorderLayout.SOUTH);
 
 //컬럼 헤더 및 데이터 중앙정렬화 		
 		//각 컬럼의 데이터들의 정렬 방식을 중앙 정렬로 설정
