@@ -3,6 +3,7 @@ package kr.co.kiosk.adminView;
 import java.awt.Color;
 import java.awt.Panel;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -20,8 +21,8 @@ public class MemberManageView extends Panel  {
     private JTextField jtfSearch; // 회원 검색을 위한 텍스트 필드
     private JTable jtblMember;  // 회원 목록을 표시할 테이블
     private DefaultTableModel tableModel;// 테이블에 데이터를 넣기 위한 모델
-    private JButton jbtnSearch, jbtnselect, jbtnDelete, jbtnReset,
-    		jbtnPointAdd, jbtnPointSubtract, jbtnStempAdd, jbtnStempSubtract ; // 각종 버튼들
+    private JButton jbtnSearch, jbtnselect, jbtnDelete, 
+    		jbtnPointAdd, jbtnPointSubtract, jbtnStempAdd, jbtnStempSubtract, jbtnLevelOk; // 각종 버튼들
     private JTextField jtfPoint; // 포인트 입력 필드
     private JTextField jtfStemp;  // 스탬프 입력 필드
     private JComboBox cb; // 회원 등급을 변경할 JComboBox
@@ -49,7 +50,7 @@ public class MemberManageView extends Panel  {
 	        add(jbtnSearch);
 
 	     // 테이블의 열(column)을 정의하고, 테이블 모델을 생성
-	        String[] columns= {"회원ID", "전화번호", "누적금액","등급", "포인트", "스탬프"};
+	        String[] columns= {"회원ID", "전화번호", "누적금액","포인트", "스탬프","등급"};
 	        tableModel=new DefaultTableModel(columns, 0);
 	        jtblMember=new JTable(tableModel);
 	        
@@ -61,18 +62,15 @@ public class MemberManageView extends Panel  {
 	        
 	        // 일괄 선택 버튼 추가
 	        jbtnselect=new JButton("일괄 선택");
-	        jbtnselect.setBounds(180, 500, 100, 30);
+	        jbtnselect.setBounds(280, 500, 100, 30);
 	        add(jbtnselect);
 	        
 	        // 회원 삭제 버튼 추가
 	        jbtnDelete=new JButton("회원 삭제");
-	        jbtnDelete.setBounds(350, 500, 100, 30);
+	        jbtnDelete.setBounds(400, 500, 100, 30);
 	        add(jbtnDelete);
 	        
-	        // 초기화 버튼 추가
-	        jbtnReset=new JButton("초기화");
-	        jbtnReset.setBounds(520, 500, 100, 30);
-	        add(jbtnReset);
+	       
 	        
 	        // 포인트 지급/차감 관련 레이블 및 텍스트 필드 추가
 	        JLabel jlblpoint = new JLabel("포인트 지급/차감");
@@ -110,14 +108,19 @@ public class MemberManageView extends Panel  {
 	        
 	     // 등급 변경 관련 레이블 추가
 	        JLabel jlblclass = new JLabel("등급변경");
-	        jlblclass.setBounds(440,370,100, 30);
+	        jlblclass.setBounds(220,680,100, 30);
 	        add(jlblclass);
 	        
 	     // 회원 등급을 변경할 수 있는 JComboBox 추가
 	        String[] item= {"뱀", "이무기 ", "용", "쌍용"};
 	        cb=new JComboBox<String>(item);
-	        cb.setBounds(500, 370, 120, 30);
+	        cb.setBounds(280, 680, 120, 30);
 	        add(cb);
+	        
+	        jbtnLevelOk=new JButton("확인");
+	        jbtnLevelOk.setBounds(420, 680, 80, 30);
+	        add(jbtnLevelOk);
+	        
 	        
 	        // 이벤트 핸들러(MemberManageEvt) 등록
 	        new MemberManageEvt(this);
@@ -174,13 +177,6 @@ public class MemberManageView extends Panel  {
 
 
 
-	public JButton getJbtnReset() {
-		return jbtnReset;
-	}
-
-
-
-
 	public JButton getJbtnPointAdd() {
 		return jbtnPointAdd;
 	}
@@ -226,6 +222,13 @@ public class MemberManageView extends Panel  {
 	public JComboBox getCb() {
 		return cb;
 	}
-	
+
+
+	public JButton getJbtnLevelOk() {
+		return jbtnLevelOk;
+	}
+
+
+
 	
 }

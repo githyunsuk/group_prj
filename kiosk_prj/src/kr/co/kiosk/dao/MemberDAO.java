@@ -170,4 +170,7 @@ public class MemberDAO {
 		return memVO;
 	}// selectMember
 
+	
+	
+	
 }

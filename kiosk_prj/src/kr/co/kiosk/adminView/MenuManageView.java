@@ -36,7 +36,7 @@ public class MenuManageView extends Panel {
         add(jbtnSearch);
 
         // menuId 컬럼 포함 (숨기기 전)
-        String[] columns = {"menuId", "카테고리", "메뉴명", "사진 경로", "중량", "UnitName", "칼로리", "가격", "비고"};
+        String[] columns = {"menuId", "카테고리", "메뉴명", "사진 경로", "중량", "UnitName", "칼로리", "가격", "설명"};
         tableModel = new DefaultTableModel(columns, 0);
         jtblMenu = new JTable(tableModel);
 
@@ -198,4 +198,8 @@ public class MenuManageView extends Panel {
             return -1;
         }
     }
+
+
+
+	
 }
