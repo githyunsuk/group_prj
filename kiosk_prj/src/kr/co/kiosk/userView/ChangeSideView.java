@@ -28,6 +28,7 @@ public class ChangeSideView extends JDialog {
 		cse.addMenuItem();
 
 		setBounds(300, 300, 772, 346);
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}
 

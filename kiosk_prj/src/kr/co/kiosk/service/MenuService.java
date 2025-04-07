@@ -19,6 +19,9 @@ public class MenuService {
 		
 		try {
 			mDAO.insertMenu(mVO);
+			
+			System.out.println("---------mVO.getMenuId()------- "+mVO.getMenuId());
+			
 			flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -32,6 +32,7 @@ public class AddIngredientsView extends JDialog {
 		aie.addMenuItem();
 
 		setBounds(300, 300, 772, 346);
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}
 
