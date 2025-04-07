@@ -23,8 +23,8 @@ public class MenuService {
 		try {
 			mDAO.insertMenu(mVO);
 			
-			//카테고리가 3,4,5인 메뉴만 재고관리에 수량0으로 추가_신민기
-			if(Arrays.asList(3,4,5).contains(mVO.getCategoryId())) {
+			//카테고리가 2, 3,4,5인 메뉴만 재고관리에 수량0으로 추가_신민기
+			if(Arrays.asList(2,3,4,5).contains(mVO.getCategoryId())) {
 				sDAO.insertNewStock(mVO);
 			}
 			

@@ -17,7 +17,7 @@ public class StockManageService {
 	}
 	
 	
-	//재고 가져오기( 3:사이드메뉴, 4:음료, 5:재료만 가져옴)
+	//재고 가져오기(2:버거, 3:사이드메뉴, 4:음료, 5:재료만 가져옴)
 	public List<StockVO> stockVOList(){
 		List<StockVO> list = new ArrayList<StockVO>();
 		
