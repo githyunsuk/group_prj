@@ -9,7 +9,9 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -39,40 +41,39 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 		if(selectedRowNum != -1) { //선택을 했을때만 
 			String orderId = omv.getJtblOrderStatus().getValueAt(selectedRowNum, 0).toString();
 			TotalOrderVO vo = new TotalOrderVO();
-			vo = oms.getOrderVO(Integer.parseInt(orderId));
-			
+			String phoneNumber = null;
+			Map<String, Object> result = new HashMap<>();
+			result = oms.getOrderVO(Integer.parseInt(orderId));
+			vo = (TotalOrderVO)result.get("order");
+			phoneNumber = (String)result.get("phoneNumber");
+		
 			omv.getOdv().getJtfOrderId().setText(String.valueOf(vo.getOrderId())); 
 			omv.getOdv().getJtfOrderWaitingNum().setText(String.valueOf(vo.getOrderWaitingNumber()));
 			omv.getOdv().getJtfOrderDate().setText(String.valueOf(vo.getOrderDateTime()));
 			omv.getOdv().getJtfTakeOut().setText(String.valueOf(vo.getOrderType()));
 			//omv.getOdv().getJtfMemberID().setText(String.valueOf(vo.getMemberId()));
 			if(vo.getMemberId() != 0) {
-				omv.getOdv().getJtfMemberID().setText(String.valueOf(vo.getMemberId()));
+				omv.getOdv().getJtfMemberID().setText(phoneNumber);
 			} else {
-				omv.getOdv().getJtfMemberID().setText("0(비회원)");
+				omv.getOdv().getJtfMemberID().setText("비회원");
 			}
 			omv.getOdv().getJtfTotalPrice().setText(String.valueOf(vo.getPrice())); //총가격
-			if (vo.getOrderStatus().equals("조리중"))  {		
+			if ("조리중".equals(vo.getOrderStatus()))  {		
 				omv.getOdv().getBgMakingDone().clearSelection();
 				omv.getOdv().getJrbMaking().setSelected(true);
-			} if (vo.getOrderStatus().equals("조리완료")) {
+			} if ("조리완료".equals(vo.getOrderStatus())) {
 				omv.getOdv().getBgMakingDone().clearSelection();
 				omv.getOdv().getJrbDone().setSelected(true);
 			}
-			
 			
 			//상세메뉴 조회출력
 			List<String[]> menuList = new ArrayList<String[]>();
 			menuList = oms.nameNprice(Integer.parseInt(orderId));
 			omv.getOdv().updateTable(menuList);
 			
-			
-			
 		} else {
 			System.out.println("잘모된 index값 ");
 		}
-		
-		
 		
 	}
 
@@ -99,7 +100,7 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -130,7 +131,9 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 				List<TotalOrderVO> voList = oms.totalOrderVOList(0);
 				omv.updateTable(voList);
 			}
+			
 		}
+		
 		//삭제 
 		if(e.getSource() == odv.getJbtnDelete()) {
 			System.out.println("삭제 클릭 ");
@@ -141,7 +144,6 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 			} else {
 				status = "예외";
 			}
-			System.out.println(status);
 			
 			if(!status.equals("조리중")) {
 				JOptionPane.showMessageDialog(odv, "'조리중'인 주문만 삭제하실 수 있습니다.");
@@ -154,21 +156,23 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 				JOptionPane.showMessageDialog(odv, orderId + "번 주문을 삭제하였습니다.");
 			}
 			
-			
 		}
+		
+		
 		//목록 갱신
 		if(e.getSource() == odv.getJbtnNewList()) {
 			System.out.println("목록갱신 클릭 ");
 			List<TotalOrderVO> voList = oms.totalOrderVOList(0);
 			omv.updateTable(voList);
 		}
+		
 		//전체주문 리스트 
 		if(e.getSource() == odv.getJbtnGuitar()) {
 			System.out.println("전체주문 클릭");
 			List<TotalOrderVO> voList = oms.totalOrderVOList(1);
 			omv.updateTable(voList);
-
 		}
+		
 		
 	}
 

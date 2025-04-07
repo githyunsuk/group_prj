@@ -11,21 +11,25 @@ public class StockCenterPanel extends JPanel {
 	
 	private JPanel stockPanel, inOutPanel;
 	
+	private StockDetailView sdtView;
+	private InOutDetailView iodtView;
+	
 	public StockCenterPanel() {
 		//재고관리 view단 입니다.
 		cardLayout = new CardLayout();
 		setLayout(cardLayout);
 		
 		stockPanel = new JPanel();
-		StockDetailView sdtView = new StockDetailView();
+		sdtView = new StockDetailView();
 		stockPanel.add(sdtView);
 		
 		inOutPanel = new JPanel();
-		InOutDetailView iodtView = new InOutDetailView();
+		iodtView = new InOutDetailView();
 		inOutPanel.add(iodtView);
 		
+		
 		//카드레이아웃에 추가 
-		add(stockPanel, "STOCKDETAIIL");
+		add(stockPanel, "STOCKDETAIL");
 		add(inOutPanel, "INOUTDETAIL");
 		
 		cardLayout.show(this, "STOCKDETAIL");
@@ -45,6 +49,14 @@ public class StockCenterPanel extends JPanel {
 
 	public JPanel getInOutPanel() {
 		return inOutPanel;
+	}
+
+	public StockDetailView getSdtView() {
+		return sdtView;
+	}
+
+	public InOutDetailView getIodtView() {
+		return iodtView;
 	}
 	
 	

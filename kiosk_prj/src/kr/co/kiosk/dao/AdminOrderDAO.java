@@ -108,8 +108,8 @@ public class AdminOrderDAO {
 		return totalOrderVOList;
 	}
 	
-	//주문번호를 매개변수로 TotalOrderVO 가져오기
-	public TotalOrderVO getOrderVO(int orderId) throws SQLException {
+	//주문번호를 매개변수로 TotalOrderVO 와 MemberVO의 값 호출 
+	public Map<String, Object> getOrderVO(int orderId) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -117,10 +117,16 @@ public class AdminOrderDAO {
 		DbConnection dbCon = DbConnection.getInstance();
 		
 		TotalOrderVO vo = new TotalOrderVO();
+		String phoneNumber = null;
+	    Map<String, Object> result = new HashMap<>();
+
 		try {
 			con = dbCon.getConn();
-			String query = "SELECT ORDER_ID, MEMBER_ID , ORDER_TYPE , ORDER_DATETIME , ORDER_STATUS , PRICE, ORDER_WAITING_NUMBER FROM TOTAL_ORDER WHERE ORDER_ID = ? ";
-			
+			String query = "SELECT t.ORDER_ID, t.MEMBER_ID , t.ORDER_TYPE , t.ORDER_DATETIME , t.ORDER_STATUS , t.PRICE, t.ORDER_WAITING_NUMBER, m.PHONE_NUMBER \r\n"
+					+ "FROM TOTAL_ORDER t\r\n"
+					+ "LEFT JOIN MEMBERS m ON t.MEMBER_ID = m.MEMBER_ID \r\n"
+					+ "WHERE ORDER_ID = ? ";
+			//LEFT JOIN해야 member_id가 null(비회원)이어도 조회가 된다. 
 			pstmt = con.prepareStatement(query);
 			
 			pstmt.setInt(1, orderId);
@@ -135,11 +141,14 @@ public class AdminOrderDAO {
 				vo.setOrderWaitingNumber(rs.getInt("ORDER_WAITING_NUMBER"));
 				vo.setPrice(rs.getInt("PRICE"));
 				vo.setOrderDateTime(rs.getDate("ORDER_DATETIME"));
+				phoneNumber = rs.getString("PHONE_NUMBER");
 			}
 		} finally {
 			dbCon.closeDB(rs, pstmt, con);
 		}
-		return vo;
+		result.put("order", vo);
+	    result.put("phoneNumber", phoneNumber);
+		return result;
 	}
 	
 	

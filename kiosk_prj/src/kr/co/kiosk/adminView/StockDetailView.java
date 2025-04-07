@@ -2,8 +2,11 @@ package kr.co.kiosk.adminView;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +17,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import kr.co.kiosk.adminEvt.StockManageEvt;
+import kr.co.kiosk.vo.StockVO;
 
 public class StockDetailView extends JPanel {
 
@@ -32,44 +38,36 @@ public class StockDetailView extends JPanel {
 		setLayout(new BorderLayout());
 		
 		this.countDataLogs = 20; //임시로 
-		String[] columnNames = {"카테고리", "상품", "변동날짜", "재고량"};
+		String[] columnNames = {"메뉴ID", "카테고리", "상품명", "변동날짜", "재고량"};
 		
-		dataLogs = new String[countDataLogs][columnNames.length]; //Obejct자료형 배열인 dataLogs를 재료품목수 만큼 배열 요소 갯수만큼 생성 
-		
-		/**
-		 * 이것도 사실 evt에서 뽑아서 해야한다.
-		 */
-		for(int i = 0; i < countDataLogs; i++) {
-			
-			//패널로 버튼 감싸
-			LocalDateTime now = LocalDateTime.now();
-
-	        // 원하는 날짜 형식 지정
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
-	        String formattedDate = now.format(formatter); 
-			
-			/**
-			 * 변동날짜는 입고를 했을 때의 sysdate 로 update해야한다. 
-			 */
-			dataLogs[i] = new String[] {"카테고리", "재료" , formattedDate , String.valueOf(i+2) +"개"};
-		}
-		
-		//데이터 직접 수정 불가
-		this.dtm = new DefaultTableModel(dataLogs, columnNames) {
+		//테이블 직접 수정 불가 
+		this.dtm = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
+		dtm.setColumnIdentifiers(columnNames);
 		
 		jtblStockStatus = new JTable(dtm);
+		
+		jtblStockStatus.getColumnModel().getColumn(0).setMinWidth(0);
+		jtblStockStatus.getColumnModel().getColumn(0).setMaxWidth(0);
+		jtblStockStatus.getColumnModel().getColumn(0).setWidth(0);
+		
 		jtblStockStatus.setRowHeight(30);
 		JScrollPane jspStock = new JScrollPane(jtblStockStatus);
 		
 		add(jspStock, "Center");
 		
+		JPanel btnSavePanel = new JPanel();
+		btnSavePanel.setLayout(new GridLayout(1,4));
+		btnSavePanel.add(new JLabel(""));
+		btnSavePanel.add(new JLabel(""));
+		btnSavePanel.add(new JLabel(""));
 		saveStock = new JButton("재료 입고");
-		add(saveStock, BorderLayout.SOUTH);
+		btnSavePanel.add(saveStock);
+		add(btnSavePanel, BorderLayout.SOUTH);
 		
 //컬럼 헤더 및 데이터 중앙정렬화 		
 		//각 컬럼의 데이터들의 정렬 방식을 중앙 정렬로 설정
@@ -83,6 +81,70 @@ public class StockDetailView extends JPanel {
             columnModel.getColumn(i).setCellRenderer(centerRenderer);
         }
 		
+		// 패널의 크기 조정
+		setPreferredSize(new java.awt.Dimension(700, 580)); // 가로 1000, 세로 600 크기로 설정
+
+	}
+	
+	public void updateTable(List<StockVO> voList) {
+		System.out.println("sdv.updateTable() 실행");
+		dtm.setRowCount(0); //초기화 
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		for(int i = 0; i < voList.size(); i++) {
+			StockVO vo = voList.get(i);
+			String formattedDate = sdf.format(vo.getInputDate());
+			
+			String categoryStr = null;
+			switch (vo.getCategoryId()) {
+			case 3: {
+				categoryStr = "사이드메뉴";
+				break;
+			}
+			case 4: {
+				categoryStr = "음료";
+				break;
+			}
+			case 5: {
+				categoryStr = "재료";
+				break;
+			}
+			
+			}
+			
+			String[] row = {
+					String.valueOf(vo.getMenuId()), //숨길예정
+					String.valueOf(categoryStr),
+					String.valueOf(vo.getMenuName()),
+					formattedDate,
+					String.valueOf(vo.getQuantity()) + String.valueOf(vo.getUnitName())
+			};
+			
+			dtm.addRow(row);
+		}
 		
 	}
+
+	public DefaultTableModel getDtm() {
+		return dtm;
+	}
+
+	public JTable getJtblStockStatus() {
+		return jtblStockStatus;
+	}
+
+	public int getCountDataLogs() {
+		return countDataLogs;
+	}
+
+	public String[][] getDataLogs() {
+		return dataLogs;
+	}
+
+	public JButton getSaveStock() {
+		return saveStock;
+	}
+	
+	
 }

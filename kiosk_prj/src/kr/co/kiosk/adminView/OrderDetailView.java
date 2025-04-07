@@ -98,7 +98,7 @@ public class OrderDetailView extends JPanel{
 		jlbOrderStatus.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfOrderStatus = new JTextField(10);
 		jtfOrderStatus.setEditable(false);
-		JLabel jlbMemberID = new JLabel("주문자ID : ", JLabel.CENTER);
+		JLabel jlbMemberID = new JLabel("주문자P.H : ", JLabel.CENTER);
 		jlbMemberID.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		jtfMemberID = new JTextField(10);
 		jtfMemberID.setEditable(false);

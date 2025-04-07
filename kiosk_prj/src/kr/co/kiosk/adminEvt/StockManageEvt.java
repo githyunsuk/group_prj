@@ -5,22 +5,48 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
+import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import kr.co.kiosk.adminService.StockManageService;
+import kr.co.kiosk.adminView.InOutDetailView;
+import kr.co.kiosk.adminView.StockDetailView;
 import kr.co.kiosk.adminView.StockManageView;
+import kr.co.kiosk.vo.StockVO;
 
 public class StockManageEvt extends WindowAdapter implements ActionListener, MouseListener {
 
 	private StockManageView smv;
 	
+	private StockManageService sms;
+	
+	private StockDetailView sdv;
+	
+	private InOutDetailView iodv;
+	
+	private String menuIdStr = null;
+	private String menuName = null;
+	
 	public StockManageEvt(StockManageView smv) {
 		this.smv = smv;
+		this.sms = new StockManageService();
+		this.sdv = smv.getScp().getSdtView();
+		this.iodv = smv.getScp().getIodtView();
 	}
-	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		int selectedRowNum = sdv.getJtblStockStatus().getSelectedRow();
 
+		if(selectedRowNum != -1) {
+			this.menuIdStr = sdv.getJtblStockStatus().getValueAt(selectedRowNum, 0).toString(); //숨겨놨음
+			System.out.println("선택한 메뉴ID : " + menuIdStr);
+			
+			this.menuName = sdv.getJtblStockStatus().getValueAt(selectedRowNum, 2).toString();
+			System.out.println("선택한 메뉴 이름 : " + menuName);
+		}
+		
 	}
 
 	@Override
@@ -49,7 +75,67 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
+		
+		if(e.getSource() == smv.getStockDetail()) {
+			System.out.println("재고현황 클릭");
+			List<StockVO> voList = sms.stockVOList();
+			smv.getScp().showPanel("STOCKDETAIL");
+			
+			smv.getScp().getSdtView().updateTable(voList);
+			
+		}
+		
+		if(e.getSource() == smv.getInOutDetail()) {
+			System.out.println("입출고내역 클릭 ");
+			smv.getScp().showPanel("INOUTDETAIL");
+			
+			//smv.getScp().getInOutPanel();
+		}
+		
+		if(e.getSource() == sdv.getSaveStock()) {
+			System.out.println("재료 입고 버튼 클릭 ");
+			
+			 if (menuIdStr == null || menuName == null) {
+			        JOptionPane.showMessageDialog(null, "먼저 테이블에서 재고 항목을 선택해주세요.");
+			        return;
+			    }
+			 
+			String input = JOptionPane.showInputDialog(
+					null,
+					menuName + "를 클릭하셨습니다. \n입고할 수량을 입력하세요 : ",
+					"입고하기",
+					JOptionPane.PLAIN_MESSAGE
+					);
+			if (input == null) {
+			    System.out.println("취소를 눌렀습니다");
+			    return;
+			} else if (input.isBlank()) {
+			    System.out.println("입력이 비어 있습니다");
+			    return;
+			} else {
+			    System.out.println("입력된 값: " + input);
+			}
+			
+			try {
+				int quantity = Integer.parseInt(input);
+				int menuId = Integer.parseInt(menuIdStr);
+				sms.saveStock(menuId, quantity);
+				
+				JOptionPane.showMessageDialog(iodv, menuName + " 상품을 " + quantity + "만큼 추가하였습니다.");
+				
+			} catch (NumberFormatException ex) {
+				ex.printStackTrace();
+		        JOptionPane.showMessageDialog(null, "숫자만 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+			} finally {
+				//목록 갱신 
+				List<StockVO> voList = sms.stockVOList();
+				smv.getScp().getSdtView().updateTable(voList);
+			}
+			
+		}
+		
+		
 
 	}
 

@@ -40,12 +40,11 @@ public class OrderManageView extends JPanel {
 
 	public OrderManageView() {
 		this.odv = new OrderDetailView(); //우측 상세 텍스트 페이지 
-		//this.ome = new OrderManageEvt(this);
 		
 		setLayout(null);
 		String[] columnNames = {"주문번호", "대기번호", "주문일시", "포장", "상태"};
 		
-		//데이터 직접 수정 불가하게 
+		//테이블 직접 수정 불가
 		this.dtm = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {

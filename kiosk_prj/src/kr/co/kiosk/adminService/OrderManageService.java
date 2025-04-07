@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,15 +41,15 @@ public class OrderManageService {
 	}
 	
 	//주문번호를 매개변수로 해당 주문의 TotalOrderVO 가져오기 
-	public TotalOrderVO getOrderVO(int orderId) {
-		TotalOrderVO vo = new TotalOrderVO();
+	public Map<String, Object> getOrderVO(int orderId) {
+	    Map<String, Object> result = new HashMap<>();
 		try {
-			vo = aoDAO.getOrderVO(orderId);
+			result = aoDAO.getOrderVO(orderId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return vo;
+		return result;
 	}
 	
 	

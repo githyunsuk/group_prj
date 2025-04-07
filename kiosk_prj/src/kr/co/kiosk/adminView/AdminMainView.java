@@ -35,7 +35,6 @@ public class AdminMainView extends JFrame {
 		setLocationRelativeTo(null); //화면 중앙에 정렬
 		//setExtendedState(JFrame.MAXIMIZED_BOTH); //전체화면 모드 
 		
-		
 		//이벤트연결
 		AdminMainEvt ame = new AdminMainEvt(this);
 		
@@ -43,12 +42,10 @@ public class AdminMainView extends JFrame {
 		adminMainButtons.getBtnShutdown().addActionListener(ame);
 		adminMainButtons.getBtnOrder().addActionListener(ame);
 		
-		//adminMainButtons.getBtnOrder().addActionListener(e -> adminCenterPanel.showPanel("ORDER"));
-		adminMainButtons.getBtnMenu().addActionListener(e -> adminCenterPanel.showPanel("MENU"));
-		adminMainButtons.getBtnFinancial().addActionListener(e -> adminCenterPanel.showPanel("FINANCIAL"));
-		adminMainButtons.getBtnStock().addActionListener(e -> adminCenterPanel.showPanel("STOCK"));
-		adminMainButtons.getBtnMember().addActionListener(e -> adminCenterPanel.showPanel("MEMBER"));
-
+		adminMainButtons.getBtnMenu().addActionListener(ame);
+		adminMainButtons.getBtnFinancial().addActionListener(ame);
+		adminMainButtons.getBtnStock().addActionListener(ame);
+		adminMainButtons.getBtnMember().addActionListener(ame);
 		
 	}
 

@@ -79,5 +79,9 @@ public class InOutDetailView extends JPanel {
 	    }
 				
 		
+		// 패널의 크기 조정
+		setPreferredSize(new java.awt.Dimension(700, 580)); // 가로 1000, 세로 600 크기로 설정
+
+		
 	}
 }
