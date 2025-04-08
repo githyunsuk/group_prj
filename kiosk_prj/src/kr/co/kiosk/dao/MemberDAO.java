@@ -42,6 +42,8 @@ public class MemberDAO {
 			rs.next();
 			//번호를 전처리한 후
 			memVO.setMemberId( rs.getInt("nextval"));
+			
+			dbCon.closeDB(rs, pstmt, null);
 
 			String insertMember = "insert into members(member_id, phone_number) values (?, ?)";
 

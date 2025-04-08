@@ -42,6 +42,7 @@ public class TotalOrderDAO {
 			rs.next();
 			// 번호를 전처리한 후
 			toVO.setOrderId(rs.getInt("nextval"));
+			dbCon.closeDB(rs, pstmt, null);
 
 			StringBuilder insertTotalOrder = new StringBuilder();
 			insertTotalOrder.append("	insert into total_order(order_id, member_id, order_type, order_status)	")
@@ -80,6 +81,8 @@ public class TotalOrderDAO {
 			
 			// 번호를 전처리한 후
 			toVO.setOrderId(rs.getInt("nextval"));
+			dbCon.closeDB(rs, pstmt, null);
+			
 			StringBuilder insertTotalOrder = new StringBuilder();
 			insertTotalOrder.append("	insert into total_order(order_id,order_type, order_status)	")
 					.append("	values(?,?,?)				");

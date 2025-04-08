@@ -50,6 +50,9 @@ public class MenuDAO {
 			//번호를 전처리한 후
 			mVO.setMenuId( rs.getInt("nextval"));
 
+			dbConn.closeDB(rs, pstmt, null);
+			
+			
 			StringBuilder insertMenu = new StringBuilder();
 			insertMenu.append("insert into menu")
 					.append("(menu_id,category_id,menu_name,unit_name,weight,calorie,price,");
@@ -87,7 +90,7 @@ public class MenuDAO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			dbConn.closeDB(rs, pstmt, con);
+			dbConn.closeDB(null, pstmt, con);
 			try {
 				if (fis != null)
 					fis.close();
