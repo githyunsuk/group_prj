@@ -51,24 +51,24 @@ public class MenuManageView extends Panel {
         add(jsp);
 
         jlblImage = new JLabel("", SwingConstants.CENTER);
-        jlblImage.setBounds(580, 50, 200, 150);
+        jlblImage.setBounds(580, 15, 200, 200);
         jlblImage.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(jlblImage);
 
         jbtnAdd = new JButton("메뉴 추가");
-        jbtnAdd.setBounds(530, 540, 100, 30);
+        jbtnAdd.setBounds(550, 560, 100, 30);
         add(jbtnAdd);
 
         jbtnEdit = new JButton("메뉴 수정");
-        jbtnEdit.setBounds(530, 580, 100, 30);
+        jbtnEdit.setBounds(550, 600, 100, 30);
         add(jbtnEdit);
 
         jbtnDelete = new JButton("메뉴 삭제");
-        jbtnDelete.setBounds(660, 540, 100, 30);
+        jbtnDelete.setBounds(680, 560, 100, 30);
         add(jbtnDelete);
 
         jbtnReset = new JButton("초기화");
-        jbtnReset.setBounds(660, 580, 100, 30);
+        jbtnReset.setBounds(680, 600, 100, 30);
         add(jbtnReset);
 
         String[] item = {"세트", "버거", "사이드", "음료", "재료"};

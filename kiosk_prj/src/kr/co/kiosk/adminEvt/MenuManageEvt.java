@@ -1,5 +1,7 @@
 package kr.co.kiosk.adminEvt;
 
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,24 +44,27 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     
     //DB 연결
     private void loadMenu() {
-        DefaultTableModel model = (DefaultTableModel) mv.getJtblMenu().getModel();
-        model.setRowCount(0);
+    	
+    	DefaultTableModel model=(DefaultTableModel) mv.getJtblMenu().getModel();
+    	model.setRowCount(0);
+    	
+    	List<MenuVO> menuList=menuService.searchAllMenu();
+    	
+    	for(MenuVO vo:menuList) {
+    		model.addRow(new Object[] {
+    				 vo.getMenuId(),
+    	             categoryIdToName(vo.getCategoryId()),
+    	             vo.getMenuName(),
+    	             vo.getImgName(),
+    	             vo.getWeight(),
+    	             vo.getUnitName(),
+    	             vo.getCalorie(),
+    	             vo.getPrice(),
+    	             vo.getNotes()
 
-        List<MenuVO> menuList = menuService.searchAllMenu();
-
-        for (MenuVO vo : menuList) {
-            model.addRow(new Object[] {
-                vo.getMenuId(),
-                categoryIdToName(vo.getCategoryId()),
-                vo.getMenuName(),
-                vo.getImgName(),
-                vo.getWeight(),
-                vo.getUnitName(),
-                vo.getCalorie(),
-                vo.getPrice(),
-                vo.getNotes()
-            });
-        }
+    		});
+    	}
+    	
     }
     
     
@@ -90,151 +95,169 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     
     //메뉴 추가
     private void addMenu() {
-        try {
-            String name = mv.getJtfName().getText().trim();
-            int categoryId = categoryNameToId((String) mv.getJcbCategory().getSelectedItem());
-            int weight = Integer.parseInt(mv.getJtfWeight().getText().trim());
-            int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
-            int price = Integer.parseInt(mv.getJtfPrice().getText().trim());
-            String unitName = (String) mv.getJcbUnitName().getSelectedItem();
-            String image = mv.getJtfImage().getText().trim();
-            String imgName=mv.getImgName();
-            Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
-            String notes = mv.getJtfExplain().getText().trim();
+       
+    try {
+    	int categoryId= categoryNameToId((String)  mv.getJcbCategory().getSelectedItem());
+    	String name= mv.getJtfName().getText().trim();
+    	String image = mv.getJtfImage().getText().trim();
+        String imgName=mv.getImgName();
+        int weight=Integer.parseInt(mv.getJtfWeight().getText().trim());
+        int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
+        int price = Integer.parseInt(mv.getJtfPrice().getText().trim());
+        String unitName = (String) mv.getJcbUnitName().getSelectedItem();
+        Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
+        String notes = mv.getJtfExplain().getText().trim();
 
-            MenuVO vo = new MenuVO(0, categoryId, name, unitName, image, weight, calorie, price, notes,inputDate, imgName);
-
-            boolean result = menuService.addMenu(vo);
-            if (result) {
-                JOptionPane.showMessageDialog(mv, "메뉴가 성공적으로 추가되었습니다.");
-                loadMenu();
-                resetFields();
-            } else {
-                JOptionPane.showMessageDialog(mv, "메뉴 추가 실패.");
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(mv, "숫자 입력란을 확인해주세요.");
+        MenuVO vo = new MenuVO(0, categoryId, name, unitName, image, weight, calorie, price, notes,inputDate, imgName);
+        boolean result=menuService.addMenu(vo);
+        
+        if(result) {
+        	JOptionPane.showMessageDialog(mv, "성공적으로 추가되었습니다.");
+        	loadMenu();
+        	resetFields();
+        	
+        }else {
+        	JOptionPane.showMessageDialog(mv, "추가 실패하였습니다.");
+        	
         }
+
+    }catch(NumberFormatException ex) {
+    	JOptionPane.showMessageDialog(mv, "숫자 입력란을 확인해주세요.");
+
     }
+  }
     
     
     
     //메뉴 수정
     private void editMenu() {
-        int row = mv.getJtblMenu().getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(mv, "수정할 메뉴를 선택하세요.");
-            return;
+    	
+    	int row=mv.getJtblMenu().getSelectedRow();
+    	if(row==-1) {
+    		JOptionPane.showMessageDialog(mv, "메뉴를 선택해주세요");
+    		return;
+    		
+    	}
+        
+    try {
+    	int MenuId=(int) mv.getJtblMenu().getValueAt(row, 0);
+    	int categoryId= categoryNameToId((String)  mv.getJcbCategory().getSelectedItem());
+    	String name= mv.getJtfName().getText().trim();
+    	String image = mv.getJtfImage().getText().trim();
+        String imgName=mv.getImgName();
+        int weight=Integer.parseInt(mv.getJtfWeight().getText().trim());
+        int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
+        int price = Integer.parseInt(mv.getJtfPrice().getText().trim());
+        String unitName = (String) mv.getJcbUnitName().getSelectedItem();
+        Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
+        String notes = mv.getJtfExplain().getText().trim();
+    	
+        MenuVO vo = new MenuVO(MenuId, categoryId, name, unitName, image, weight, calorie, price, notes, null, imgName);
+        
+        boolean result=menuService.modifyMenu(vo);
+        if (result) {
+            JOptionPane.showMessageDialog(mv, "수정 성공");
+            loadMenu();
+            resetFields();
+        } else {
+            JOptionPane.showMessageDialog(mv, "수정 실패");
         }
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(mv, "입력값 오류 확인");
+    }
 
-        try {
-            int menuId = (int) mv.getJtblMenu().getValueAt(row, 0);
-            int categoryId = categoryNameToId((String) mv.getJcbCategory().getSelectedItem());
-            String name = mv.getJtfName().getText().trim();
-            int weight = Integer.parseInt(mv.getJtfWeight().getText().trim());
-            int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
-            int price = Integer.parseInt(mv.getJtfPrice().getText().trim());
-            String unitName = (String) mv.getJcbUnitName().getSelectedItem();
-            String image = mv.getJtfImage().getText().trim();
-            String notes = mv.getJtfExplain().getText().trim();
-            String imgName=mv.getImgName();
-
-            MenuVO vo = new MenuVO(menuId, categoryId, name, unitName, image, weight, calorie, price, notes, null ,imgName);
-
-            boolean result = menuService.modifyMenu(vo);
-            if (result) {
-                JOptionPane.showMessageDialog(mv, "수정 성공");
-                loadMenu();
-                resetFields();
-            } else {
-                JOptionPane.showMessageDialog(mv, "수정 실패");
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(mv, "입력값 오류 확인");
-        }
     }
 
     
     //메뉴 삭제
     private void deleteMenu() {
-        int row = mv.getJtblMenu().getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(mv, "삭제할 메뉴를 선택하세요.");
-            return;
+        int row=mv.getJtblMenu().getSelectedRow();
+        if(row==-1) {
+        	JOptionPane.showMessageDialog(mv, "메뉴를 선택해주세요");
+        	return;
+        	
         }
-
-        int menuId = (int) mv.getJtblMenu().getValueAt(row, 0);
-        boolean result = menuService.removeMenu(menuId);
-
-        if (result) {
-            JOptionPane.showMessageDialog(mv, "삭제 성공");
-            loadMenu();
-            resetFields();
-        } else {
-            JOptionPane.showMessageDialog(mv, "삭제 실패");
+        
+        int menuId=(int) mv.getJtblMenu().getValueAt(row, 0);
+        boolean result=menuService.removeMenu(menuId);
+        
+        if(result) {
+        	JOptionPane.showMessageDialog(mv, "성공적으로 삭제되었습니다.");
+        	loadMenu();
+        	resetFields();
+        }else {
+        	JOptionPane.showMessageDialog(mv, "삭제 실패");
         }
     }
 
     
     
     private void resetFields() {
-        mv.getJcbCategory().setSelectedIndex(0);
-        mv.getJtfName().setText("");
-        mv.getJtfImage().setText("");
-        mv.getJtfWeight().setText("");
-        mv.getJtfCalorie().setText("");
-        mv.getJtfPrice().setText("");
-        mv.getJtfExplain().setText("");
-        mv.getJcbUnitName().setSelectedIndex(0);
+       mv.getJcbCategory().setSelectedIndex(0);
+       mv.getJtfName().setText("");
+       mv.getJtfImage().setText("");
+       mv.getJtfWeight().setText("");
+       mv.getJtfCalorie().setText("");
+       mv.getJtfPrice().setText("");
+       mv.getJtfExplain().setText("");
+       mv.getJcbUnitName().setSelectedIndex(0);
+       
+       
     }
     
-  private void findImage() {
-      JFileChooser chooser = new JFileChooser();
-   
+  
+    private void findImage(){
+     JFileChooser chooser=new JFileChooser();
+     int result = chooser.showOpenDialog(mv);
 
-      int result = chooser.showOpenDialog(mv);
-      if (result == JFileChooser.APPROVE_OPTION) {
-          File selectedFile = chooser.getSelectedFile();
-          String fileName = selectedFile.getName();
-          String targetPath = "c:/dev/img/" + fileName;
+     if (result == JFileChooser.APPROVE_OPTION) {
+         File selectedFile = chooser.getSelectedFile();
+         String fileName = selectedFile.getName();
+         String targetPath = "c:/dev/img/" + fileName;
 
-          try {
+         try {
+            
+             BufferedImage img = ImageIO.read(selectedFile);
+             if (img == null) {
+                 throw new IOException("선택한 파일이 이미지 파일이 아닙니다.");
+             }
              
-              BufferedImage img = ImageIO.read(selectedFile);
-              if (img == null) {
-                  throw new IOException("선택한 파일이 이미지 파일이 아닙니다.");
-              }
+             
+             Files.copy(selectedFile.toPath(), new File(targetPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+             mv.getJtfImage().setText(fileName);
+             
+             ImageIcon ic=new ImageIcon(targetPath);
+             Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+             ImageIcon realIc = new ImageIcon(tempImg);
+             
+             mv.getJlblImage().setIcon(realIc);
+             imagePath =fileName;
+             mv.setImgName(targetPath);
+             
+             
 
-              Files.copy(selectedFile.toPath(), new File(targetPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
-              mv.getJtfImage().setText(fileName);
-              mv.getJlblImage().setIcon(new ImageIcon(targetPath));
-              imagePath = fileName;
-              mv.setImgName(targetPath);
-
-          } catch (IOException e) {
-              JOptionPane.showMessageDialog(mv, "이미지 저장 오류: " + e.getMessage());
-          }
-      }
-  }
-
+         } catch (IOException e) {
+             JOptionPane.showMessageDialog(mv, "이미지 저장 오류: " + e.getMessage());
+         
+         	}
+     	}
+     
+    }
 
     
    //메뉴명 검색
     private void searchMenu() {
-        String keyword = mv.getJtfSearch().getText().trim();
-        
-        if (keyword.isEmpty()) {
-            loadMenu();  // 전체 메뉴 다시 불러오기
-            return;
-        }
-        
-        
-        DefaultTableModel model = (DefaultTableModel) mv.getJtblMenu().getModel();
-        DefaultTableModel filteredModel = new DefaultTableModel(new String[] {
-            "menuId", "카테고리", "메뉴명", "사진 경로", "중량", "unitname", "칼로리", "가격","설명"
-        }, 0);
-
-        for (int i = 0; i < model.getRowCount(); i++) {
+    	String keyword=mv.getJtfSearch().getText().trim();
+    	
+    	if(keyword.isEmpty()) {
+    		loadMenu();
+    		return;
+    	}
+    	
+    	DefaultTableModel model=(DefaultTableModel) mv.getJtblMenu().getModel();
+    	DefaultTableModel filteredModel=new DefaultTableModel(new String[] 
+    			{"MenuId","카테고리", "메뉴명", "사진 경로", "중량", "unitname", "칼로리", "가격","설명"}, 0);
+    	for (int i = 0; i < model.getRowCount(); i++) {
             String menuName = model.getValueAt(i, 2).toString();
             if (menuName.contains(keyword)) {
                 filteredModel.addRow(new Object[] {
@@ -258,18 +281,23 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     //행을 선택하면 그 행을 가져옴
     @Override
     public void mouseClicked(MouseEvent e) {
+    	
     	  int row = mv.getJtblMenu().getSelectedRow();
           if (row == -1) return;
-
+          
           mv.getJcbCategory().setSelectedItem(mv.getJtblMenu().getValueAt(row, 1));
           mv.getJtfName().setText((String) mv.getJtblMenu().getValueAt(row, 2));
-
+          
+          
           String imgPath = (String) mv.getJtblMenu().getValueAt(row, 3);
           if (!imgPath.startsWith("c:/dev/img/")) {
               imgPath = "c:/dev/img/" + imgPath;
           }
-          mv.getJtfImage().setText(new File(imgPath).getName());
+         
+          mv.getJtfImage().setText(imgPath); 
           mv.getJlblImage().setIcon(new ImageIcon(imgPath));
+          
+          //이 값은 나중에 DB에 저장하거나 이미지 처리할 때 사용될 수 있어요.
           mv.setImgName(imgPath);
 
           mv.getJtfWeight().setText(String.valueOf(mv.getJtblMenu().getValueAt(row, 4)));
@@ -307,7 +335,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     	         }
     	      } else if (e.getSource() == mv.getJbtnFind()) {
 
-    	         findImage();
+    	    	 findImage();
 
     	      } else if (e.getSource() == mv.getJbtnSearch()) {
 

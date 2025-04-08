@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -51,32 +50,11 @@ public class MemberManageEvt implements ActionListener, MouseListener {
                 vo.getPoints(),
                 vo.getStamps(),
                 vo.getLevelId()
-//                LevelIdToName(vo.getLevelId())
             });
         }
     }
     
-//    private int LevelNameToId(String name) {
-//        switch (name) {
-//            case "뱀": return 1;
-//            case "이무기": return 2;
-//            case "용": return 3;
-//            case "쌍용": return 4;
-//            default: return 0;
-//        }
-//    }
-//
-//
-//
-//    private String LevelIdToName(int id) {
-//        switch (id) {
-//            case 1: return "뱀";
-//            case 2: return "이무기";
-//            case 3: return "용";
-//            case 4: return "쌍용";
-//            default: return "기타";
-//        }
-//    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -125,25 +103,44 @@ public class MemberManageEvt implements ActionListener, MouseListener {
     }
 
     private void LevelOk() {
-    	  int selectedRow = mmv.getJtblMember().getSelectedRow();
-    	  if(selectedRow == -1) {
-    		  JOptionPane.showMessageDialog(mmv, "회원을 선택해주세요");
-    		  return;
-    	  }
-    	  
-    	  String selectLevel= (String) mmv.getCb().getSelectedItem();
-    	  
-//    	  switch(selectLevel) {
-//    	  case "뱀": return 1;
-//    	  
-//    	  }
-//    	  
-    	  
+    	
+    	
+  	  int selectedRow = mmv.getJtblMember().getSelectedRow();
+  	  if(selectedRow == -1) {
+  		  JOptionPane.showMessageDialog(mmv, "회원을 선택해주세요");
+  	  }
+  	  
+  	  int memberId = (int) mmv.getTableModel().getValueAt(selectedRow, 0);
+  	  
+  	  String selectLevel= ((String) mmv.getCb().getSelectedItem()).trim();
+  	  int levelId=0;
+  	  
+  	  switch(selectLevel) {
+  	  case "뱀": levelId =1; break;
+  	  case "이무기":  levelId=2; break;
+  	  case "용": levelId=3;break;
+  	  case "쌍용": levelId=4;break;
+  	  
+  	  }
+  
+  	  MemberVO memVO = memberService.searchMember(memberId);
+  	  memVO.setLevelId(levelId);
+  	  
+  	    boolean result = memberService.modifyMember(memVO);
+  	   
+  	    if (result) {
+  	        JOptionPane.showMessageDialog(mmv, "등급이 성공적으로 변경되었습니다.");
+  	        loadMember(); 
+  	    } else {
+  	        JOptionPane.showMessageDialog(mmv, "등급 변경에 실패했습니다.");
+  	    }
 		
-	}
 
+	}
+    
+    
 	private void search() {
-        String keyword = mmv.getJtfSearch().getText().trim().toLowerCase();
+        String keyword = mmv.getJtfSearch().getText().trim();
         DefaultTableModel model = (DefaultTableModel) mmv.getJtblMember().getModel();
 
         if (keyword.isEmpty()) {
@@ -154,7 +151,7 @@ public class MemberManageEvt implements ActionListener, MouseListener {
         DefaultTableModel filteredModel = new DefaultTableModel(new String[]{"회원ID", "전화번호", "누적금액", "포인트", "스탬프", "등급"}, 0);
 
         for (int i = 0; i < model.getRowCount(); i++) {
-            String id = model.getValueAt(i, 0).toString().toLowerCase();
+            String id = model.getValueAt(i, 0).toString();
             if (id.contains(keyword)) {
                 filteredModel.addRow(new Object[]{
                     model.getValueAt(i, 0),
@@ -200,8 +197,21 @@ public class MemberManageEvt implements ActionListener, MouseListener {
 
     private void PointAdd() {
     	  int[] rows = mmv.getJtblMember().getSelectedRows();
-    	    int point = Integer.parseInt(mmv.getJtfPoint().getText().trim());
 
+    	   if (rows.length == 0) {
+   	        JOptionPane.showMessageDialog(mmv, "회원이 선택되지 않았습니다. 회원을 선택해주세요.");
+   	        return; 
+   	    }
+    	   
+    	   String pointText = mmv.getJtfPoint().getText().trim();
+    	   if (pointText.isEmpty()) {
+    	        JOptionPane.showMessageDialog(mmv, "포인트를 입력해주세요.");
+    	        return;
+    	    }
+
+    	   int point = Integer.parseInt(pointText);
+
+    	  
     	    for (int row : rows) {
     	        int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
 
@@ -219,7 +229,20 @@ public class MemberManageEvt implements ActionListener, MouseListener {
 
     private void PointSubtract() {
     	  int[] rows = mmv.getJtblMember().getSelectedRows();
-    	    int point = Integer.parseInt(mmv.getJtfPoint().getText().trim());
+    	    
+    	    if (rows.length == 0) {
+    	        JOptionPane.showMessageDialog(mmv, "회원이 선택되지 않았습니다. 회원을 선택해주세요.");
+    	        return; 
+    	    }
+    	    
+    	    String pointText = mmv.getJtfPoint().getText().trim();
+     	   if (pointText.isEmpty()) {
+     	        JOptionPane.showMessageDialog(mmv, "포인트를 입력해주세요.");
+     	        return;
+     	    }
+
+     	   int point = Integer.parseInt(pointText);
+
 
     	    for (int row : rows) {
     	        int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
@@ -238,8 +261,23 @@ public class MemberManageEvt implements ActionListener, MouseListener {
 
     private void StempAdd() {
         int[] rows = mmv.getJtblMember().getSelectedRows();
-        int stemp = Integer.parseInt(mmv.getJtfStemp().getText().trim());
+      
+        if (rows.length == 0) {
+	        JOptionPane.showMessageDialog(mmv, "회원이 선택되지 않았습니다. 회원을 선택해주세요.");
+	        return; 
+	    }
+        
+     
+	    
+	    String StempText = mmv.getJtfPoint().getText().trim();
+ 	   if (StempText.isEmpty()) {
+ 	        JOptionPane.showMessageDialog(mmv, "스탬프를 입력해주세요.");
+ 	        return;
+ 	    }
 
+ 	   int stemp = Integer.parseInt(StempText);
+
+        
         for (int row : rows) {
             int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
 
@@ -256,8 +294,24 @@ public class MemberManageEvt implements ActionListener, MouseListener {
 
     private void StempSubtract() {
     	int[] rows = mmv.getJtblMember().getSelectedRows();
-        int stemp = Integer.parseInt(mmv.getJtfStemp().getText().trim());
+       
 
+        if (rows.length == 0) {
+	        JOptionPane.showMessageDialog(mmv, "회원이 선택되지 않았습니다. 회원을 선택해주세요.");
+	        return; 
+	    }
+        
+        String StempText = mmv.getJtfStemp().getText().trim();
+
+	    if (StempText.isEmpty()) {
+	        JOptionPane.showMessageDialog(mmv, "스탬프를 입력해주세요.");
+	        return;
+	    }
+	   
+
+ 	   int stemp = Integer.parseInt(StempText);
+
+        
         for (int row : rows) {
             int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
 
@@ -272,9 +326,7 @@ public class MemberManageEvt implements ActionListener, MouseListener {
         loadMember();
     }
 
-    
-    
-    
+  
     
     @Override public void mouseClicked(MouseEvent e) {}
     @Override public void mousePressed(MouseEvent e) {}
