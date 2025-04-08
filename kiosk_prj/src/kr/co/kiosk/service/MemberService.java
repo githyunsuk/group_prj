@@ -72,6 +72,15 @@ public class MemberService {
 		return memVO;
 	}//searchMember
 
+	public MemberVO searchMemberWithPhone(String phoneNumber) {
+		MemberVO memVO = null;
+		MemberDAO memDAO = MemberDAO.getInstance();
+		try {
+			memVO = memDAO.selectMemberWithPhone(phoneNumber);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return memVO;
+	}//searchMemberWithPhone
 	
-	
-}
+}//class

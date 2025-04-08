@@ -28,14 +28,26 @@ public class MemberDAO {
 	public void insertMember(MemberVO memVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
 			con = dbCon.getConn();
-			String insertMember = "insert into members(member_id, phone_number) values (SEQ_MEMBERS_ID.nextval, ?)";
+
+			String memberId = "select SEQ_MEMBERS_ID.nextval nextval from dual";
+			
+			pstmt=con.prepareStatement(memberId);
+			rs=pstmt.executeQuery();
+			rs.next();
+			//번호를 전처리한 후
+			memVO.setMemberId( rs.getInt("nextval"));
+
+			String insertMember = "insert into members(member_id, phone_number) values (?, ?)";
 
 			pstmt = con.prepareStatement(insertMember);
-			pstmt.setString(1, memVO.getPhoneNumber());
+			pstmt.setInt(1, memVO.getMemberId());
+			pstmt.setString(2, memVO.getPhoneNumber());
 			pstmt.executeUpdate();
 
 		} finally {
@@ -109,13 +121,13 @@ public class MemberDAO {
 		try {
 			con = dbCon.getConn();
 			String sql = "select MEMBER_ID, PHONE_NUMBER, TOTAL_AMOUNT, POINTS, STAMPS, LEVEL_ID from members";
-			
+
 			pstmt = con.prepareStatement(sql);
-			
+
 			rs = pstmt.executeQuery();
-			
+
 			MemberVO moVO = null;
-			while(rs.next()) {
+			while (rs.next()) {
 				moVO = new MemberVO();
 				moVO.setMemberId(rs.getInt("member_id"));
 				moVO.setPhoneNumber(rs.getString("phone_number"));
@@ -123,7 +135,7 @@ public class MemberDAO {
 				moVO.setPoints(rs.getInt("points"));
 				moVO.setStamps(rs.getInt("stamps"));
 				moVO.setLevelId(rs.getInt("level_id"));
-				
+
 				list.add(moVO);
 			}
 		} finally {
@@ -132,7 +144,7 @@ public class MemberDAO {
 
 		return list;
 
-	}//selectAllMember
+	}// selectAllMember
 
 	public MemberVO selectMember(int memberId) throws SQLException {
 		MemberVO memVO = null;
@@ -170,7 +182,41 @@ public class MemberDAO {
 		return memVO;
 	}// selectMember
 
-	
-	
-	
-}
+	public MemberVO selectMemberWithPhone(String phoneNumber) throws SQLException {
+		MemberVO memVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			con = dbCon.getConn();
+			StringBuilder selectMember = new StringBuilder();
+			selectMember.append("	select MEMBER_ID, PHONE_NUMBER, TOTAL_AMOUNT, POINTS, STAMPS, LEVEL_ID	")
+					.append("	from MEMBERS where PHONE_NUMBER=?										  	");
+
+			pstmt = con.prepareStatement(selectMember.toString());
+
+			pstmt.setString(1, phoneNumber);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				memVO = new MemberVO();
+				memVO.setMemberId(rs.getInt("member_id"));
+				memVO.setPhoneNumber(rs.getString("phone_number"));
+				memVO.setTotalAmount(rs.getInt("total_amount"));
+				memVO.setPoints(rs.getInt("points"));
+				memVO.setStamps(rs.getInt("stamps"));
+				memVO.setLevelId(rs.getInt("level_id"));
+			}
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+		return memVO;
+
+	}// selectMemberWithPhone
+
+}// class

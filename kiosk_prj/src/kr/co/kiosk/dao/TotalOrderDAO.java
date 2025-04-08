@@ -28,11 +28,21 @@ public class TotalOrderDAO {
 	public void insertTotalOrderMember(TotalOrderVO toVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
+
 			con = dbCon.getConn();
+			String orderId = "SELECT seq_total_order_order__id.NEXTVAL nextval FROM dual";
+
+			pstmt = con.prepareStatement(orderId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			// 번호를 전처리한 후
+			toVO.setOrderId(rs.getInt("nextval"));
+
 			StringBuilder insertTotalOrder = new StringBuilder();
 			insertTotalOrder.append("	insert into total_order(order_id, member_id, order_type, order_status)	")
 					.append("	values(?,?,?,?)				");
@@ -55,11 +65,21 @@ public class TotalOrderDAO {
 	public void insertTotalOrderGuest(TotalOrderVO toVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
 			con = dbCon.getConn();
+			
+			String orderId = "SELECT seq_total_order_order__id.NEXTVAL nextval FROM dual";
+
+			pstmt = con.prepareStatement(orderId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			
+			// 번호를 전처리한 후
+			toVO.setOrderId(rs.getInt("nextval"));
 			StringBuilder insertTotalOrder = new StringBuilder();
 			insertTotalOrder.append("	insert into total_order(order_id,order_type, order_status)	")
 					.append("	values(?,?,?)				");
@@ -89,17 +109,15 @@ public class TotalOrderDAO {
 			con = dbCon.getConn();
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE TOTAL_ORDER ")
-					.append("SET MEMBER_ID=?, ORDER_DATETIME=?, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=?  ")
+					.append("SET MEMBER_ID=?, ORDER_DATETIME=sysdate, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=SEQ_TOTAL_ORDER_ORDER_WAITING_NUMBER.nextval  ")
 					.append("WHERE ORDER_ID=?");
 
 			pstmt = con.prepareStatement(sql.toString());
 
 			pstmt.setInt(1, toVO.getMemberId());
-			pstmt.setDate(2, toVO.getOrderDateTime());
-			pstmt.setInt(3, toVO.getPrice());
-			pstmt.setString(4, toVO.getOrderStatus());
-			pstmt.setInt(5, toVO.getOrderWaitingNumber());
-			pstmt.setInt(6, toVO.getOrderId());
+			pstmt.setInt(2, toVO.getPrice());
+			pstmt.setString(3, toVO.getOrderStatus());
+			pstmt.setInt(4, toVO.getOrderId());
 
 			rowCnt = pstmt.executeUpdate();
 		} finally {
@@ -170,30 +188,4 @@ public class TotalOrderDAO {
 		}
 		return toVO;
 	}// selectTotalOrder
-
-	// order_id 추가용 시퀀스 미리 얻어오기
-	public int getNextOrderId() throws SQLException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		DbConnection dbCon = DbConnection.getInstance();
-		int orderId = -1; // 기본값
-
-		try {
-			con = dbCon.getConn();
-			String sql = "SELECT seq_total_order_order__id.NEXTVAL FROM dual";
-
-			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				orderId = rs.getInt(1);
-			}
-
-		} finally {
-			dbCon.closeDB(rs, pstmt, con);
-		}
-
-		return orderId;
-	}// getNextOrderId
 }

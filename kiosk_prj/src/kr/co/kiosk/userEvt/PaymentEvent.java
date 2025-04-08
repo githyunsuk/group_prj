@@ -51,22 +51,16 @@ public class PaymentEvent implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
     	if(e.getSource() == pv.getCreditcardBtn()) {
-    		new InputPhonenumberView();	
     	}
     	if(e.getSource() == pv.getGiftcardBtn()) {
-    		new InputPhonenumberView();
     	}
     	if(e.getSource() == pv.getKakaopayBtn()) {
-    		new InputPhonenumberView();
     	}
     	if(e.getSource() == pv.getPayCoinBtn()) {
-    		new InputPhonenumberView() ;
     	}
     	if(e.getSource() == pv.getZeropayBtn()) {
-    		new InputPhonenumberView();
     	}
     	if(e.getSource() == pv.getOtherBtn()) {
-    		new InputPhonenumberView();
     	}
         JButton clicked = (JButton) e.getSource();
         String method = clicked.getText();

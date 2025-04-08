@@ -23,7 +23,7 @@ public class TotalOrderService {
 		}
 		return flag;
 	}// addTotalOrderMember
-	
+
 	public boolean addTotalOrderGuest(TotalOrderVO toVO) {
 		boolean flag = false;
 		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
@@ -36,7 +36,7 @@ public class TotalOrderService {
 		}
 		return flag;
 	}// addTotalOrderGuest
-	
+
 	public boolean modifyTotalOrder(TotalOrderVO toVO) {
 		boolean flag = false;
 		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
@@ -47,10 +47,10 @@ public class TotalOrderService {
 			e.printStackTrace();
 		}
 		return flag;
-	}//modifyTotalOrder
-	
+	}// modifyTotalOrder
+
 	public boolean removeTotalOrder(int orderId) {
-		boolean flag= false;
+		boolean flag = false;
 		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
 		try {
 			toDAO.deleteTotalOrder(orderId);
@@ -59,8 +59,8 @@ public class TotalOrderService {
 			e.printStackTrace();
 		}
 		return flag;
-	}//removeTotalOrder
-	
+	}// removeTotalOrder
+
 	public TotalOrderVO searchTotalOrder(int orderId) {
 		TotalOrderVO toVO = null;
 		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
@@ -71,17 +71,6 @@ public class TotalOrderService {
 			e.printStackTrace();
 		}
 		return toVO;
-	}//searchTotalOrder
-
-	public int acquireNextOrderId() {
-		int orderId = -1;
-		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
-		try {
-			orderId = toDAO.getNextOrderId();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return orderId;
-	}//acquireNextOrderId
+	}// searchTotalOrder
 
 }

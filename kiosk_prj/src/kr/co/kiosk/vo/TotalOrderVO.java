@@ -12,16 +12,14 @@ public class TotalOrderVO {
 	}
 	
 	//회원전용 생성자
-	public TotalOrderVO(int orderId, int memberId, String orderType, String orderStatus) {
-		this.orderId = orderId;
+	public TotalOrderVO(int memberId, String orderType, String orderStatus) {
 		this.memberId = memberId;
 		this.orderType = orderType;
 		this.orderStatus = orderStatus;
 	}
 	
 	//비회원 전용 생성자
-	public TotalOrderVO(int orderId, String orderType, String orderStatus) {
-		this.orderId = orderId;
+	public TotalOrderVO(String orderType, String orderStatus) {
 		this.orderType = orderType;
 		this.orderStatus = orderStatus;
 	}

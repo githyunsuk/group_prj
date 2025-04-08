@@ -11,41 +11,34 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import kr.co.kiosk.service.MenuOrderService;
-import kr.co.kiosk.service.MenuService;
-import kr.co.kiosk.service.TotalOrderService;
+import kr.co.kiosk.service.MemberService;
+import kr.co.kiosk.userView.FinalOrderListView;
+import kr.co.kiosk.userView.InputPhonenumberView;
 import kr.co.kiosk.userView.MainPageView;
+import kr.co.kiosk.userView.UseStampView;
 import kr.co.kiosk.userView.UserMainView;
-import kr.co.kiosk.vo.MenuOrderVO;
-import kr.co.kiosk.vo.MenuVO;
-import kr.co.kiosk.vo.TotalOrderVO;
 
 public class UserMainEvt extends WindowAdapter implements ActionListener {
 
 	private UserMainView umv;
-	private String orderType;
 	private DefaultTableModel dtm;
-	private boolean isMember;
-	private int memberId;
 
 	private List<String> easterEgg;
 
 	public UserMainEvt(UserMainView umv) {
 		this.umv = umv;
 		this.dtm = umv.getDtm();
-		isMember = false;
 		easterEgg = new ArrayList<String>();
-	} //UserMainEvt
+	} // UserMainEvt
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
-
 		if (src == umv.getBtnHome()) {
 			umv.getFrame().dispose();
 			new MainPageView();
 		} else if (src == umv.getBtnStamp()) {
-
+			openStampView();
 		} else if (src == umv.getBtnRecommendView()) {
 			switchPanel("rmv", umv.getBtnRecommendView());
 		} else if (src == umv.getBtnBurgerView()) {
@@ -87,6 +80,14 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 		}
 	}// checkEasterEgg
 
+	public void openStampView() {
+		if(umv.getMemberId() != -1) { //이미 앞서 스탬프를 통해 번호 조회를 완료했다면
+			MemberService ms = new MemberService();
+			new UseStampView(umv, ms.searchMember(umv.getMemberId()));
+		}else {
+			new InputPhonenumberView(umv, "stamp");
+		}
+	}//openStampView
 	public void resetButtonColors() {
 		umv.getBtnRecommendView().setBackground(null);
 		umv.getBtnBurgerView().setBackground(null);
@@ -125,6 +126,9 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 		int row = umv.getTable().getSelectedRow();
 		if (row == -1)
 			return;
+		if(String.valueOf(dtm.getValueAt(row, 0)).contains("(증정)")) {
+			return;
+		}
 
 		int quantity = (int) dtm.getValueAt(row, 1);
 		int price = (int) dtm.getValueAt(row, 2);
@@ -160,55 +164,13 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 	}// updateSummary
 
 	public void itemOrder() {
-		if (dtm.getRowCount() == 0)
+		if (dtm.getRowCount() == 0) {
+			JOptionPane.showMessageDialog(umv, "장바구니가 비었습니다!");
 			return;
-
-		orderType = umv.isHall() ? "홀" : "포장";
-		TotalOrderService tos = new TotalOrderService();
-
-		TotalOrderVO toVO = null;
-		if (isMember) {
-			toVO = new TotalOrderVO(tos.acquireNextOrderId(), memberId, orderType, "주문중");
-			tos.addTotalOrderMember(toVO);
-		} else {
-			toVO = new TotalOrderVO(tos.acquireNextOrderId(), orderType, "주문중");
-			tos.addTotalOrderGuest(toVO);
 		}
 
-		MenuService ms = new MenuService();
-		MenuOrderService mos = new MenuOrderService();
-		MenuVO mVO = null;
-		MenuOrderVO moVO = null;
-
-		for (int i = 0; i < dtm.getRowCount(); i++) {
-			mVO = ms.searchMenu((int) dtm.getValueAt(i, 3));
-			moVO = mos.searchOneMenuOrder(toVO.getOrderId(), mVO.getMenuId());
-			if (moVO != null) { // 이미 해당 제품이 MenuOrder에 올라가있으면
-				moVO.setQuantity(moVO.getQuantity() + (int) dtm.getValueAt(i, 1));
-				moVO.setTotalPrice(moVO.getTotalPrice() + (int) dtm.getValueAt(i, 2));
-				mos.modifyMenuOrder(moVO);
-			} else { // 아니면 새로 생성
-				moVO = new MenuOrderVO(toVO.getOrderId(), mVO.getMenuId(), mVO.getCategoryId(),
-						(int) dtm.getValueAt(i, 1), (int) dtm.getValueAt(i, 2));
-				mos.addMenuOrder(moVO);
-			}
-
-			// 세트메뉴면(사이드 및 음료 변경 위해 따로 관리)
-			if (mVO.getCategoryId() == 1 || mVO.getCategoryId() == 2) {
-				String[] strArr = String.valueOf(dtm.getValueAt(i, 0)).split("/");
-				for (int j = 1; j < strArr.length; j++) {
-					strArr[j] = strArr[j].substring(strArr[j].indexOf(')') + 1).trim();
-					mVO = ms.searchMenuWithName(strArr[j]);
-					moVO = mos.searchOneMenuOrder(toVO.getOrderId(), mVO.getMenuId());
-					if (moVO != null) { // 이미 해당 제품이 MenuOrder에 올라가있으면
-						moVO.setQuantity(moVO.getQuantity() + 1);
-						mos.modifyMenuOrder(moVO);
-					} else { // 아니면 새로 생성
-						moVO = new MenuOrderVO(toVO.getOrderId(), mVO.getMenuId(), mVO.getCategoryId(), 1, 0);
-						mos.addMenuOrder(moVO);
-					}
-				}
-			}
-		}
+		new FinalOrderListView(umv);
+		umv.getFrame().dispose();
 	}// itemOrder
+
 }

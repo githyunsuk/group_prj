@@ -132,7 +132,6 @@ public class DrinkMenuEvt implements ActionListener {
 		// 총수량 및 총금액 업데이트
 		umv.getJtfTotalQuantity().setText(String.valueOf(totalQuantity));
 		umv.getJtfTotalPrice().setText(String.valueOf(totalPrice));
-		System.out.println(drinkList.getMenuId());
 		
 	}// menuBtnClicked
 

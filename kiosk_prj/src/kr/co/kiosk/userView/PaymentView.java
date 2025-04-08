@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 
 import kr.co.kiosk.userEvt.PaymentEvent;
 
+@SuppressWarnings("serial")
 public class PaymentView extends JFrame {
     private JButton creditcardBtn;
     private JButton giftcardBtn;

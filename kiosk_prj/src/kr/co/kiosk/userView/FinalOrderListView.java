@@ -24,8 +24,10 @@ public class FinalOrderListView extends JFrame {
     private JLabel jlblTotalResult;
     private JLabel jlblDiscountResult;
     private DefaultTableModel dtm;
+    private UserMainView umv;
     
-    public FinalOrderListView() {
+    public FinalOrderListView(UserMainView umv) {
+    	this.umv = umv;
         setLayout(null);
         
         // ----------------------나의 주문 리스트 타이틀----------------------
@@ -35,20 +37,25 @@ public class FinalOrderListView extends JFrame {
         add(jlblTitle);
 
         // ----------------------테이블 설정----------------------
-        String[] attribute = {"메뉴", "수량", "가격"};
+        String[] attribute = {"메뉴", "수량", "가격", "메뉴id"};
         String[][] row = {{"테스트햄버거1", "1", "1000"},
         				 {"테스트감튀", "2", "1200"}};
-        
-        dtm = new DefaultTableModel(row, attribute) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        dtm = new DefaultTableModel(attribute, 0);
+
         
 //-----------------------------------------------------------------------------------------------------
         
         JTable jt = new JTable(dtm);
+        jt.setDefaultEditor(Object.class, null);
+		jt.getColumnModel().getColumn(0).setMinWidth(400); // 최소 너비
+		jt.getColumnModel().getColumn(0).setMaxWidth(400); // 최대 너비
+		jt.getColumnModel().getColumn(0).setPreferredWidth(400); // 기본 너비
+
+		// 메뉴Id컬럼 숨기기(메뉴ID를 받아와야해서 어쩔 수 없이 dtm에 저장은 하되, 사용자에게는 보이지 않게
+		jt.getColumnModel().getColumn(3).setMinWidth(0);
+		jt.getColumnModel().getColumn(3).setMaxWidth(0);
+		jt.getColumnModel().getColumn(3).setWidth(0);
+		jt.getColumnModel().getColumn(3).setPreferredWidth(0);
 //      jt.setBorder(new LineBorder(Color.BLACK, 1));
         jt.setRowHeight(30);
         
@@ -86,7 +93,7 @@ public class FinalOrderListView extends JFrame {
         jlblDiscount.setFont(font);
         jlblDiscount.setBounds(10, 10, 50, 20);
         
-        jlblDiscountResult = new JLabel("1");
+        jlblDiscountResult = new JLabel();
         jlblDiscountResult.setFont(font);
         jlblDiscountResult.setBounds(530, 10, 150, 20);
         
@@ -103,7 +110,7 @@ public class FinalOrderListView extends JFrame {
         jlblTotalPrice.setFont(font);
         jlblTotalPrice.setBounds(10, 10, 150, 20);
         
-        jlblTotalPriceResult = new JLabel("0원");
+        jlblTotalPriceResult = new JLabel("");
         jlblTotalPriceResult.setFont(font);
         jlblTotalPriceResult.setBounds(530, 10, 150, 20);
         
@@ -128,11 +135,12 @@ public class FinalOrderListView extends JFrame {
         add(jbtnPay);
         
         // ----------------------이벤트 등록-------------------------
-        FinalOrderListEvt fole = new FinalOrderListEvt(this);
+        FinalOrderListEvt fole = new FinalOrderListEvt(this, umv);
         
         
         jbtnCancel.addActionListener(fole);
         jbtnDiscount.addActionListener(fole);	
+        jbtnPay.addActionListener(fole);
         
         addWindowListener(fole);
         // ----------------------프레임 설정----------------------
