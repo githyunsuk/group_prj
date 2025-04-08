@@ -98,6 +98,10 @@ public class StockDetailView extends JPanel {
 			
 			String categoryStr = null;
 			switch (vo.getCategoryId()) {
+			case 2: {
+				categoryStr = "햄버거";
+				break;
+			}
 			case 3: {
 				categoryStr = "사이드메뉴";
 				break;

@@ -153,8 +153,7 @@ public class AdminOrderDAO {
 	
 	
 	//주문번호를 매개변수로 해당 주문에 해당하는 메뉴들 이름과 각각의 수량
-	
-	public List<Map<String, Integer>> hamNPrice (int orderId) throws SQLException{
+	public List<Map<String, Integer>> SelectMenuAndPrice (int orderId) throws SQLException{
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -192,6 +191,35 @@ public class AdminOrderDAO {
 		}
 		return mapList;
 		
+	}
+	
+	//List<String[메뉴이름, 수량]>을 매개변수로 받아 메뉴ID를 찾아 return
+	public int selectMenuId(String menuName) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		int menuId = 0;
+		
+		try {
+			con = dbCon.getConn();
+			
+			String query = "SELECT menu_id FROM MENU WHERE menu_name = ?";
+			
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, menuName);
+			
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				menuId = rs.getInt("menu_id");
+			}
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+		return menuId;
 	}
 	
 	
@@ -244,19 +272,7 @@ public class AdminOrderDAO {
 		
 	}
 	
-	/**
-	public static void main(String[] args) {
-		try {
-			//List<TotalOrderVO> list = new AdminOrderDAO().getOrderList();
-			//List<Map<String, Integer>> list = new AdminOrderDAO().hamNPrice(9);
-			//boolean result = new AdminOrderDAO().changeOrderStatus("조리완료", 32);
-			boolean result = new AdminOrderDAO().deleteOrder(39);
-			System.out.println(result);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	*/
+	
 	
 }
 

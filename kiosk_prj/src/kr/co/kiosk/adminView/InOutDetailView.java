@@ -3,8 +3,10 @@ package kr.co.kiosk.adminView;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,6 +17,10 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import kr.co.kiosk.vo.StockSummaryVO;
+import kr.co.kiosk.vo.StockUpVO;
+import kr.co.kiosk.vo.StockVO;
 
 public class InOutDetailView extends JPanel {
 
@@ -30,28 +36,10 @@ public class InOutDetailView extends JPanel {
 
 		this.countDataLogs = 20; //임시로 
 
-		String[] columnNames = {"재료명", "날짜", "입고건수", "출고건수", "연고"};
-		
-		dataLogs = new String[countDataLogs][columnNames.length]; 
-		
-		for(int i = 0; i < countDataLogs; i++) {
-			
-			//패널로 버튼 감싸
-			LocalDateTime now = LocalDateTime.now();
-
-	        // 원하는 날짜 형식 지정
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm");
-	        String formattedDate = now.format(formatter); 
-			
-			/**
-			 * 변동날짜는 입고를 했을 때의 sysdate 로 update해야한다. 
-			 */
-			dataLogs[i] = new String[] {"입고/출고/전체", "패티", "불고기패티", formattedDate , String.valueOf(i+2)+"Kg"};
-		}
-		
+		String[] columnNames = {"재료명", "날짜", "입고건수", "출고건수", "입고합계", "출고합계"};
 		
 		//데이터 직접 수정 불가
-		this.dtm = new DefaultTableModel(dataLogs, columnNames) {
+		this.dtm = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -91,4 +79,30 @@ public class InOutDetailView extends JPanel {
 
 		
 	}
+	
+	public void updateTable(List<StockSummaryVO> voList) {
+		System.out.println("iodv.updateTable() 실행");
+		dtm.setRowCount(0); //초기화 
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		for(int i = 0; i < voList.size(); i++) {
+			StockSummaryVO vo = voList.get(i);
+			//String formattedDate = sdf.format(vo.getInputDate());
+			
+			String[] row = {
+					vo.getMenuName(),
+					vo.getInputDate(),
+					String.valueOf(vo.getInCount()),
+					String.valueOf(vo.getOutCount()),
+					String.valueOf(vo.getInTotal()),
+					String.valueOf(vo.getOutTotal()),
+			};
+			
+			dtm.addRow(row);
+		}
+		
+	}
+	
+	
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import kr.co.kiosk.adminService.OrderManageService;
+import kr.co.kiosk.adminService.StockManageService;
 import kr.co.kiosk.adminView.OrderDetailView;
 import kr.co.kiosk.adminView.OrderManageView;
 import kr.co.kiosk.vo.TotalOrderVO;
@@ -26,12 +27,15 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 	
 	private OrderManageService oms;
 	
+	private StockManageService sms;
+	
 	private OrderDetailView odv;
 	
 	public OrderManageEvt(OrderManageView omv) {
 		this.omv = omv;
-		this.oms = new OrderManageService();
 		this.odv = omv.getOdv();
+		this.oms = new OrderManageService();
+		this.sms = new StockManageService();
 	}
 	
 	@Override
@@ -64,11 +68,14 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 			} if ("조리완료".equals(vo.getOrderStatus())) {
 				omv.getOdv().getBgMakingDone().clearSelection();
 				omv.getOdv().getJrbDone().setSelected(true);
+				//조리완료시 비활성화
+				omv.getOdv().getJrbMaking().setEnabled(false);
+				omv.getOdv().getJrbDone().setEnabled(false);
 			}
 			
 			//상세메뉴 조회출력
 			List<String[]> menuList = new ArrayList<String[]>();
-			menuList = oms.nameNprice(Integer.parseInt(orderId));
+			menuList = oms.SelectMenuAndPrice(Integer.parseInt(orderId));
 			omv.getOdv().updateTable(menuList);
 			
 		} else {
@@ -125,6 +132,25 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 					JOptionPane.YES_NO_OPTION
 					);
 			if(result == JOptionPane.YES_OPTION) {
+				//status가 조리완료시, 해당 주문의 메뉴들을 재고에서 차감 
+				if("조리완료".equals(status)) {
+					//해당 orderId의 메뉴들을 재고에서 차감, 입출고 테이블에 생성
+					//차감시에 category_id가 1인것은 제외 
+					List<String[]> mNpList = new ArrayList<String[]>();
+					//해당 orderId에 대한 메뉴명들과 각 메뉴들의수량 String 배열List -> 기존메서드 재활용, str로 바뀌는건 어쩔수 없
+					mNpList = oms.SelectMenuAndPrice(orderId); 
+					for(String[] menuAndQty : mNpList) {
+						String menuName = menuAndQty[0];
+						String quantityStr = menuAndQty[1];
+						int menuId = oms.getMenuId(menuName);
+						int quantity = Integer.parseInt(quantityStr);
+					    System.out.println("saveStock() 실행 :"+ menuName +"/"+ menuId +"/"+quantity );
+					    sms.saveStock(menuId, quantity, false);//차감: 여기서quantity는 수량임 
+					}
+					
+				}
+				
+				
 				oms.changeOrderStatus(status, orderId);
 				JOptionPane.showMessageDialog(odv, "성공적으로 변경되었습니다.");
 				//수정 후 갱신

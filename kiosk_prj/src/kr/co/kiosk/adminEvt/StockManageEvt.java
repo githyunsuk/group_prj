@@ -13,6 +13,8 @@ import kr.co.kiosk.adminService.StockManageService;
 import kr.co.kiosk.adminView.InOutDetailView;
 import kr.co.kiosk.adminView.StockDetailView;
 import kr.co.kiosk.adminView.StockManageView;
+import kr.co.kiosk.vo.StockSummaryVO;
+import kr.co.kiosk.vo.StockUpVO;
 import kr.co.kiosk.vo.StockVO;
 
 public class StockManageEvt extends WindowAdapter implements ActionListener, MouseListener {
@@ -88,9 +90,10 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 		
 		if(e.getSource() == smv.getInOutDetail()) {
 			System.out.println("입출고내역 클릭 ");
+			List<StockSummaryVO> voList = sms.selectStockUpAll();
 			smv.getScp().showPanel("INOUTDETAIL");
 			
-			//smv.getScp().getInOutPanel();
+			smv.getScp().getIodtView().updateTable(voList);
 		}
 		
 		if(e.getSource() == sdv.getSaveStock()) {
@@ -120,7 +123,7 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 			try {
 				int quantity = Integer.parseInt(input);
 				int menuId = Integer.parseInt(menuIdStr);
-				sms.saveStock(menuId, quantity);
+				sms.saveStock(menuId, quantity, true); //여기서 quantity는 ml, g 임
 				
 				JOptionPane.showMessageDialog(iodv, menuName + " 상품을 " + quantity + "만큼 추가하였습니다.");
 				

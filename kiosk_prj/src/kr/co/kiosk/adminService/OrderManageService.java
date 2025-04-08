@@ -54,12 +54,12 @@ public class OrderManageService {
 	
 	
 	//주문번호를 매개변수로 해당 주문의 메뉴들의 이름과 수량 
-	public List<String[]> nameNprice(int orderId){
+	public List<String[]> SelectMenuAndPrice(int orderId){
 		List<Map<String, Integer>> hnpMap = new ArrayList<Map<String,Integer>>();
 		List<String[]> tableDataStr = new ArrayList<String[]>();
 		
 		try {
-			hnpMap = aoDAO.hamNPrice(orderId);
+			hnpMap = aoDAO.SelectMenuAndPrice(orderId);
 			
 			for(Map<String, Integer> map : hnpMap) {
 				for(Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -73,8 +73,20 @@ public class OrderManageService {
 		return tableDataStr; 
 	}
 	
+	//메뉴명으로 menuId가져오기 
+	public int getMenuId(String menuName) {
+		int menuId = 0;
+		
+		try {
+			menuId = aoDAO.selectMenuId(menuName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return menuId;
+	}
 
-	//조리중, 완료 글자로 해당 주문번호의 주문 상태를 변경
+	//해당 주문번호의 주문 상태를 조리중, 완료로 변경
 	public boolean changeOrderStatus(String status, int orderId) {
 		
 		boolean result = false;
