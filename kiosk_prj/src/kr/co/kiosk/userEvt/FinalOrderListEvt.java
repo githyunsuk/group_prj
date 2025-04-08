@@ -122,14 +122,20 @@ public class FinalOrderListEvt extends WindowAdapter implements ActionListener {
 		toVO.setOrderStatus("조리중");
 		toVO.setPrice(totalResult - umv.getUsingPoints());
 		
-		MemberService mems = new MemberService();
-		MemberVO memVO = mems.searchMember(umv.getMemberId());
-		memVO.setTotalAmount(memVO.getTotalAmount() + totalPriceAfterDiscount );
-		memVO.setStamps(memVO.getStamps() - umv.getUsingStamps() + (totalResult / 10000)); //사용한 스탬프 빼고, 만원 당 스탬프 1개씩
-		memVO.setPoints(memVO.getPoints() - umv.getUsingPoints() + ((int)(totalResult * 0.05))); //사용한 포인트 빼고, 일단 결제 금액의 5%로 포인트 적립
+		//회원이면
+		if(umv.getMemberId() != -1) {
+			MemberService mems = new MemberService();
+			MemberVO memVO = mems.searchMember(umv.getMemberId());
+			memVO.setTotalAmount(memVO.getTotalAmount() + totalPriceAfterDiscount );
+			memVO.setStamps(memVO.getStamps() - umv.getUsingStamps() + (totalResult / 10000)); //사용한 스탬프 빼고, 만원 당 스탬프 1개씩
+			memVO.setPoints(memVO.getPoints() - umv.getUsingPoints() + ((int)(totalResult * 0.05))); //사용한 포인트 빼고, 일단 결제 금액의 5%로 포인트 적립
+			
+			tos.modifyTotalOrder(toVO);
+			mems.modifyMember(memVO);
+		} else {
+			tos.modifyTotalOrderGuests(toVO);
+		}
 		
-		tos.modifyTotalOrder(toVO);
-		mems.modifyMember(memVO);
 		
 		//member 업데이트(누적금액, 스탬프, 포인트, 등급 등)
 	}// pressPayBtn

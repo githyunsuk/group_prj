@@ -48,6 +48,18 @@ public class TotalOrderService {
 		}
 		return flag;
 	}// modifyTotalOrder
+	
+	public boolean modifyTotalOrderGuests(TotalOrderVO toVO) {
+		boolean flag = false;
+		TotalOrderDAO toDAO = TotalOrderDAO.getInstance();
+		try {
+			toDAO.updateTotalOrderGuests(toVO);
+			flag = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}// modifyTotalOrderGuests
 
 	public boolean removeTotalOrder(int orderId) {
 		boolean flag = false;

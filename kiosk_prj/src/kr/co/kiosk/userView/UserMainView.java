@@ -3,8 +3,10 @@ package kr.co.kiosk.userView;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import kr.co.kiosk.service.MenuService;
@@ -59,7 +60,14 @@ public class UserMainView extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		JLabel jlblSsangyongBurger = new JLabel("쌍용버거");
+		ImageIcon originalIcon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogo.png"));
+
+		// 원하는 크기로 리사이즈 (예: 150x100)
+		Image resizedImage = originalIcon.getImage().getScaledInstance(55, 55, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+		// JLabel에 적용
+		JLabel jlblSsangyongBurger = new JLabel(resizedIcon,  JLabel.LEFT);
 		jlblSsangyongBurger.setFont(new Font("굴림", Font.PLAIN, 18));
 		jlblSsangyongBurger.setBounds(12, 10, 115, 45);
 		frame.getContentPane().add(jlblSsangyongBurger);

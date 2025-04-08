@@ -125,6 +125,35 @@ public class TotalOrderDAO {
 		}
 		return rowCnt;
 	}// updateTotalOrder
+	
+	//게스트 전용 업데이트
+	public int updateTotalOrderGuests(TotalOrderVO toVO) throws SQLException {
+		int rowCnt = 0;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			con = dbCon.getConn();
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE TOTAL_ORDER ")
+			.append("SET ORDER_DATETIME=sysdate, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=SEQ_TOTAL_ORDER_ORDER_WAITING_NUMBER.nextval  ")
+			.append("WHERE ORDER_ID=?");
+			
+			pstmt = con.prepareStatement(sql.toString());
+			
+			pstmt.setInt(1, toVO.getPrice());
+			pstmt.setString(2, toVO.getOrderStatus());
+			pstmt.setInt(3, toVO.getOrderId());
+			
+			rowCnt = pstmt.executeUpdate();
+		} finally {
+			dbCon.closeDB(null, pstmt, con);
+		}
+		return rowCnt;
+	}// updateTotalOrderGuest
 
 	public int deleteTotalOrder(int orderId) throws SQLException {
 		int rowCnt = 0;
