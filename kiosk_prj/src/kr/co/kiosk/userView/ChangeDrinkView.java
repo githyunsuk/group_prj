@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import kr.co.kiosk.userEvt.ChangeDrinkEvt;
 
@@ -21,13 +22,13 @@ public class ChangeDrinkView extends JDialog {
 
 		setLayout(new BorderLayout());
 
-		menuPanel = new JPanel(new GridLayout(3, 3, 10, 10));
+		menuPanel = new JPanel(new GridLayout(0, 3, 10, 10));
 		add(menuPanel);
-
+		
 		ChangeDrinkEvt cde = new ChangeDrinkEvt(this, menuName, menuPrice, umv);
 		cde.addMenuItem();
 
-		setBounds(300, 300, 772, 346);
+		setBounds(300, 300, 772, 546);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}

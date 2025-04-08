@@ -9,6 +9,10 @@ public class MemberVO {
 	public MemberVO() {
 		super();
 	}
+	
+	public MemberVO(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 	public MemberVO(int memberId, String phoneNumber, int totalAmount, int points, int stamps, int levelId) {
 		super();

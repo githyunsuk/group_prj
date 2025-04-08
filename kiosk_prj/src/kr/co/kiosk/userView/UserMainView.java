@@ -41,6 +41,11 @@ public class UserMainView extends JFrame {
 	private SideMenuView smv;
 	private DrinkMenuView dmv;
 
+	//스탬프 아이디 포인트 처리하기가 너무 힘들어서 모든 view가 상속받는 UserMainView의 전역 변수로 설정..
+	private int memberId = -1; //회원아이디
+	private int usingPoints; //사용한 포인트
+	private int usingStamps; //사용한 스탬프
+	
 	private boolean isHall;
 	private List<MenuVO> allMenuList;
 
@@ -193,6 +198,222 @@ public class UserMainView extends JFrame {
 
 	}
 
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+
+	public JTextField getJtfTotalQuantity() {
+		return jtfTotalQuantity;
+	}
+
+	public void setJtfTotalQuantity(JTextField jtfTotalQuantity) {
+		this.jtfTotalQuantity = jtfTotalQuantity;
+	}
+
+	public JTextField getJtfTotalPrice() {
+		return jtfTotalPrice;
+	}
+
+	public void setJtfTotalPrice(JTextField jtfTotalPrice) {
+		this.jtfTotalPrice = jtfTotalPrice;
+	}
+
+	public DefaultTableModel getDtm() {
+		return dtm;
+	}
+
+	public void setDtm(DefaultTableModel dtm) {
+		this.dtm = dtm;
+	}
+
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+
+	public JScrollPane getJsp() {
+		return jsp;
+	}
+
+	public void setJsp(JScrollPane jsp) {
+		this.jsp = jsp;
+	}
+
+	public CardLayout getCl() {
+		return cl;
+	}
+
+	public void setCl(CardLayout cl) {
+		this.cl = cl;
+	}
+
+	public JPanel getJpnlMain() {
+		return jpnlMain;
+	}
+
+	public void setJpnlMain(JPanel jpnlMain) {
+		this.jpnlMain = jpnlMain;
+	}
+
+	public JPanel getJpnlBtn() {
+		return jpnlBtn;
+	}
+
+	public void setJpnlBtn(JPanel jpnlBtn) {
+		this.jpnlBtn = jpnlBtn;
+	}
+
+	public JButton getBtnHome() {
+		return btnHome;
+	}
+
+	public void setBtnHome(JButton btnHome) {
+		this.btnHome = btnHome;
+	}
+
+	public JButton getBtnOrder() {
+		return btnOrder;
+	}
+
+	public void setBtnOrder(JButton btnOrder) {
+		this.btnOrder = btnOrder;
+	}
+
+	public JButton getBtnStamp() {
+		return btnStamp;
+	}
+
+	public void setBtnStamp(JButton btnStamp) {
+		this.btnStamp = btnStamp;
+	}
+
+	public JButton getBtnCancelAll() {
+		return btnCancelAll;
+	}
+
+	public void setBtnCancelAll(JButton btnCancelAll) {
+		this.btnCancelAll = btnCancelAll;
+	}
+
+	public JButton getBtnRecommendView() {
+		return btnRecommendView;
+	}
+
+	public void setBtnRecommendView(JButton btnRecommendView) {
+		this.btnRecommendView = btnRecommendView;
+	}
+
+	public JButton getBtnBurgerView() {
+		return btnBurgerView;
+	}
+
+	public void setBtnBurgerView(JButton btnBurgerView) {
+		this.btnBurgerView = btnBurgerView;
+	}
+
+	public JButton getBtnSideView() {
+		return btnSideView;
+	}
+
+	public void setBtnSideView(JButton btnSideView) {
+		this.btnSideView = btnSideView;
+	}
+
+	public JButton getBtnDrinkView() {
+		return btnDrinkView;
+	}
+
+	public void setBtnDrinkView(JButton btnDrinkView) {
+		this.btnDrinkView = btnDrinkView;
+	}
+
+	public JButton getBtnPlus() {
+		return btnPlus;
+	}
+
+	public void setBtnPlus(JButton btnPlus) {
+		this.btnPlus = btnPlus;
+	}
+
+	public JButton getBtnMinus() {
+		return btnMinus;
+	}
+
+	public void setBtnMinus(JButton btnMinus) {
+		this.btnMinus = btnMinus;
+	}
+
+	public JButton getBtnCancel() {
+		return btnCancel;
+	}
+
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
+	}
+
+	public RecommendMenuView getRmv() {
+		return rmv;
+	}
+
+	public void setRmv(RecommendMenuView rmv) {
+		this.rmv = rmv;
+	}
+
+	public BurgerMenuView getBmv() {
+		return bmv;
+	}
+
+	public void setBmv(BurgerMenuView bmv) {
+		this.bmv = bmv;
+	}
+
+	public SideMenuView getSmv() {
+		return smv;
+	}
+
+	public void setSmv(SideMenuView smv) {
+		this.smv = smv;
+	}
+
+	public DrinkMenuView getDmv() {
+		return dmv;
+	}
+
+	public void setDmv(DrinkMenuView dmv) {
+		this.dmv = dmv;
+	}
+
+	public int getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(int memberId) {
+		this.memberId = memberId;
+	}
+
+	public int getUsingPoints() {
+		return usingPoints;
+	}
+
+	public void setUsingPoints(int usingPoints) {
+		this.usingPoints = usingPoints;
+	}
+
+	public boolean isHall() {
+		return isHall;
+	}
+
+	public void setHall(boolean isHall) {
+		this.isHall = isHall;
+	}
+
 	public List<MenuVO> getAllMenuList() {
 		return allMenuList;
 	}
@@ -201,104 +422,13 @@ public class UserMainView extends JFrame {
 		this.allMenuList = allMenuList;
 	}
 
-	public JButton getBtnHome() {
-		return btnHome;
+	public int getUsingStamps() {
+		return usingStamps;
 	}
 
-	public JFrame getFrame() {
-		return frame;
+	public void setUsingStamps(int usingStamps) {
+		this.usingStamps = usingStamps;
 	}
+	
+}//class
 
-	public JTextField getJtfTotalQuantity() {
-		return jtfTotalQuantity;
-	}
-
-	public JTextField getJtfTotalPrice() {
-		return jtfTotalPrice;
-	}
-
-	public DefaultTableModel getDtm() {
-		return dtm;
-	}
-
-	public JTable getTable() {
-		return table;
-	}
-
-	public JScrollPane getJsp() {
-		return jsp;
-	}
-
-	public CardLayout getCl() {
-		return cl;
-	}
-
-	public JPanel getJpnlMain() {
-		return jpnlMain;
-	}
-
-	public JPanel getJpnlBtn() {
-		return jpnlBtn;
-	}
-
-	public JButton getBtnOrder() {
-		return btnOrder;
-	}
-
-	public JButton getBtnStamp() {
-		return btnStamp;
-	}
-
-	public JButton getBtnCancelAll() {
-		return btnCancelAll;
-	}
-
-	public JButton getBtnRecommendView() {
-		return btnRecommendView;
-	}
-
-	public JButton getBtnBurgerView() {
-		return btnBurgerView;
-	}
-
-	public JButton getBtnSideView() {
-		return btnSideView;
-	}
-
-	public JButton getBtnDrinkView() {
-		return btnDrinkView;
-	}
-
-	public JButton getBtnPlus() {
-		return btnPlus;
-	}
-
-	public JButton getBtnMinus() {
-		return btnMinus;
-	}
-
-	public JButton getBtnCancel() {
-		return btnCancel;
-	}
-
-	public RecommendMenuView getRmv() {
-		return rmv;
-	}
-
-	public BurgerMenuView getBmv() {
-		return bmv;
-	}
-
-	public SideMenuView getSmv() {
-		return smv;
-	}
-
-	public DrinkMenuView getDmv() {
-		return dmv;
-	}
-
-	public boolean isHall() {
-		return isHall;
-	}
-
-}
