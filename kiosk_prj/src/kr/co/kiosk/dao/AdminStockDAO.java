@@ -207,7 +207,7 @@ public class AdminStockDAO {
 		
 		DbConnection dbCon = DbConnection.getInstance();
 		List<StockSummaryVO> ssList = new ArrayList<StockSummaryVO>();
-		
+		 
 		try {
 			con = dbCon.getConn();
 			String query = " SELECT \r\n"
