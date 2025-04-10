@@ -82,11 +82,12 @@ public class BurgerMenuEvt implements ActionListener {
 	public void addMenuItem(MenuVO burgerList) {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
 		if (burgerList.getImgName() != null) {
-			File file = new File("c:/dev/img/kiosk" + File.separator + burgerList.getImgName());
-			if (file.exists()) {
-				String iconPath = file.getAbsolutePath();
-				icon = new ImageIcon(iconPath);
-			}
+//			File file = new File("c:/dev/img/kiosk" + File.separator + burgerList.getImgName());
+//			if (file.exists()) {
+//				String iconPath = file.getAbsolutePath();
+//				icon = new ImageIcon(iconPath);
+//			}
+			icon = burgerList.getImage();
 		}
 		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
 		ImageIcon img = new ImageIcon(scaledImg);

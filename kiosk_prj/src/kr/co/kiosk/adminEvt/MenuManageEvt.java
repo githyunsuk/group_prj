@@ -101,7 +101,6 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     try {
     	int categoryId= categoryNameToId((String)  mv.getJcbCategory().getSelectedItem());
     	String name= mv.getJtfName().getText().trim();
-    	String image = mv.getJtfImage().getText().trim();
         String imgName=mv.getImgName();
         int weight=Integer.parseInt(mv.getJtfWeight().getText().trim());
         int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
@@ -110,7 +109,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
         String notes = mv.getJtfExplain().getText().trim();
 
-        MenuVO vo = new MenuVO(0, categoryId, name, unitName, image, weight, calorie, price, notes,inputDate, imgName);
+        MenuVO vo = new MenuVO(0, categoryId, name, unitName, weight, calorie, price, notes,inputDate, imgName);
         boolean result=menuService.addMenu(vo);
         
         if(result) {
@@ -146,7 +145,6 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     	int MenuId=(int) mv.getJtblMenu().getValueAt(row, 0);
     	int categoryId= categoryNameToId((String)  mv.getJcbCategory().getSelectedItem());
     	String name= mv.getJtfName().getText().trim();
-    	String image = mv.getJtfImage().getText().trim();
         String imgName=mv.getImgName();
         int weight=Integer.parseInt(mv.getJtfWeight().getText().trim());
         int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
@@ -155,7 +153,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
         String notes = mv.getJtfExplain().getText().trim();
     	
-        MenuVO vo = new MenuVO(MenuId, categoryId, name, unitName, image, weight, calorie, price, notes, null, imgName);
+        MenuVO vo = new MenuVO(MenuId, categoryId, name, unitName,  weight, calorie, price, notes, null, imgName);
         
         boolean result=menuService.modifyMenu(vo);
         if (result) {
@@ -305,6 +303,9 @@ public class MenuManageEvt implements ActionListener, MouseListener {
           mv.getJcbCategory().setSelectedItem(mv.getJtblMenu().getValueAt(row, 1));
           mv.getJtfName().setText((String) mv.getJtblMenu().getValueAt(row, 2));
           
+          MenuService ms = new MenuService();
+          MenuVO mVO = ms.searchMenuWithName((String) mv.getJtblMenu().getValueAt(row, 2));
+          System.out.println(mVO.getImage());
           
           String imgPath = (String) mv.getJtblMenu().getValueAt(row, 3);
           if (!imgPath.startsWith("c:/dev/img/")) {
@@ -313,7 +314,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
          
           mv.getJtfImage().setText(imgPath); 
           
-          ImageIcon ic=new ImageIcon(imgPath);
+          ImageIcon ic = mVO.getImage();
           Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
           ImageIcon realIc = new ImageIcon(tempImg);
           mv.getJlblImage().setIcon(realIc);

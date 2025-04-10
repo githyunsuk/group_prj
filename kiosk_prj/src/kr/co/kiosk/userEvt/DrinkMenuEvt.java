@@ -82,11 +82,7 @@ public class DrinkMenuEvt implements ActionListener {
 	public void addMenuItem(MenuVO drinkList) {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
 		if (drinkList.getImgName() != null) {
-			File file = new File("c:/dev/img/kiosk" + File.separator + drinkList.getImgName());
-			if (file.exists()) {
-				String iconPath = file.getAbsolutePath();
-				icon = new ImageIcon(iconPath);
-			}
+				icon = drinkList.getImage();
 		}
 		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
 		ImageIcon img = new ImageIcon(scaledImg);

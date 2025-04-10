@@ -2,28 +2,29 @@ package kr.co.kiosk.vo;
 
 import java.sql.Timestamp;
 
+import javax.swing.ImageIcon;
+
 public class MenuVO {
 
 	private int menuId, categoryId;
 	private String menuName, unitName;
-	private String image;
+	private ImageIcon image;
 	private int weight, calorie, price;
 	private String notes;
 	private Timestamp inputDate;
 	private String imgName;
-	
+
 	public MenuVO() {
-		
+
 	}
 
-	public MenuVO(int menuId, int categoryId, String menuName, String unitName, String image, int weight, int calorie,
-			int price, String notes, Timestamp inputDate, String imgName) {
+	public MenuVO(int menuId, int categoryId, String menuName, String unitName, int weight, int calorie, int price,
+			String notes, Timestamp inputDate, String imgName) {
 		super();
 		this.menuId = menuId;
 		this.categoryId = categoryId;
 		this.menuName = menuName;
 		this.unitName = unitName;
-		this.image = image;
 		this.weight = weight;
 		this.calorie = calorie;
 		this.price = price;
@@ -64,11 +65,11 @@ public class MenuVO {
 		this.unitName = unitName;
 	}
 
-	public String getImage() {
+	public ImageIcon getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(ImageIcon image) {
 		this.image = image;
 	}
 
@@ -126,5 +127,5 @@ public class MenuVO {
 				+ unitName + ", image=" + image + ", weight=" + weight + ", calorie=" + calorie + ", price=" + price
 				+ ", notes=" + notes + ", inputDate=" + inputDate + ", imgName=" + imgName + "]";
 	}
-	
+
 }

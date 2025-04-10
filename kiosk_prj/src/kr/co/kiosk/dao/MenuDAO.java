@@ -1,11 +1,12 @@
 package kr.co.kiosk.dao;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import kr.co.kiosk.vo.MenuVO;
 
@@ -201,6 +205,13 @@ public class MenuDAO {
 				mVO.setCalorie(rs.getInt("calorie"));
 				mVO.setPrice(rs.getInt("price"));
 				mVO.setImgName(rs.getString("img_name"));
+				
+				Blob blob = rs.getBlob("image");
+				InputStream inputStream = blob.getBinaryStream();
+				
+				BufferedImage bufferedImage = ImageIO.read(inputStream);
+				ImageIcon icon = new ImageIcon(bufferedImage);
+				mVO.setImage(icon);
 
 				// clob
 				Clob clobNotes = rs.getClob("notes");
@@ -261,6 +272,13 @@ public class MenuDAO {
 				mVO.setCalorie(rs.getInt("calorie"));
 				mVO.setPrice(rs.getInt("price"));
 				mVO.setImgName(rs.getString("img_name"));
+				
+				Blob blob = rs.getBlob("image");
+				InputStream inputStream = blob.getBinaryStream();
+				
+				BufferedImage bufferedImage = ImageIO.read(inputStream);
+				ImageIcon icon = new ImageIcon(bufferedImage);
+				mVO.setImage(icon);
 
 				// clob
 				Clob clobNotes = rs.getClob("notes");
@@ -321,6 +339,13 @@ public class MenuDAO {
 				mVO.setCalorie(rs.getInt("calorie"));
 				mVO.setPrice(rs.getInt("price"));
 				mVO.setImgName(rs.getString("img_name"));
+				
+				Blob blob = rs.getBlob("image");
+				InputStream inputStream = blob.getBinaryStream();
+				
+				BufferedImage bufferedImage = ImageIO.read(inputStream);
+				ImageIcon icon = new ImageIcon(bufferedImage);
+				mVO.setImage(icon);
 
 				// clob
 				Clob clobNotes = rs.getClob("notes");

@@ -60,11 +60,7 @@ public class RecommendMenuEvt {
 			MenuVO menu = randomMenu.get(i);
 			ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogo.png"));
 			if (menu.getImgName() != null) {
-				File file = new File("c:/dev/img/kiosk" + File.separator + menu.getImgName());
-				if (file.exists()) {
-					String iconPath = file.getAbsolutePath();
-					icon = new ImageIcon(iconPath);
-				}
+					icon = menu.getImage();
 			}
 			Image scaledImg = icon.getImage().getScaledInstance(300, 180, Image.SCALE_SMOOTH);
 			ImageIcon img = new ImageIcon(scaledImg);

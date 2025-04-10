@@ -67,12 +67,9 @@ public class ChangeDrinkEvt {
 			ImageIcon menuIcon = img;
 
 			if (mv.getImgName() != null) {
-				File file = new File("c:/dev/img/kiosk" + File.separator + mv.getImgName());
-				if (file.exists()) {
-					ImageIcon tempIcon = new ImageIcon(file.getAbsolutePath());
+					ImageIcon tempIcon = mv.getImage();
 					Image tempImg = tempIcon.getImage().getScaledInstance(160, 130, Image.SCALE_SMOOTH);
 					menuIcon = new ImageIcon(tempImg);
-				}
 			}
 
 			JButton btn = new JButton(menuIcon);

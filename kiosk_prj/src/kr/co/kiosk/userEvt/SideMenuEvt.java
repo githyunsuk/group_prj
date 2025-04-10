@@ -82,11 +82,7 @@ public class SideMenuEvt implements ActionListener {
 	public void addMenuItem(MenuVO sideList) {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
 		if (sideList.getImgName() != null) {
-			File file = new File("c:/dev/img/kiosk" + File.separator + sideList.getImgName());
-			if (file.exists()) {
-				String iconPath = file.getAbsolutePath();
-				icon = new ImageIcon(iconPath);
-			}
+				icon = sideList.getImage();
 		}
 		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
 		ImageIcon img = new ImageIcon(scaledImg);
