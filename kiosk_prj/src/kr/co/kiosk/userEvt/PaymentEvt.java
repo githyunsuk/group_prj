@@ -151,14 +151,15 @@ public class PaymentEvt extends WindowAdapter implements ActionListener {
 
 		for (int i = 0; i < dtm.getRowCount(); i++) {
 			String name = dtm.getValueAt(i, 0).toString().replaceAll(" ", "");
-						if (name.length() > 15) {
-			    name = name.substring(0, 14) + "…"; // 15자까지만 표시 + 생략부호
+			if (name.length() > 15) {
+				name = name.substring(0, 14) + "…"; // 15자까지만 표시 + 생략부호
 			}
 			String quantity = dtm.getValueAt(i, 1).toString();
 			int price = Integer.parseInt(dtm.getValueAt(i, 2).toString());
 			String formattedPrice = String.format("%,d", price);
 
 			sb.append(String.format("%-22s %8s %15s\n", name, quantity, formattedPrice));
+
 		}
 
 		sb.append("------------------------------------------------------\n");
@@ -219,5 +220,5 @@ public class PaymentEvt extends WindowAdapter implements ActionListener {
 			receiptCreate();
 			new ReceiptView(sb.toString(), waitingNumber);
 		}
-	}
+	}// actionPerformed
 }

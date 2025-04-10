@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +22,7 @@ public class ReceiptView extends JFrame {
 
 	public ReceiptView(String receiptText, int waitingNumber) {
 		setTitle("영수증");
-		setSize(400, 500);
+		setSize(400, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
@@ -48,12 +50,19 @@ public class ReceiptView extends JFrame {
 		receiptArea.setText(receiptText.toString());
 		add(receiptArea, BorderLayout.CENTER);
 
+		
 		// 하단 패널
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 		bottomPanel.setBackground(new Color(255,255,255));
 
-		JButton confirmButton = new JButton("확인");
+		ImageIcon originalIcon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogoBlack.png"));
+		Image resizedImage = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+		JButton confirmButton = new JButton(resizedIcon);
+		confirmButton.setBorderPainted(false); // 테두리 제거
+		confirmButton.setContentAreaFilled(false); // 버튼 배경 제거
 		confirmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		confirmButton.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		confirmButton.addActionListener(new ActionListener() {

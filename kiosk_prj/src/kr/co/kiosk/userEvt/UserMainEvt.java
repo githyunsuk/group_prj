@@ -17,6 +17,7 @@ import kr.co.kiosk.userView.InputPhonenumberView;
 import kr.co.kiosk.userView.MainPageView;
 import kr.co.kiosk.userView.UseStampView;
 import kr.co.kiosk.userView.UserMainView;
+import kr.co.kiosk.vo.MemberVO;
 
 public class UserMainEvt extends WindowAdapter implements ActionListener {
 
@@ -24,6 +25,7 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 	private DefaultTableModel dtm;
 
 	private List<String> easterEgg;
+	private boolean easterEggUsed = false;
 
 	public UserMainEvt(UserMainView umv) {
 		this.umv = umv;
@@ -74,20 +76,31 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 
 	public void checkEasterEgg() {
 		List<String> easterEggCode = List.of("PLUS", "PLUS", "MINUS", "MINUS", "CANCEL");
-		if (easterEgg.equals(easterEggCode)) {
-			JOptionPane.showMessageDialog(null, "축하합니다!!!", "이스터에그", JOptionPane.INFORMATION_MESSAGE);
-			easterEgg.clear();
+		if (easterEggUsed) {
+	        easterEgg.clear();
+	        return; // 이미 사용했으면 아무 일도 안 함
+	    }
+		
+		if (easterEgg.equals(easterEggCode) && umv.getMemberId() != -1) {
+			JOptionPane.showMessageDialog(null, "축하합니다!!!\n 10000포인트 획득하셨습니다!", "이스터에그 발견",
+					JOptionPane.INFORMATION_MESSAGE);
+			MemberService ms = new MemberService();
+			MemberVO memVO = ms.searchMember(umv.getMemberId());
+			memVO.setPoints(memVO.getPoints() + 10000);
+			ms.modifyMember(memVO);
+			easterEggUsed = true;
 		}
 	}// checkEasterEgg
 
 	public void openStampView() {
-		if(umv.getMemberId() != -1) { //이미 앞서 스탬프를 통해 번호 조회를 완료했다면
+		if (umv.getMemberId() != -1) { // 이미 앞서 스탬프를 통해 번호 조회를 완료했다면
 			MemberService ms = new MemberService();
 			new UseStampView(umv, ms.searchMember(umv.getMemberId()));
-		}else {
+		} else {
 			new InputPhonenumberView(umv, "stamp");
 		}
-	}//openStampView
+	}// openStampView
+
 	public void resetButtonColors() {
 		umv.getBtnRecommendView().setBackground(null);
 		umv.getBtnBurgerView().setBackground(null);
@@ -126,7 +139,7 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 		int row = umv.getTable().getSelectedRow();
 		if (row == -1)
 			return;
-		if(String.valueOf(dtm.getValueAt(row, 0)).contains("(증정)")) {
+		if (String.valueOf(dtm.getValueAt(row, 0)).contains("(증정)")) {
 			return;
 		}
 
