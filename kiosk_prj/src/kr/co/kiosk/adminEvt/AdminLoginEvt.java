@@ -9,14 +9,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import kr.co.kiosk.adminService.OrderManageService;
 import kr.co.kiosk.adminView.AdminLoginView;
 import kr.co.kiosk.adminView.AdminMainView;
+import kr.co.kiosk.adminView.OrderManageView;
 import kr.co.kiosk.dao.DbConnection;
 import kr.co.kiosk.userView.MainPageView;
+import kr.co.kiosk.vo.TotalOrderVO;
 
 /**
  * 로그인 이벤트
@@ -30,11 +34,17 @@ public class AdminLoginEvt extends WindowAdapter implements ActionListener {
 	private String id;
 	private String pass;
 	
+	private OrderManageView omv;
+	private OrderManageService oms;
 	
 	public AdminLoginEvt(AdminLoginView ld) {
 		this.ld = ld;
 		login=ld.getJbtnLogin();
 		out=ld.getJbtnOut();
+		
+		this.omv = new OrderManageView();
+		this.oms = new OrderManageService();
+		
 	}//LoginEvt
 	
 	public boolean idChk() {
@@ -86,7 +96,12 @@ public class AdminLoginEvt extends WindowAdapter implements ActionListener {
 		if(id.equals(accessId)&&pass.equals(accessPw)) {
 			JOptionPane.showMessageDialog(ld, "로그인 성공");
 			ld.dispose(); //기존창 종료
-			new AdminMainView().setVisible(true); //AdminMainView 실행 
+			
+			//관리자 접속시, 첫 화면에 주문관리 내역 호출
+			AdminMainView amv = new AdminMainView(); 
+			//amv.setVisible(true); //AdminMainView에서 setVisible() 설정중  
+			List<TotalOrderVO> voList = oms.totalOrderVOList(0);
+			amv.getOrderManageView().updateTable(voList);
 		}else {
 			JOptionPane.showMessageDialog(ld, "로그인 실패");
 		}

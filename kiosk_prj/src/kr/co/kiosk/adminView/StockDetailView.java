@@ -51,6 +51,7 @@ public class StockDetailView extends JPanel {
 		
 		jtblStockStatus = new JTable(dtm);
 		
+		//menuId를 넣고 숨기기위해 설정 
 		jtblStockStatus.getColumnModel().getColumn(0).setMinWidth(0);
 		jtblStockStatus.getColumnModel().getColumn(0).setMaxWidth(0);
 		jtblStockStatus.getColumnModel().getColumn(0).setWidth(0);
@@ -116,13 +117,19 @@ public class StockDetailView extends JPanel {
 			}
 			
 			}
-			
+			//일정수치 이하의 수량은 앞에 이모티콘 표시
+			int menuQuantity = vo.getQuantity();
+			if(menuQuantity < 0) { //음수시 0값으로 대체 
+				menuQuantity = 0;
+			}
+			String displayText = (vo.getQuantity() <= 100) ? "⚠️ " + menuQuantity + vo.getUnitName() : menuQuantity + vo.getUnitName();
+
 			String[] row = {
-					String.valueOf(vo.getMenuId()), //숨길예정
+					String.valueOf(vo.getMenuId()), //숨김
 					String.valueOf(categoryStr),
 					String.valueOf(vo.getMenuName()),
 					formattedDate,
-					String.valueOf(vo.getQuantity()) + String.valueOf(vo.getUnitName())
+					displayText
 			};
 			
 			dtm.addRow(row);

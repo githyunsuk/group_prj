@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -29,6 +30,7 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 	
 	private String menuIdStr = null;
 	private String menuName = null;
+	private String orderDate = null;
 	
 	public StockManageEvt(StockManageView smv) {
 		this.smv = smv;
@@ -48,6 +50,12 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 			this.menuName = sdv.getJtblStockStatus().getValueAt(selectedRowNum, 2).toString();
 			System.out.println("선택한 메뉴 이름 : " + menuName);
 		}
+		
+		//리스트에서 클릭한 날짜 값 
+		this.orderDate = iodv.getJlDate().getSelectedValue();
+		System.out.println("orderDate : " + orderDate);
+		List<StockSummaryVO> voList = sms.selectStockUpAll(orderDate);
+		smv.getScp().getIodtView().updateTable(voList);
 		
 	}
 
@@ -90,10 +98,12 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 		
 		if(e.getSource() == smv.getInOutDetail()) {
 			System.out.println("입출고내역 클릭 ");
-			List<StockSummaryVO> voList = sms.selectStockUpAll();
 			smv.getScp().showPanel("INOUTDETAIL");
-			
+			List<StockSummaryVO> voList = sms.selectStockUpAll("All");
 			smv.getScp().getIodtView().updateTable(voList);
+			
+			List<String> dateList = sms.getWorkdays();
+			smv.getScp().getIodtView().updateList(dateList);
 		}
 		
 		if(e.getSource() == sdv.getSaveStock()) {

@@ -1,8 +1,10 @@
 package kr.co.kiosk.adminService;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import kr.co.kiosk.dao.AdminStockDAO;
@@ -37,6 +39,7 @@ public class StockManageService {
 		boolean result = false;
 		try {
 			result = aoDAO.updateStock(menuId, quantity, isIncrease);
+			//출고시(isIncrease = false일 때) menuId의 현재 quantity를 확인 후에, 출고할 quantity보다 적으면 ...
 			
 			int categoryId = aoDAO.selectCategory(menuId); //insertStockUp()에 필요하다.
 			
@@ -58,11 +61,11 @@ public class StockManageService {
 	}
 	
 	//입출고내역 조회 
-	public List<StockSummaryVO> selectStockUpAll(){
+	public List<StockSummaryVO> selectStockUpAll(String date){
 		List<StockSummaryVO> list = new ArrayList<StockSummaryVO>();
 		
 		try {
-			list = aoDAO.SelectStockUpList();
+			list = aoDAO.SelectStockUpList(date);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,7 +75,20 @@ public class StockManageService {
 		
 	}
 	
-	
-	
+	//영업일 리스트 
+	public List<String> getWorkdays(){
+		List<String> list = new ArrayList<String>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			for (int i = 0; i < aoDAO.selectWorkDays().size(); i++) {
+				list.add(sdf.format(aoDAO.selectWorkDays().get(i)));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 	
 }

@@ -57,7 +57,7 @@ public class StockManageView extends JPanel {
 		scp.getSdtView().getJtblStockStatus().addMouseListener(sme);
 		scp.getSdtView().getSaveStock().addActionListener(sme);
 		//입출고내역 테이블 이벤트 연결 
-		//scp.getIodtView().
+		scp.getIodtView().getJlDate().addMouseListener(sme);
 		
 		
 	}
