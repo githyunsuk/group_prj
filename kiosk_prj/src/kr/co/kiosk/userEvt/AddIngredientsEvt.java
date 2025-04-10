@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userView.AddIngredientsView;
 import kr.co.kiosk.userView.ChangeSideView;
 import kr.co.kiosk.userView.UserMainView;
@@ -80,7 +81,16 @@ public class AddIngredientsEvt {
 			JButton btn = new JButton(menuIcon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
 
-			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + mv.getPrice() + "</html>",
+			MenuService ms = new MenuService();
+			int availableCnt = ms.getAvailableCount(mv.getMenuId());
+			String alertText = "";
+			if (availableCnt <= 5) {
+			    alertText = "<span style='color:red; font-weight:bold;'>매진임박: " + availableCnt + "회</span>";
+			} else {
+			    alertText = "";
+			}
+			
+			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + mv.getPrice() + "<br>" + alertText + "</html>",
 					SwingConstants.CENTER);
 
 			JPanel itemPanel = new JPanel(new GridLayout(1, 1));
