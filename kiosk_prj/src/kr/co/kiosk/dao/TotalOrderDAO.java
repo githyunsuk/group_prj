@@ -105,14 +105,25 @@ public class TotalOrderDAO {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
 		DbConnection dbCon = DbConnection.getInstance();
 
 		try {
 			con = dbCon.getConn();
+			
+			String orderId = "SELECT SEQ_TOTAL_ORDER_ORDER_WAITING_NUMBER.nextval FROM dual";
+
+			pstmt = con.prepareStatement(orderId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			
+			toVO.setOrderWaitingNumber(rs.getInt("nextval"));
+			dbCon.closeDB(rs, pstmt, null);
+			
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE TOTAL_ORDER ")
-					.append("SET MEMBER_ID=?, ORDER_DATETIME=sysdate, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=SEQ_TOTAL_ORDER_ORDER_WAITING_NUMBER.nextval  ")
+					.append("SET MEMBER_ID=?, ORDER_DATETIME=sysdate, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=?  ")
 					.append("WHERE ORDER_ID=?");
 
 			pstmt = con.prepareStatement(sql.toString());
@@ -120,7 +131,8 @@ public class TotalOrderDAO {
 			pstmt.setInt(1, toVO.getMemberId());
 			pstmt.setInt(2, toVO.getPrice());
 			pstmt.setString(3, toVO.getOrderStatus());
-			pstmt.setInt(4, toVO.getOrderId());
+			pstmt.setInt(4, toVO.getOrderWaitingNumber());
+			pstmt.setInt(5, toVO.getOrderId());
 
 			rowCnt = pstmt.executeUpdate();
 		} finally {
@@ -135,21 +147,33 @@ public class TotalOrderDAO {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		
 		DbConnection dbCon = DbConnection.getInstance();
 		
 		try {
 			con = dbCon.getConn();
+			
+			String orderId = "SELECT SEQ_TOTAL_ORDER_ORDER_WAITING_NUMBER.nextval FROM dual";
+
+			pstmt = con.prepareStatement(orderId);
+			rs = pstmt.executeQuery();
+			rs.next();
+			
+			toVO.setOrderWaitingNumber(rs.getInt("nextval"));
+			dbCon.closeDB(rs, pstmt, null);
+			
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE TOTAL_ORDER ")
-			.append("SET ORDER_DATETIME=sysdate, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=SEQ_TOTAL_ORDER_ORDER_WAITING_NUMBER.nextval  ")
+			.append("SET ORDER_DATETIME=sysdate, PRICE=?, ORDER_STATUS=?, ORDER_WAITING_NUMBER=? ")
 			.append("WHERE ORDER_ID=?");
 			
 			pstmt = con.prepareStatement(sql.toString());
 			
 			pstmt.setInt(1, toVO.getPrice());
 			pstmt.setString(2, toVO.getOrderStatus());
-			pstmt.setInt(3, toVO.getOrderId());
+			pstmt.setInt(3, toVO.getOrderWaitingNumber());
+			pstmt.setInt(4, toVO.getOrderId());
 			
 			rowCnt = pstmt.executeUpdate();
 		} finally {

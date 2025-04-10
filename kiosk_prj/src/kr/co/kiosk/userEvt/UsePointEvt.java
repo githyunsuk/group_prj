@@ -23,6 +23,7 @@ public class UsePointEvt extends WindowAdapter implements ActionListener {
 		this.umv = umv;
 		this.mVO = mVO;
 		points = new StringBuilder();
+		umv.setUsingPoints(0); //할인 금액 초기화
 		upv.getJtfTotalPoints().setText(String.valueOf(mVO.getPoints()));
 	}// InputPhonenumberEvt
 

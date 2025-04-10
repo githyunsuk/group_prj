@@ -11,12 +11,13 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import kr.co.kiosk.userEvt.PaymentEvent;
+import kr.co.kiosk.userEvt.PaymentEvt;
 
 @SuppressWarnings("serial")
 public class PaymentView extends JFrame {
@@ -26,11 +27,11 @@ public class PaymentView extends JFrame {
     private JButton payCoinBtn;
     private JButton zeropayBtn;
     private JButton otherBtn;
+    
 
-    public PaymentView() {
+    public PaymentView(FinalOrderListView folv, UserMainView umv, int totalPrice, int totalPriceAfterDiscount) {
         setTitle("결제 수단 선택");
         setSize(600, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -64,6 +65,7 @@ public class PaymentView extends JFrame {
         payCoinBtn = createButton("페이 코인");
         zeropayBtn = createButton("제로페이");
         otherBtn = createButton("기타");
+        
 
         gridPanel.add(kakaopayBtn);
         gridPanel.add(payCoinBtn);
@@ -74,16 +76,24 @@ public class PaymentView extends JFrame {
         add(buttonPanel, BorderLayout.CENTER);
 
         // 하단 총 결제 금액 라벨
-        JLabel amountLabel = new JLabel("총 결제 금액", SwingConstants.CENTER);
+        JLabel amountLabel = new JLabel("총 결제 금액: " + totalPriceAfterDiscount + "원", SwingConstants.CENTER);
         amountLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         amountLabel.setOpaque(true);
         amountLabel.setBackground(Color.LIGHT_GRAY);
         amountLabel.setPreferredSize(new Dimension(400, 40));
         add(amountLabel, BorderLayout.SOUTH);
 
+        PaymentEvt pme = new PaymentEvt(this, folv, umv, totalPrice, totalPriceAfterDiscount);
+        addWindowListener(pme);
+        creditcardBtn.addActionListener(pme);
+        giftcardBtn.addActionListener(pme);
+        kakaopayBtn.addActionListener(pme);
+        payCoinBtn.addActionListener(pme);
+        zeropayBtn.addActionListener(pme);
+        otherBtn.addActionListener(pme);
+        
         setVisible(true);
 
-        new PaymentEvent(this);
     }
 
     private JButton createButton(String text) {
@@ -95,9 +105,7 @@ public class PaymentView extends JFrame {
         return btn;
     }
 
-    public JFrame getParentFrame() { 
-    	return this; 
-    	}
+   
     public JButton getCreditcardBtn() { 
     	return creditcardBtn; 
     	}
@@ -116,8 +124,4 @@ public class PaymentView extends JFrame {
     public JButton getOtherBtn() { 
     	return otherBtn; 
     	}
-
-    public static void main(String[] args) {
-    	new PaymentView();
-    }
 }

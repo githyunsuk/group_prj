@@ -24,10 +24,9 @@ public class FinalOrderListView extends JFrame {
     private JLabel jlblTotalResult;
     private JLabel jlblDiscountResult;
     private DefaultTableModel dtm;
-    private UserMainView umv;
+    
     
     public FinalOrderListView(UserMainView umv) {
-    	this.umv = umv;
         setLayout(null);
         
         // ----------------------나의 주문 리스트 타이틀----------------------
@@ -38,8 +37,7 @@ public class FinalOrderListView extends JFrame {
 
         // ----------------------테이블 설정----------------------
         String[] attribute = {"메뉴", "수량", "가격", "메뉴id"};
-        String[][] row = {{"테스트햄버거1", "1", "1000"},
-        				 {"테스트감튀", "2", "1200"}};
+       
         dtm = new DefaultTableModel(attribute, 0);
 
         
@@ -175,5 +173,5 @@ public class FinalOrderListView extends JFrame {
 	public DefaultTableModel getDtm() {
 		return dtm;
 	}
-
+	
 }
