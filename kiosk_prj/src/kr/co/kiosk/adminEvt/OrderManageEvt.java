@@ -65,6 +65,8 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 			if ("조리중".equals(vo.getOrderStatus()))  {		
 				omv.getOdv().getBgMakingDone().clearSelection();
 				omv.getOdv().getJrbMaking().setSelected(true);
+				omv.getOdv().getJrbMaking().setEnabled(true);
+				omv.getOdv().getJrbDone().setEnabled(true);
 			} if ("조리완료".equals(vo.getOrderStatus())) {
 				omv.getOdv().getBgMakingDone().clearSelection();
 				omv.getOdv().getJrbDone().setSelected(true);

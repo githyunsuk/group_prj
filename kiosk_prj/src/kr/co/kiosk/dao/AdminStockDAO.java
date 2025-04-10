@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import kr.co.kiosk.vo.MemberVO;
@@ -199,7 +200,7 @@ public class AdminStockDAO {
 	}
 	
 	//입출고 내역 전체 조회
-	public List<StockSummaryVO> SelectStockUpList() throws SQLException{
+	public List<StockSummaryVO> SelectStockUpList(String date) throws SQLException{
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -210,24 +211,50 @@ public class AdminStockDAO {
 		 
 		try {
 			con = dbCon.getConn();
-			String query = " SELECT \r\n"
-					+ "    s.MENU_NAME, \r\n"
-					+ "    to_char(TRUNC(su.INPUT_DATE), 'yyyy-mm-dd') AS 입출고일자,\r\n"
-					+ "    SUM(CASE WHEN su.IO_TYPE = '입고' THEN 1 ELSE 0 END) AS 입고건수,\r\n"
-					+ "    SUM(CASE WHEN su.IO_TYPE = '출고' THEN 1 ELSE 0 END) AS 출고건수,\r\n"
-					+ "    SUM(CASE WHEN su.IO_TYPE = '입고' THEN su.QUANTITY_RECEIVED ELSE 0 END) AS 입고합계,\r\n"
-					+ "    SUM(CASE WHEN su.IO_TYPE = '출고' THEN su.QUANTITY_RECEIVED * m.WEIGHT ELSE 0 END) AS 출고합계\r\n"
-					+ "FROM \r\n"
-					+ "    STOCK_UP su\r\n"
-					+ "JOIN \r\n"
-					+ "    STOCK s ON su.MENU_ID = s.MENU_ID AND su.CATEGORY_ID = s.CATEGORY_ID\r\n"
-					+ "JOIN \r\n"
-					+ "    MENU m ON su.MENU_ID = m.MENU_ID\r\n"
-					+ "GROUP BY \r\n"
-					+ "    s.MENU_NAME, TRUNC(su.INPUT_DATE)\r\n"
-					+ "ORDER BY \r\n"
-					+ "    입출고일자 DESC ";
-			pstmt = con.prepareStatement(query);
+			String query = null;
+			if ("All".equals(date)) {
+				query = " SELECT \r\n"
+						+ "    s.MENU_NAME, \r\n"
+						+ "    to_char(TRUNC(su.INPUT_DATE), 'yyyy-mm-dd') AS 입출고일자,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '입고' THEN 1 ELSE 0 END) AS 입고건수,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '출고' THEN 1 ELSE 0 END) AS 출고건수,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '입고' THEN su.QUANTITY_RECEIVED ELSE 0 END) AS 입고합계,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '출고' THEN su.QUANTITY_RECEIVED * m.WEIGHT ELSE 0 END) AS 출고합계\r\n"
+						+ "FROM \r\n"
+						+ "    STOCK_UP su\r\n"
+						+ "JOIN \r\n"
+						+ "    STOCK s ON su.MENU_ID = s.MENU_ID AND su.CATEGORY_ID = s.CATEGORY_ID\r\n"
+						+ "JOIN \r\n"
+						+ "    MENU m ON su.MENU_ID = m.MENU_ID\r\n"
+						+ "GROUP BY \r\n"
+						+ "    s.MENU_NAME, TRUNC(su.INPUT_DATE)\r\n"
+						+ "ORDER BY \r\n"
+						+ "    입출고일자 DESC ";
+				pstmt = con.prepareStatement(query);
+				
+			} else {
+				query = " SELECT \r\n"
+						+ "    s.MENU_NAME, \r\n"
+						+ "    to_char(TRUNC(su.INPUT_DATE), 'yyyy-mm-dd') AS 입출고일자,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '입고' THEN 1 ELSE 0 END) AS 입고건수,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '출고' THEN 1 ELSE 0 END) AS 출고건수,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '입고' THEN su.QUANTITY_RECEIVED ELSE 0 END) AS 입고합계,\r\n"
+						+ "    SUM(CASE WHEN su.IO_TYPE = '출고' THEN su.QUANTITY_RECEIVED * m.WEIGHT ELSE 0 END) AS 출고합계\r\n"
+						+ "FROM \r\n"
+						+ "    STOCK_UP su\r\n"
+						+ "JOIN \r\n"
+						+ "    STOCK s ON su.MENU_ID = s.MENU_ID AND su.CATEGORY_ID = s.CATEGORY_ID\r\n"
+						+ "JOIN \r\n"
+						+ "    MENU m ON su.MENU_ID = m.MENU_ID\r\n"
+						+ "WHERE\r\n"
+						+ "	TRUNC(su.INPUT_DATE) = TO_DATE( ?, 'yyyy-MM-dd')\r\n"
+						+ "GROUP BY \r\n"
+						+ "    s.MENU_NAME, TRUNC(su.INPUT_DATE)\r\n"
+						+ "ORDER BY \r\n"
+						+ "    s.MENU_NAME ";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, date);
+			}
 			
 			rs = pstmt.executeQuery();
 			
@@ -250,6 +277,38 @@ public class AdminStockDAO {
 		
 	}
 	
+	//주문이 존재하는 날짜 가져오기 
+	public List<Date> selectWorkDays() throws SQLException{
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		List<Date> workDays = new ArrayList<Date>();
+		 
+		try {
+			con = dbCon.getConn();
+				
+			String query = " SELECT DISTINCT TO_CHAR(INPUT_DATE, 'yyyy-mm-dd') AS ORDER_DATE\r\n"
+					+ "FROM STOCK_UP\r\n"
+					+ "WHERE INPUT_DATE IS NOT NULL \r\n"
+					+ "ORDER BY ORDER_DATE DESC ";
+			
+			pstmt = con.prepareStatement(query);
+			
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				workDays.add( rs.getDate("ORDER_DATE"));
+			}
+			
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+		return workDays;
+		
+	}
 	
 	
 }
