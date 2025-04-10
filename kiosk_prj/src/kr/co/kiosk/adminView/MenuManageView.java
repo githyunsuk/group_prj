@@ -36,7 +36,7 @@ public class MenuManageView extends Panel {
         add(jbtnSearch);
 
         // menuId 컬럼 포함 (숨기기 전)
-        String[] columns = {"menuId", "카테고리", "메뉴명", "사진 경로", "중량", "UnitName", "칼로리", "가격", "설명"};
+        String[] columns = {"menuId", "카테고리", "메뉴명", "사진 경로", "중량", "단위", "칼로리", "가격", "설명"};
         tableModel = new DefaultTableModel(columns, 0);
         jtblMenu = new JTable(tableModel);
 
@@ -103,7 +103,7 @@ public class MenuManageView extends Panel {
         add(JlblWeight);
         add(JtfWeight);
 
-        JLabel JlblUnitName = new JLabel("UnitName");
+        JLabel JlblUnitName = new JLabel("단위");
         JlblUnitName.setBounds(520, 380, 70, 30);
         String[] item2 = {"g", "ml "};
         JcbUnitName = new JComboBox<>(item2);

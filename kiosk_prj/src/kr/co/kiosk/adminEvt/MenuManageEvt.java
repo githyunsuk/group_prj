@@ -95,6 +95,8 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     
     //메뉴 추가
     private void addMenu() {
+    	
+    	if (!Input()) return;
        
     try {
     	int categoryId= categoryNameToId((String)  mv.getJcbCategory().getSelectedItem());
@@ -131,6 +133,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     
     //메뉴 수정
     private void editMenu() {
+    	if (!Input()) return;
     	
     	int row=mv.getJtblMenu().getSelectedRow();
     	if(row==-1) {
@@ -230,6 +233,8 @@ public class MenuManageEvt implements ActionListener, MouseListener {
              Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
              ImageIcon realIc = new ImageIcon(tempImg);
              
+            
+             
              mv.getJlblImage().setIcon(realIc);
              imagePath =fileName;
              mv.setImgName(targetPath);
@@ -256,7 +261,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     	
     	DefaultTableModel model=(DefaultTableModel) mv.getJtblMenu().getModel();
     	DefaultTableModel filteredModel=new DefaultTableModel(new String[] 
-    			{"MenuId","카테고리", "메뉴명", "사진 경로", "중량", "unitname", "칼로리", "가격","설명"}, 0);
+    			{"MenuId","카테고리", "메뉴명", "사진 경로", "중량", "단위", "칼로리", "가격","설명"}, 0);
     	for (int i = 0; i < model.getRowCount(); i++) {
             String menuName = model.getValueAt(i, 2).toString();
             if (menuName.contains(keyword)) {
@@ -275,6 +280,18 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         }
 
         mv.getJtblMenu().setModel(filteredModel);
+    }
+    
+    // "필수 입력란을 입력해주세요."
+    private boolean Input() {
+        if (mv.getJtfName().getText().trim().isEmpty() || mv.getJtfImage().getText().trim().isEmpty()
+        	|| mv.getJtfWeight().getText().trim().isEmpty() || mv.getJtfCalorie().getText().trim().isEmpty()
+        	|| mv.getJtfPrice().getText().trim().isEmpty()|| mv.getJtfExplain().getText().trim().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(mv, "필수 입력란을 입력해주세요.");
+            return false;
+        }
+        return true;
     }
 
     
@@ -295,7 +312,11 @@ public class MenuManageEvt implements ActionListener, MouseListener {
           }
          
           mv.getJtfImage().setText(imgPath); 
-          mv.getJlblImage().setIcon(new ImageIcon(imgPath));
+          
+          ImageIcon ic=new ImageIcon(imgPath);
+          Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+          ImageIcon realIc = new ImageIcon(tempImg);
+          mv.getJlblImage().setIcon(realIc);
           
           //이 값은 나중에 DB에 저장하거나 이미지 처리할 때 사용될 수 있어요.
           mv.setImgName(imgPath);

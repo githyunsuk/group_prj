@@ -96,7 +96,7 @@ public class MemberManageEvt implements ActionListener, MouseListener {
             }
          
         }else if(e.getSource()==mmv.getJbtnLevelOk()) {
-        	if(JOptionPane.showConfirmDialog(mmv, "확인하시겠습니까?","확인", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION) {
+        	if(JOptionPane.showConfirmDialog(mmv, "변경하시겠습니까?","확인", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION) {
         		LevelOk();
         	}
         }
@@ -228,35 +228,40 @@ public class MemberManageEvt implements ActionListener, MouseListener {
     
 
     private void PointSubtract() {
-    	  int[] rows = mmv.getJtblMember().getSelectedRows();
-    	    
-    	    if (rows.length == 0) {
-    	        JOptionPane.showMessageDialog(mmv, "회원이 선택되지 않았습니다. 회원을 선택해주세요.");
-    	        return; 
-    	    }
-    	    
-    	    String pointText = mmv.getJtfPoint().getText().trim();
-     	   if (pointText.isEmpty()) {
-     	        JOptionPane.showMessageDialog(mmv, "포인트를 입력해주세요.");
-     	        return;
-     	    }
+        int[] rows = mmv.getJtblMember().getSelectedRows();
 
-     	   int point = Integer.parseInt(pointText);
+        if (rows.length == 0) {
+            JOptionPane.showMessageDialog(mmv, "회원이 선택되지 않았습니다. 회원을 선택해주세요.");
+            return; 
+        }
 
+        String pointText = mmv.getJtfPoint().getText().trim();
+        if (pointText.isEmpty()) {
+            JOptionPane.showMessageDialog(mmv, "포인트를 입력해주세요.");
+            return;
+        }
 
-    	    for (int row : rows) {
-    	        int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
+        int point = Integer.parseInt(pointText);
 
-    	        try {
-    	            MemberVO memVO = memberService.searchMember(memberId);
-    	            memVO.setPoints(memVO.getPoints() - point);
-    	            memberService.modifyMember(memVO);
-    	        } catch (Exception e) {
-    	            e.printStackTrace();
-    	        }
-    	    }
-    	    loadMember();
-        
+        for (int row : rows) {
+            int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
+
+            try {
+                MemberVO memVO = memberService.searchMember(memberId);
+                int currentPoints = memVO.getPoints();
+
+                if (currentPoints < point) {
+                    JOptionPane.showMessageDialog(mmv, "보유 포인트보다 많은 포인트를 차감할 수 없습니다.");
+                    continue;
+                }
+
+                memVO.setPoints(currentPoints - point);
+                memberService.modifyMember(memVO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        loadMember();
     }
 
     private void StempAdd() {
@@ -267,16 +272,15 @@ public class MemberManageEvt implements ActionListener, MouseListener {
 	        return; 
 	    }
         
-     
 	    
-	    String StempText = mmv.getJtfPoint().getText().trim();
+	   String StempText = mmv.getJtfStemp().getText().trim();
  	   if (StempText.isEmpty()) {
  	        JOptionPane.showMessageDialog(mmv, "스탬프를 입력해주세요.");
  	        return;
  	    }
 
  	   int stemp = Integer.parseInt(StempText);
-
+ 	   
         
         for (int row : rows) {
             int memberId = (int) mmv.getJtblMember().getValueAt(row, 0);
@@ -284,6 +288,13 @@ public class MemberManageEvt implements ActionListener, MouseListener {
             try {
                 MemberVO memVO = memberService.searchMember(memberId);
                 memVO.setStamps(memVO.getStamps() + stemp);
+                
+                int currentStemp = memVO.getStamps();
+                if (currentStemp + stemp > 10) {
+                    JOptionPane.showMessageDialog(mmv, "스탬프는 최대 10개까지만 보유할 수 있습니다.");
+                    continue;
+                }
+                
                 memberService.modifyMember(memVO);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -318,6 +329,13 @@ public class MemberManageEvt implements ActionListener, MouseListener {
             try {
                 MemberVO memVO = memberService.searchMember(memberId);
                 memVO.setStamps(memVO.getStamps() - stemp);
+                int currentStemp = memVO.getStamps();
+                
+                if (currentStemp < stemp) {
+                	JOptionPane.showMessageDialog(mmv, "보유 스탬프보다 많은 스탬프를 차감할 수 없습니다.");
+                	continue;
+                }//end if
+                
                 memberService.modifyMember(memVO);
             } catch (Exception e) {
                 e.printStackTrace();
