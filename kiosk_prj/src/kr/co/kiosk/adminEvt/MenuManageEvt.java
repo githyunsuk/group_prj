@@ -105,8 +105,8 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         int weight=Integer.parseInt(mv.getJtfWeight().getText().trim());
         int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
         int price = Integer.parseInt(mv.getJtfPrice().getText().trim());
-        String unitName = (String) mv.getJcbUnitName().getSelectedItem();
         Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
+        String unitName=(String) mv.getJcbUnitName().getSelectedItem();
         String notes = mv.getJtfExplain().getText().trim();
 
         MenuVO vo = new MenuVO(0, categoryId, name, unitName, weight, calorie, price, notes,inputDate, imgName);
@@ -123,7 +123,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         }
 
     }catch(NumberFormatException ex) {
-    	JOptionPane.showMessageDialog(mv, "숫자 입력란을 확인해주세요.");
+    	JOptionPane.showMessageDialog(mv, "숫자 입력란(N)을 확인해주세요.");
 
     }
   }
@@ -149,11 +149,10 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         int weight=Integer.parseInt(mv.getJtfWeight().getText().trim());
         int calorie = Integer.parseInt(mv.getJtfCalorie().getText().trim());
         int price = Integer.parseInt(mv.getJtfPrice().getText().trim());
-        String unitName = (String) mv.getJcbUnitName().getSelectedItem();
         Timestamp inputDate = new Timestamp(System.currentTimeMillis()); 
         String notes = mv.getJtfExplain().getText().trim();
     	
-        MenuVO vo = new MenuVO(MenuId, categoryId, name, unitName,  weight, calorie, price, notes, null, imgName);
+        MenuVO vo = new MenuVO(MenuId, categoryId, name, null,  weight, calorie, price, notes, null, imgName);
         
         boolean result=menuService.modifyMenu(vo);
         if (result) {
@@ -250,7 +249,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     
    //메뉴명 검색
     private void searchMenu() {
-    	String keyword=mv.getJtfSearch().getText().trim();
+    	String keyword=mv.getJtfSearch().getText().trim().toLowerCase();
     	
     	if(keyword.isEmpty()) {
     		loadMenu();
@@ -261,7 +260,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     	DefaultTableModel filteredModel=new DefaultTableModel(new String[] 
     			{"MenuId","카테고리", "메뉴명", "사진 경로", "중량", "단위", "칼로리", "가격","설명"}, 0);
     	for (int i = 0; i < model.getRowCount(); i++) {
-            String menuName = model.getValueAt(i, 2).toString();
+            String menuName = model.getValueAt(i, 2).toString().toLowerCase();
             if (menuName.contains(keyword)) {
                 filteredModel.addRow(new Object[] {
                     model.getValueAt(i, 0),
@@ -286,7 +285,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
         	|| mv.getJtfWeight().getText().trim().isEmpty() || mv.getJtfCalorie().getText().trim().isEmpty()
         	|| mv.getJtfPrice().getText().trim().isEmpty()|| mv.getJtfExplain().getText().trim().isEmpty()) {
             
-            JOptionPane.showMessageDialog(mv, "필수 입력란을 입력해주세요.");
+            JOptionPane.showMessageDialog(mv, "필수 입력란(*)을 입력해주세요.");
             return false;
         }
         return true;

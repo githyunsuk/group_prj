@@ -323,7 +323,6 @@ public class MemberManageEvt implements ActionListener, MouseListener {
 
             try {
                 MemberVO memVO = memberService.searchMember(memberId);
-                memVO.setStamps(memVO.getStamps() - stemp);
                 int currentStemp = memVO.getStamps();
                 
                 if (currentStemp < stemp) {
@@ -331,6 +330,7 @@ public class MemberManageEvt implements ActionListener, MouseListener {
                 	continue;
                 }//end if
                 
+                memVO.setStamps(memVO.getStamps() - stemp);
                 memberService.modifyMember(memVO);
             } catch (Exception e) {
                 e.printStackTrace();

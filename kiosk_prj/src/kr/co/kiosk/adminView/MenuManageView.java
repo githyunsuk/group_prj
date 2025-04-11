@@ -73,20 +73,20 @@ public class MenuManageView extends Panel {
 
         String[] item = {"세트", "버거", "사이드", "음료", "재료"};
         JcbCategory = new JComboBox<>(item);
-        JLabel JlblCategory = new JLabel("카테고리");
+        JLabel JlblCategory = new JLabel("카테고리*");
         JlblCategory.setBounds(520, 220, 70, 30);
         JcbCategory.setBounds(580, 220, 200, 30);
         add(JlblCategory);
         add(JcbCategory);
 
-        JLabel JlblName = new JLabel("이름");
+        JLabel JlblName = new JLabel("이름*");
         JlblName.setBounds(520, 260, 100, 30);
         JtfName = new JTextField();
         JtfName.setBounds(580, 260, 200, 30);
         add(JlblName);
         add(JtfName);
 
-        JLabel JlblImage = new JLabel("사진");
+        JLabel JlblImage = new JLabel("사진*");
         JlblImage.setBounds(520, 300, 100, 30);
         JtfImage = new JTextField();
         JtfImage.setBounds(580, 300, 140, 30);
@@ -96,14 +96,14 @@ public class MenuManageView extends Panel {
         add(JtfImage);
         add(jbtnFind);
 
-        JLabel JlblWeight = new JLabel("중량");
+        JLabel JlblWeight = new JLabel("중량*,N");
         JlblWeight.setBounds(520, 340, 100, 30);
         JtfWeight = new JTextField();
         JtfWeight.setBounds(580, 340, 200, 30);
         add(JlblWeight);
         add(JtfWeight);
 
-        JLabel JlblUnitName = new JLabel("단위");
+        JLabel JlblUnitName = new JLabel("단위*");
         JlblUnitName.setBounds(520, 380, 70, 30);
         String[] item2 = {"g", "ml "};
         JcbUnitName = new JComboBox<>(item2);
@@ -111,21 +111,21 @@ public class MenuManageView extends Panel {
         add(JlblUnitName);
         add(JcbUnitName);
 
-        JLabel JlblCalorie = new JLabel("칼로리");
+        JLabel JlblCalorie = new JLabel("칼로리*,N");
         JlblCalorie.setBounds(520, 420, 100, 30);
         JtfCalorie = new JTextField();
         JtfCalorie.setBounds(580, 420, 200, 30);
         add(JlblCalorie);
         add(JtfCalorie);
 
-        JLabel JlblPrice = new JLabel("가격");
+        JLabel JlblPrice = new JLabel("가격*,N");
         JlblPrice.setBounds(520, 460, 100, 30);
         JtfPrice = new JTextField();
         JtfPrice.setBounds(580, 460, 200, 30);
         add(JlblPrice);
         add(JtfPrice);
 
-        JLabel JlblExplain = new JLabel("설명");
+        JLabel JlblExplain = new JLabel("설명*");
         JlblExplain.setBounds(520, 500, 100, 30);
         JtfExplain = new JTextField();
         JtfExplain.setBounds(580, 500, 200, 30);
@@ -189,9 +189,15 @@ public class MenuManageView extends Panel {
 
     public JComboBox<String> getJcbCategory() { return JcbCategory; }
 
-    public JComboBox<String> getJcbUnitName() { return JcbUnitName; }
+    
+    
 
-    public String getImgName() {
+    public JComboBox<String> getJcbUnitName() {
+		return JcbUnitName;
+	}
+
+	
+	public String getImgName() {
         return imgName;
     }
 
