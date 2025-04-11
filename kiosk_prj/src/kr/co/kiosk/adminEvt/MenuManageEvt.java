@@ -1,6 +1,5 @@
 package kr.co.kiosk.adminEvt;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -206,8 +205,8 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     }
     
   
-    private void findImage(){
-        JFileChooser chooser=new JFileChooser();
+    private void findImage() {
+        JFileChooser chooser = new JFileChooser();
         int result = chooser.showOpenDialog(mv);
 
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -216,35 +215,25 @@ public class MenuManageEvt implements ActionListener, MouseListener {
             String targetPath = "c:/dev/img/" + fileName;
 
             try {
-               
                 BufferedImage img = ImageIO.read(selectedFile);
-                if (img == null) {
-                    throw new IOException("선택한 파일이 이미지 파일이 아닙니다.");
-                }
-                
-                
+                if (img == null) throw new IOException("선택한 파일이 이미지 파일이 아닙니다.");
+
                 Files.copy(selectedFile.toPath(), new File(targetPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
                 mv.getJtfImage().setText(fileName);
-                
-                ImageIcon ic=new ImageIcon(targetPath);
-                Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                ImageIcon realIc = new ImageIcon(tempImg);
-                
-               
-                
-                mv.getJlblImage().setIcon(realIc);
-                imagePath =fileName;
+
+                ImageIcon ic = new ImageIcon(targetPath);
+                Image tempImg = ic.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
+                mv.getJlblImage().setIcon(new ImageIcon(tempImg));
+
+                imagePath = fileName;
                 mv.setImgName(targetPath);
-                
-                
 
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(mv, "이미지 저장 오류: " + e.getMessage());
-            
-            	}
-        	}
-        
-       }
+            }
+        }
+    }
+
 
 
     
@@ -315,7 +304,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
           mv.getJtfImage().setText(imgPath); 
           
           ImageIcon ic = mVO.getImage();
-          Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+          Image tempImg = ic.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
           ImageIcon realIc = new ImageIcon(tempImg);
           mv.getJlblImage().setIcon(realIc);
           

@@ -4,7 +4,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
@@ -29,6 +31,7 @@ public class AddIngredientsEvt {
 	private StringBuilder menuName;
 	private AtomicInteger menuPrice;
 	private List<MenuVO> ingredList;
+	private final Map<Integer, Integer> stockMap = new HashMap<>();
 
 	public AddIngredientsEvt(AddIngredientsView aiv, StringBuilder menuName, AtomicInteger menuPrice, UserMainView umv) {
 		this.aiv = aiv;
@@ -37,6 +40,7 @@ public class AddIngredientsEvt {
 		this.menuPrice = menuPrice;
 		this.menuPanel = aiv.getMenuPanel();
 		this.ingredList = getIngredMenu();
+		getStockInfo();
 	}
 
 	private List<MenuVO> getIngredMenu() {
@@ -49,11 +53,19 @@ public class AddIngredientsEvt {
 		}
 		return ingredList;
 	}// getIngredMenu
+	
+	private void getStockInfo() {
+		MenuService ms = new MenuService();
+		for (MenuVO menu : ingredList) {
+			int availableCnt = ms.getAvailableCount(menu.getMenuId());
+			stockMap.put(menu.getMenuId(), availableCnt);
+		}
+	}
 
 	public void addMenuItem() {
 
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
-		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
+		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_FAST);
 		ImageIcon img = new ImageIcon(scaledImg);
 
 		// "변경안함" 버튼
@@ -73,24 +85,21 @@ public class AddIngredientsEvt {
 			ImageIcon menuIcon = img;
 
 			if (mv.getImgName() != null) {
-					ImageIcon tempIcon = mv.getImage();
-					Image tempImg = tempIcon.getImage().getScaledInstance(160, 130, Image.SCALE_SMOOTH);
-					menuIcon = new ImageIcon(tempImg);
+					icon = mv.getImage();
 			}
 
-			JButton btn = new JButton(menuIcon);
+			JButton btn = new JButton(icon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
 
 			
 			/**
 			 * 재고소진에 따른 주문 가능 횟수 표기			 
 			 * */
-			MenuService ms = new MenuService();
-			int availableCnt = ms.getAvailableCount(mv.getMenuId());
+			int availableCnt = stockMap.get(mv.getMenuId());
 			String alertText = "";
-			if (availableCnt <= 0 && mv.getCategoryId() != 1) { //세트제외
-				alertText = "<font color='red'><b>Sold Out!</b></font>";
-				btn.setEnabled(false);
+			if (availableCnt <= 0) {
+			    alertText = "<font color='red'><b>Sold Out!</b></font>";
+			    btn.setEnabled(false);
 			} 
 			
 			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + mv.getPrice() + "<br>" + alertText + "</html>",
