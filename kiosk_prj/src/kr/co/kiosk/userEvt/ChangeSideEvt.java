@@ -2,7 +2,6 @@ package kr.co.kiosk.userEvt;
 
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
 
 import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userView.ChangeDrinkView;
