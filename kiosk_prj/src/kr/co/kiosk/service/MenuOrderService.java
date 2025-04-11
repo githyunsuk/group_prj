@@ -22,7 +22,7 @@ public class MenuOrderService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		 
 		return flag;
 	}//addMenuOrder
 	
