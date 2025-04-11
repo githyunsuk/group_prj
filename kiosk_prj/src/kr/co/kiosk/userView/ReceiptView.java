@@ -22,7 +22,7 @@ public class ReceiptView extends JFrame {
 
 	public ReceiptView(String receiptText, int waitingNumber) {
 		setTitle("영수증");
-		setSize(400, 600);
+		setSize(400, 630);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
@@ -64,7 +64,6 @@ public class ReceiptView extends JFrame {
 		confirmButton.setBorderPainted(false); // 테두리 제거
 		confirmButton.setContentAreaFilled(false); // 버튼 배경 제거
 		confirmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		confirmButton.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		confirmButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

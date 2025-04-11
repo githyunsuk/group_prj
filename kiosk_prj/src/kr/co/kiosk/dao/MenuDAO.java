@@ -370,5 +370,36 @@ public class MenuDAO {
 		return mVO;
 	}// selectMenuWithName
 	
+	public int selectAvailableCount(int menuId) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		int availableCnt = 0;
+		
+		try {
+			con =dbCon.getConn();
+			
+			String query = " SELECT TRUNC(s.QUANTITY / m.WEIGHT) AS availableCount FROM STOCK s JOIN MENU m ON s.menu_id = m.menu_id WHERE m.MENU_ID = ?  ";
+			
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setInt(1, menuId);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				availableCnt = rs.getInt("availableCount");
+			}
+			
+		} finally {
+			dbCon.closeDB(rs, pstmt, con);
+		}
+
+		return availableCnt;
+	}
+	
 
 }// class

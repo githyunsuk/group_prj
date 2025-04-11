@@ -14,8 +14,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userView.AddIngredientsView;
 import kr.co.kiosk.userView.RecommendMenuView;
 import kr.co.kiosk.userView.UserMainView;
@@ -66,7 +68,8 @@ public class RecommendMenuEvt {
 			ImageIcon img = new ImageIcon(scaledImg);
 			JButton jlblImg = new JButton(img);
 
-			JLabel jlblMenu = new JLabel(menu.getMenuName() + " / " + menu.getPrice());
+			JLabel jlblMenu = new JLabel(("<html>" + menu.getMenuName() + " / " + menu.getPrice() + "</html>"),
+					SwingConstants.CENTER);
 			jlblMenu.setFont(new Font("맑은 고딕", Font.BOLD, 22));
 
 			JButton btnOrder = new JButton("주문하기");

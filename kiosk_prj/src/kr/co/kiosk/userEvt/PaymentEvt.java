@@ -163,9 +163,9 @@ public class PaymentEvt extends WindowAdapter implements ActionListener {
 		}
 
 		sb.append("------------------------------------------------------\n");
-		sb.append(String.format("%-22s %23s\n", "총액", String.format("%,d", totalPrice)));
-		sb.append(String.format("%-22s %23s\n", "할인", String.format("%,d", umv.getUsingPoints())));
-		sb.append(String.format("%-22s %23s\n", "합계", String.format("%,d", totalPriceAfterDiscount)));
+		sb.append(String.format("%-22s %28s\n", "총액", String.format("%,d", totalPrice)));
+		sb.append(String.format("%-22s %28s\n", "할인", String.format("%,d", umv.getUsingPoints())));
+		sb.append(String.format("%-22s %28s\n", "합계", String.format("%,d", totalPriceAfterDiscount)));
 		sb.append("------------------------------------------------------\n");
 	}// receiptCreate
 

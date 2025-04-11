@@ -12,10 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userView.AddIngredientsView;
 import kr.co.kiosk.userView.BurgerMenuView;
 import kr.co.kiosk.userView.UserMainView;
@@ -93,10 +95,24 @@ public class BurgerMenuEvt implements ActionListener {
 		ImageIcon img = new ImageIcon(scaledImg);
 		JButton btn = new JButton(img);
 		btn.addActionListener(e -> menuBtnClicked(burgerList));
-		JLabel lbl = new JLabel(("<html>" + burgerList.getMenuName() + "<br>" + burgerList.getPrice() + "<html>"),
+		
+		/**
+		 * 재고소진에 따른 주문 가능 횟수 표기			 
+		 * */
+		MenuService ms = new MenuService();
+		int availableCnt = ms.getAvailableCount(burgerList.getMenuId());
+		String alertText = "";
+		if (availableCnt <= 0 && burgerList.getCategoryId() != 1) {
+		    alertText = "<font color='red'><b>Sold Out!</b></font>";
+		    btn.setEnabled(false);
+		} 
+		
+		JLabel lbl = new JLabel(("<html>" + burgerList.getMenuName() + "<br>" + burgerList.getPrice() + "<br>" + alertText + "<html>"),
 				SwingConstants.CENTER);
 		JPanel itemPanel = new JPanel(new GridLayout(1, 1));
 
+		
+		
 		itemPanel.add(btn);
 		itemPanel.add(lbl);
 

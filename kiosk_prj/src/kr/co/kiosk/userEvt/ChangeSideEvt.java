@@ -2,7 +2,6 @@ package kr.co.kiosk.userEvt;
 
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,8 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
 
+import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userView.ChangeDrinkView;
 import kr.co.kiosk.userView.ChangeSideView;
 import kr.co.kiosk.userView.UserMainView;
@@ -75,8 +74,19 @@ public class ChangeSideEvt {
 
 			JButton btn = new JButton(menuIcon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
-
-			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + (mv.getPrice() - basicPrice) + "</html>",
+			
+			/**
+			 * 재고소진에 따른 주문 가능 횟수 표기			 
+			 * */
+			MenuService ms = new MenuService();
+			int availableCnt = ms.getAvailableCount(mv.getMenuId());
+			String alertText = "";
+			if (availableCnt <= 0) {
+			    alertText = "<font color='red'><b>Sold Out!</b></font>";
+			    btn.setEnabled(false);
+			} 
+			
+			JLabel lbl = new JLabel(("<html>" + mv.getMenuName() + "<br>+" + (mv.getPrice() - basicPrice) + "<br>" + alertText +"</html>"),
 					SwingConstants.CENTER);
 
 			JPanel itemPanel = new JPanel(new GridLayout(1, 1));

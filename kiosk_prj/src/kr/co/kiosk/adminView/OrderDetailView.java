@@ -192,7 +192,6 @@ public class OrderDetailView extends JPanel{
 		add(jpTotalPrice);
 		add(jpButtons);
 		
-		
 	}
 	
 	public void updateTable(List<String[]> menuList) {

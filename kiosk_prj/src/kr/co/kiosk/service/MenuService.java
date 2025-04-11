@@ -101,5 +101,22 @@ public class MenuService {
 		return mVO;
 				
 	}//searchMenuWithName
+	     
+	/**
+	 * menuId를 매개변수로, 재고량과 join해서 제조가능 수량 체크하기 
+	 * 왜 얘 push가안되냐고 
+	 */
+	public int getAvailableCount(int menuId) {
+		int availableCnt = 0;
+		
+		MenuDAO mDAO = MenuDAO.getInstance();
+		 
+		try {
+			availableCnt = mDAO.selectAvailableCount(menuId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return availableCnt;  
+	}    
 	
 }//class
