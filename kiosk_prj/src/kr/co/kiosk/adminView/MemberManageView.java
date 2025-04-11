@@ -20,7 +20,7 @@ public class MemberManageView extends Panel  {
 	// 회원 관리 화면에서 사용되는 컴포넌트들 선언
     private JTextField jtfSearch; // 회원 검색을 위한 텍스트 필드
     private JTable jtblMember;  // 회원 목록을 표시할 테이블
-    private DefaultTableModel tableModel;// 테이블에 데이터를 넣기 위한 모델
+    private DefaultTableModel tableModel; // 테이블에 데이터를 추가하거나 수정할 수 있는 모델 객체
     private JButton jbtnSearch, jbtnselect, jbtnDelete, 
     		jbtnPointAdd, jbtnPointSubtract, jbtnStempAdd, jbtnStempSubtract, jbtnLevelOk; // 각종 버튼들
     private JTextField jtfPoint; // 포인트 입력 필드
@@ -33,7 +33,7 @@ public class MemberManageView extends Panel  {
 	public MemberManageView() {
 		
 		  // 회원관리 화면의 레이아웃 및 구성 요소 설정
-		add(new JLabel("회원관리!"));// 화면 제목 "회원관리" 레이블 추가
+		add(new JLabel("회원관리"));// 화면 제목 "회원관리" 레이블 추가
 
 		
 		  // 레이아웃을 null로 설정하여 위치를 좌표로 지정

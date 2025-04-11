@@ -72,7 +72,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
 
     private String categoryIdToName(int id) {
         switch (id) {
-            case 1: return "세트!";
+            case 1: return "세트";
             case 2: return "버거";
             case 3: return "사이드";
             case 4: return "음료";
@@ -207,44 +207,45 @@ public class MenuManageEvt implements ActionListener, MouseListener {
     
   
     private void findImage(){
-     JFileChooser chooser=new JFileChooser();
-     int result = chooser.showOpenDialog(mv);
+        JFileChooser chooser=new JFileChooser();
+        int result = chooser.showOpenDialog(mv);
 
-     if (result == JFileChooser.APPROVE_OPTION) {
-         File selectedFile = chooser.getSelectedFile();
-         String fileName = selectedFile.getName();
-         String targetPath = "c:/dev/img/" + fileName;
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = chooser.getSelectedFile();
+            String fileName = selectedFile.getName();
+            String targetPath = "c:/dev/img/" + fileName;
 
-         try {
+            try {
+               
+                BufferedImage img = ImageIO.read(selectedFile);
+                if (img == null) {
+                    throw new IOException("선택한 파일이 이미지 파일이 아닙니다.");
+                }
+                
+                
+                Files.copy(selectedFile.toPath(), new File(targetPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                mv.getJtfImage().setText(fileName);
+                
+                ImageIcon ic=new ImageIcon(targetPath);
+                Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                ImageIcon realIc = new ImageIcon(tempImg);
+                
+               
+                
+                mv.getJlblImage().setIcon(realIc);
+                imagePath =fileName;
+                mv.setImgName(targetPath);
+                
+                
+
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(mv, "이미지 저장 오류: " + e.getMessage());
             
-             BufferedImage img = ImageIO.read(selectedFile);
-             if (img == null) {
-                 throw new IOException("선택한 파일이 이미지 파일이 아닙니다.");
-             }
-             
-             
-             Files.copy(selectedFile.toPath(), new File(targetPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
-             mv.getJtfImage().setText(fileName);
-             
-             ImageIcon ic=new ImageIcon(targetPath);
-             Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-             ImageIcon realIc = new ImageIcon(tempImg);
-             
-            
-             
-             mv.getJlblImage().setIcon(realIc);
-             imagePath =fileName;
-             mv.setImgName(targetPath);
-             
-             
+            	}
+        	}
+        
+       }
 
-         } catch (IOException e) {
-             JOptionPane.showMessageDialog(mv, "이미지 저장 오류: " + e.getMessage());
-         
-         	}
-     	}
-     
-    }
 
     
    //메뉴명 검색

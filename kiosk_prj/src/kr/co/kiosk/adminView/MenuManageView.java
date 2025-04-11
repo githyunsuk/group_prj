@@ -11,31 +11,35 @@ import kr.co.kiosk.adminEvt.MenuManageEvt;
 
 public class MenuManageView extends Panel {
 
-    private JTextField jtfSearch;
-    private JTable jtblMenu;
-    private DefaultTableModel tableModel;
-    private JLabel jlblImage;
+    private JTextField jtfSearch;// 검색어 입력 필드
+    private JTable jtblMenu; // 메뉴 목록을 보여주는 테이블
+    private DefaultTableModel tableModel; // 테이블 모델 (데이터를 담는 역할)
+    private JLabel jlblImage;// 이미지 미리보기용 라벨
     private JButton jbtnSearch, jbtnAdd, jbtnEdit, jbtnDelete, jbtnReset, jbtnFind;
 
-    private JComboBox<String> JcbCategory;
+    // 콤보박스 및 텍스트필드 (메뉴 정보 입력용)
+    private JComboBox<String> JcbCategory; 
     private JComboBox<String> JcbUnitName;
     private JTextField JtfName, JtfImage, JtfWeight, JtfCalorie, JtfPrice, JtfExplain;
     
+ // 이미지 전체 경로 (이미지 찾기 시 저장)
     private String imgName;
 
     public MenuManageView() {
-        add(new JLabel("메뉴명 관리!"));
+        add(new JLabel("메뉴명 관리"));
         setLayout(null);
 
+        // 검색창 필드
         jtfSearch = new JTextField();
         jtfSearch.setBounds(35, 20, 200, 25);
         add(jtfSearch);
 
+        // 검색 버튼
         jbtnSearch = new JButton("메뉴명 검색");
         jbtnSearch.setBounds(240, 20, 120, 25);
         add(jbtnSearch);
 
-        // menuId 컬럼 포함 (숨기기 전)
+        // 테이블 컬럼 정의 (menuId는 숨길 예정)
         String[] columns = {"menuId", "카테고리", "메뉴명", "사진 경로", "중량", "단위", "칼로리", "가격", "설명"};
         tableModel = new DefaultTableModel(columns, 0);
         jtblMenu = new JTable(tableModel);
@@ -46,15 +50,18 @@ public class MenuManageView extends Panel {
         columnModel.getColumn(0).setMaxWidth(0);
         columnModel.getColumn(0).setWidth(0);
 
+     // 테이블 스크롤 포함해서 추가
         JScrollPane jsp = new JScrollPane(jtblMenu);
         jsp.setBounds(10, 60, 500, 550);
         add(jsp);
 
+     // 이미지 미리보기용 라벨
         jlblImage = new JLabel("", SwingConstants.CENTER);
         jlblImage.setBounds(580, 15, 200, 200);
         jlblImage.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(jlblImage);
 
+     // 메뉴 추가/수정/삭제/초기화 버튼
         jbtnAdd = new JButton("메뉴 추가");
         jbtnAdd.setBounds(550, 560, 100, 30);
         add(jbtnAdd);
@@ -71,6 +78,7 @@ public class MenuManageView extends Panel {
         jbtnReset.setBounds(680, 600, 100, 30);
         add(jbtnReset);
 
+        // 카테고리 콤보박스
         String[] item = {"세트", "버거", "사이드", "음료", "재료"};
         JcbCategory = new JComboBox<>(item);
         JLabel JlblCategory = new JLabel("카테고리*");
@@ -79,6 +87,7 @@ public class MenuManageView extends Panel {
         add(JlblCategory);
         add(JcbCategory);
 
+     // 메뉴 이름 입력
         JLabel JlblName = new JLabel("이름*");
         JlblName.setBounds(520, 260, 100, 30);
         JtfName = new JTextField();
@@ -86,6 +95,7 @@ public class MenuManageView extends Panel {
         add(JlblName);
         add(JtfName);
 
+        // 이미지 경로 및 찾기 버튼
         JLabel JlblImage = new JLabel("사진*");
         JlblImage.setBounds(520, 300, 100, 30);
         JtfImage = new JTextField();
@@ -96,6 +106,7 @@ public class MenuManageView extends Panel {
         add(JtfImage);
         add(jbtnFind);
 
+     // 중량 입력
         JLabel JlblWeight = new JLabel("중량*,N");
         JlblWeight.setBounds(520, 340, 100, 30);
         JtfWeight = new JTextField();
