@@ -382,7 +382,7 @@ public class MenuDAO {
 		try {
 			con =dbCon.getConn();
 			
-			String query = " SELECT TRUNC(s.QUANTITY / m.WEIGHT) AS availableCount FROM STOCK s JOIN MENU m ON s.menu_id = m.menu_id WHERE m.MENU_ID = ? ";
+			String query = " SELECT TRUNC(s.QUANTITY / m.WEIGHT) AS availableCount FROM STOCK s JOIN MENU m ON s.menu_id = m.menu_id WHERE m.MENU_ID = ?  ";
 			
 			pstmt = con.prepareStatement(query);
 			

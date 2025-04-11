@@ -88,7 +88,19 @@ public class SideMenuEvt implements ActionListener {
 		ImageIcon img = new ImageIcon(scaledImg);
 		JButton btn = new JButton(img);
 		btn.addActionListener(e -> menuBtnClicked(sideList));
-		JLabel lbl = new JLabel(("<html>" + sideList.getMenuName() + "<br>" + sideList.getPrice() + "<html>"), SwingConstants.CENTER);
+		
+		/**
+		 * 재고소진에 따른 주문 가능 횟수 표기			 
+		 * */
+		MenuService ms = new MenuService();
+		int availableCnt = ms.getAvailableCount(sideList.getMenuId());
+		String alertText = "";
+		if (availableCnt <= 0) {
+		    alertText = "<font color='red'><b>Sold Out!</b></font>";
+		    btn.setEnabled(false);
+		} 
+		
+		JLabel lbl = new JLabel(("<html>" + sideList.getMenuName() + "<br>" + sideList.getPrice() + "<br>" + alertText + "<html>"), SwingConstants.CENTER);
 		JPanel itemPanel = new JPanel(new GridLayout(1, 1));
 
 		itemPanel.add(btn);

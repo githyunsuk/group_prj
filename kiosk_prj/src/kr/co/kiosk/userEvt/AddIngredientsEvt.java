@@ -81,14 +81,17 @@ public class AddIngredientsEvt {
 			JButton btn = new JButton(menuIcon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
 
+			
+			/**
+			 * 재고소진에 따른 주문 가능 횟수 표기			 
+			 * */
 			MenuService ms = new MenuService();
 			int availableCnt = ms.getAvailableCount(mv.getMenuId());
 			String alertText = "";
-			if (availableCnt <= 5) {
-			    alertText = "<span style='color:red; font-weight:bold;'>매진임박: " + availableCnt + "회</span>";
-			} else {
-			    alertText = "";
-			}
+			if (availableCnt <= 0 && mv.getCategoryId() != 1) { //세트제외
+				alertText = "<font color='red'><b>Sold Out!</b></font>";
+				btn.setEnabled(false);
+			} 
 			
 			JLabel lbl = new JLabel("<html>" + mv.getMenuName() + "<br>+" + mv.getPrice() + "<br>" + alertText + "</html>",
 					SwingConstants.CENTER);
