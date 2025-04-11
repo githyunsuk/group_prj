@@ -3,7 +3,9 @@ package kr.co.kiosk.userEvt;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
@@ -27,6 +29,7 @@ public class ChangeSideEvt {
 	private AtomicInteger menuPrice;
 	private List<MenuVO> sideList;
 	private int basicPrice; // 세트 기본 메뉴의 가격
+	private final Map<Integer, Integer> stockMap = new HashMap<>();
 
 	public ChangeSideEvt(ChangeSideView csv, StringBuilder menuName, AtomicInteger menuPrice, UserMainView umv) {
 		this.csv = csv;
@@ -35,6 +38,7 @@ public class ChangeSideEvt {
 		this.menuPrice = menuPrice;
 		this.menuPanel = csv.getMenuPanel();
 		this.sideList = getSideMenu();
+		getStockInfo();
 	}
 
 	private List<MenuVO> getSideMenu() {
@@ -47,6 +51,14 @@ public class ChangeSideEvt {
 		}
 		return sideList;
 	}// getSideMenu
+	
+	private void getStockInfo() {
+		MenuService ms = new MenuService();
+		for (MenuVO menu : sideList) {
+			int availableCnt = ms.getAvailableCount(menu.getMenuId());
+			stockMap.put(menu.getMenuId(), availableCnt);
+		}
+	}
 
 	public void addMenuItem() {
 
@@ -78,8 +90,7 @@ public class ChangeSideEvt {
 			/**
 			 * 재고소진에 따른 주문 가능 횟수 표기			 
 			 * */
-			MenuService ms = new MenuService();
-			int availableCnt = ms.getAvailableCount(mv.getMenuId());
+			int availableCnt = stockMap.get(mv.getMenuId());
 			String alertText = "";
 			if (availableCnt <= 0) {
 			    alertText = "<font color='red'><b>Sold Out!</b></font>";

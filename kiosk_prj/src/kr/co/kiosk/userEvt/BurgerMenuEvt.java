@@ -4,15 +4,15 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +30,7 @@ public class BurgerMenuEvt implements ActionListener {
 	private JPanel menuPanel;
 	private DefaultTableModel dtm;
 	private List<MenuVO> burgerList; // 버거 메뉴를 담는 VO 리스트
+	private final Map<Integer, Integer> stockMap = new HashMap<>(); //버거 재고 관리위한 Map
 
 	private int maxPage = 9; // 한 페이지당 최대 메뉴 개수
 	private int currentPage = 0; // 현재 페이지 번호
@@ -41,6 +42,7 @@ public class BurgerMenuEvt implements ActionListener {
 		this.menuPanel = bmv.getMenuPanel();
 		this.dtm = umv.getDtm();
 		this.burgerList = getBurgerMenu();
+		getStockInfo();
 	}// BurgerMenuEvt
 
 	// 버거 메뉴를 가져오는 method
@@ -55,6 +57,14 @@ public class BurgerMenuEvt implements ActionListener {
 		return burgerList;
 	}// getBurgerMenu
 
+	private void getStockInfo() {
+		MenuService ms = new MenuService();
+		for (MenuVO menu : burgerList) {
+			int availableCnt = ms.getAvailableCount(menu.getMenuId());
+			stockMap.put(menu.getMenuId(), availableCnt);
+		}
+	}//getStockInfo
+	
 	// 데이터를 가져와서 메뉴판을 채우는 method
 	public void loadMenu() {
 		menuPanel.removeAll(); // 기존 메뉴 삭제
@@ -84,11 +94,6 @@ public class BurgerMenuEvt implements ActionListener {
 	public void addMenuItem(MenuVO burgerList) {
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
 		if (burgerList.getImgName() != null) {
-//			File file = new File("c:/dev/img/kiosk" + File.separator + burgerList.getImgName());
-//			if (file.exists()) {
-//				String iconPath = file.getAbsolutePath();
-//				icon = new ImageIcon(iconPath);
-//			}
 			icon = burgerList.getImage();
 		}
 		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
@@ -99,8 +104,7 @@ public class BurgerMenuEvt implements ActionListener {
 		/**
 		 * 재고소진에 따른 주문 가능 횟수 표기			 
 		 * */
-		MenuService ms = new MenuService();
-		int availableCnt = ms.getAvailableCount(burgerList.getMenuId());
+		int availableCnt = stockMap.getOrDefault(burgerList.getMenuId(),0);
 		String alertText = "";
 		if (availableCnt <= 0 && burgerList.getCategoryId() != 1) {
 		    alertText = "<font color='red'><b>Sold Out!</b></font>";
