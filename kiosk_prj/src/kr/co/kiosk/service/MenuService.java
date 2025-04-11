@@ -12,7 +12,7 @@ import kr.co.kiosk.vo.MenuVO;
 public class MenuService {
 
 	public MenuService() {
-		
+		  
 	}//MenuService
 	
 	public boolean addMenu(MenuVO mVO) {

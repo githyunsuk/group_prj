@@ -31,7 +31,7 @@ public class MenuManageView extends Panel {
         jtfSearch.setBounds(35, 20, 200, 25);
         add(jtfSearch);
 
-        jbtnSearch = new JButton("메뉴검색");
+        jbtnSearch = new JButton("메뉴명 검색");
         jbtnSearch.setBounds(240, 20, 120, 25);
         add(jbtnSearch);
 
@@ -136,6 +136,20 @@ public class MenuManageView extends Panel {
         setVisible(true);
         setBounds(200, 200, 800, 800);
     }
+    
+    // 선택된 메뉴의 menuId 반환
+    public int getSelectedMenuId() {
+    	int selectedRow = jtblMenu.getSelectedRow();
+    	if (selectedRow == -1) {
+    		return -1;
+    	}
+    	Object value = tableModel.getValueAt(selectedRow, 0); // 0번 컬럼 = menuId
+    	try {
+    		return Integer.parseInt(value.toString());
+    	} catch (NumberFormatException e) {
+    		return -1;
+    	}
+    }
 
    
 
@@ -185,19 +199,6 @@ public class MenuManageView extends Panel {
         this.imgName = imgName;
     }
     
-    // 선택된 메뉴의 menuId 반환
-    public int getSelectedMenuId() {
-        int selectedRow = jtblMenu.getSelectedRow();
-        if (selectedRow == -1) {
-            return -1;
-        }
-        Object value = tableModel.getValueAt(selectedRow, 0); // 0번 컬럼 = menuId
-        try {
-            return Integer.parseInt(value.toString());
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
 
 
 

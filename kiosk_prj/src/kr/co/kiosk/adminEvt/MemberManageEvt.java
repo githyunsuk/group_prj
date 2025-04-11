@@ -288,12 +288,7 @@ public class MemberManageEvt implements ActionListener, MouseListener {
             try {
                 MemberVO memVO = memberService.searchMember(memberId);
                 memVO.setStamps(memVO.getStamps() + stemp);
-                
-                int currentStemp = memVO.getStamps();
-                if (currentStemp + stemp > 10) {
-                    JOptionPane.showMessageDialog(mmv, "스탬프는 최대 10개까지만 보유할 수 있습니다.");
-                    continue;
-                }
+
                 
                 memberService.modifyMember(memVO);
             } catch (Exception e) {
