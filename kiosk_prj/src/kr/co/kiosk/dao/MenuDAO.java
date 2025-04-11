@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import kr.co.kiosk.vo.MenuVO;
+import kr.co.sist.util.img.ImageResize;
 
 public class MenuDAO {
 
@@ -82,7 +83,8 @@ public class MenuDAO {
 			if (!mVO.getImgName().isEmpty()) {
 				File file = new File(mVO.getImgName());
 				if (file.exists()) {
-					fis = new FileInputStream(file);
+					ImageResize.resizeImage(file.getAbsolutePath(), 125, 110);
+					fis = new FileInputStream(file.getParent()+File.separator+"rs_"+file.getName());
 					pstmt.setBinaryStream(++bindIdx, fis, file.length());
 					pstmt.setString(++bindIdx, file.getName());
 				}

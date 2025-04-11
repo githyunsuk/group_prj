@@ -227,7 +227,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
              mv.getJtfImage().setText(fileName);
              
              ImageIcon ic=new ImageIcon(targetPath);
-             Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+             Image tempImg = ic.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
              ImageIcon realIc = new ImageIcon(tempImg);
              
             
@@ -314,7 +314,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
           mv.getJtfImage().setText(imgPath); 
           
           ImageIcon ic = mVO.getImage();
-          Image tempImg = ic.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+          Image tempImg = ic.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
           ImageIcon realIc = new ImageIcon(tempImg);
           mv.getJlblImage().setIcon(realIc);
           

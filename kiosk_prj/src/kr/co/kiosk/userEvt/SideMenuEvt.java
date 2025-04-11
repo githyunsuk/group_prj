@@ -96,9 +96,7 @@ public class SideMenuEvt implements ActionListener {
 		if (sideList.getImgName() != null) {
 				icon = sideList.getImage();
 		}
-		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
-		ImageIcon img = new ImageIcon(scaledImg);
-		JButton btn = new JButton(img);
+		JButton btn = new JButton(icon);
 		btn.addActionListener(e -> menuBtnClicked(sideList));
 		
 		/**

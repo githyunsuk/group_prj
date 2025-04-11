@@ -63,7 +63,7 @@ public class ChangeSideEvt {
 	public void addMenuItem() {
 
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
-		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
+		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_FAST);
 		ImageIcon img = new ImageIcon(scaledImg);
 
 		//우선 세트 기본 메뉴를 찾아서 기본 가격을 설정
@@ -79,12 +79,10 @@ public class ChangeSideEvt {
 			ImageIcon menuIcon = img;
 
 			if (mv.getImgName() != null) {
-					ImageIcon tempIcon = mv.getImage();
-					Image tempImg = tempIcon.getImage().getScaledInstance(160, 130, Image.SCALE_SMOOTH);
-					menuIcon = new ImageIcon(tempImg);
+					icon = mv.getImage();
 			}
 
-			JButton btn = new JButton(menuIcon);
+			JButton btn = new JButton(icon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
 			
 			/**

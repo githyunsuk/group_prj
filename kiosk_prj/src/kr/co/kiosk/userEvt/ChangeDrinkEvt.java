@@ -63,7 +63,7 @@ public class ChangeDrinkEvt {
 	public void addMenuItem() {
 
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
-		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
+		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_FAST);
 		ImageIcon img = new ImageIcon(scaledImg);
 
 
@@ -80,12 +80,10 @@ public class ChangeDrinkEvt {
 			ImageIcon menuIcon = img;
 
 			if (mv.getImgName() != null) {
-					ImageIcon tempIcon = mv.getImage();
-					Image tempImg = tempIcon.getImage().getScaledInstance(160, 130, Image.SCALE_SMOOTH);
-					menuIcon = new ImageIcon(tempImg);
+					icon = mv.getImage();
 			}
 
-			JButton btn = new JButton(menuIcon);
+			JButton btn = new JButton(icon);
 			btn.addActionListener(e -> menuBtnClicked(mv));
 			
 			/**

@@ -56,6 +56,8 @@ public class UserMainView extends JFrame {
 		MenuService ms = new MenuService();
 		allMenuList = ms.searchAllMenu();
 
+		
+
 		frame = new JFrame();
 		frame.setBounds(400, 10, 800, 950);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,6 +117,7 @@ public class UserMainView extends JFrame {
 		jlblTotalPrice.setBounds(65, 864, 85, 35);
 		frame.getContentPane().add(jlblTotalPrice);
 
+		
 		// dtm 설정
 		String[] columnName = { "메뉴", "수량", "가격", "메뉴id" };
 		dtm = new DefaultTableModel(columnName, 0);
@@ -148,7 +151,8 @@ public class UserMainView extends JFrame {
 		btnCancel = new JButton("x");
 		btnCancel.setBounds(427, 754, 50, 30);
 		frame.getContentPane().add(btnCancel);
-
+		
+		/////////////////////////////////////////////////////////////////////////////////////
 		// 상단 메뉴바
 		jpnlBtn = new JPanel();
 		jpnlBtn.setBounds(0, 45, 784, 114);
@@ -180,6 +184,9 @@ public class UserMainView extends JFrame {
 		// 카드레이아웃 패널 생성
 		rmv = new RecommendMenuView(this);
 		bmv = new BurgerMenuView(this);
+		long st=System.currentTimeMillis();
+		long et=System.currentTimeMillis();
+		System.out.println( (et - st) +" ms");
 		smv = new SideMenuView(this);
 		dmv = new DrinkMenuView(this);
 

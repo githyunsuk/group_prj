@@ -96,9 +96,7 @@ public class BurgerMenuEvt implements ActionListener {
 		if (burgerList.getImgName() != null) {
 			icon = burgerList.getImage();
 		}
-		Image scaledImg = icon.getImage().getScaledInstance(125, 110, Image.SCALE_SMOOTH);
-		ImageIcon img = new ImageIcon(scaledImg);
-		JButton btn = new JButton(img);
+		JButton btn = new JButton(icon);
 		btn.addActionListener(e -> menuBtnClicked(burgerList));
 		
 		/**
@@ -114,6 +112,7 @@ public class BurgerMenuEvt implements ActionListener {
 		JLabel lbl = new JLabel(("<html>" + burgerList.getMenuName() + "<br>" + burgerList.getPrice() + "<br>" + alertText + "<html>"),
 				SwingConstants.CENTER);
 		JPanel itemPanel = new JPanel(new GridLayout(1, 1));
+	
 
 		
 		
@@ -159,7 +158,6 @@ public class BurgerMenuEvt implements ActionListener {
 		// 총수량 및 총금액 업데이트
 		umv.getJtfTotalQuantity().setText(String.valueOf(totalQuantity));
 		umv.getJtfTotalPrice().setText(String.valueOf(totalPrice));
-		System.out.println(burgerList.getMenuId());
 	}// menuBtnClicked
 
 	@Override
