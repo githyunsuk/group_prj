@@ -117,12 +117,13 @@ public class MenuDAO {
 			con = dbCon.getConn();
 			StringBuilder updateMenu = new StringBuilder();
 			updateMenu.append("	update menu																	")
-					.append("	set menu_name=?, weight=?, calorie=?, price=?, notes=?, image=?, img_name=?	")
+					.append("	set category_id=?, menu_name=?, weight=?, calorie=?, price=?, notes=?, image=?, img_name=?	")
 					.append("	where menu_id=?																");
 
 			pstmt = con.prepareStatement(updateMenu.toString());
 
 			int bindIdx = 0;
+			pstmt.setInt(++bindIdx, mVO.getCategoryId());
 			pstmt.setString(++bindIdx, mVO.getMenuName());
 			pstmt.setInt(++bindIdx, mVO.getWeight());
 			pstmt.setInt(++bindIdx, mVO.getCalorie());

@@ -22,7 +22,7 @@ public class ReceiptView extends JFrame {
 
 	public ReceiptView(String receiptText, int waitingNumber) {
 		setTitle("영수증");
-		setSize(400, 630);
+		setSize(405, 650);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());

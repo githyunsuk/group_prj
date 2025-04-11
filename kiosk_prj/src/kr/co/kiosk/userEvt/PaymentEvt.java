@@ -138,16 +138,16 @@ public class PaymentEvt extends WindowAdapter implements ActionListener {
 
 	public void receiptCreate() {
 		sb = new StringBuilder();
-		sb.append("------------------------------------------------------\n");
+		sb.append("-------------------------------------------------------\n");
 		sb.append("[판매영수증]\n");
 		sb.append("서울특별시 강남구 테헤란로 132\n");
 		sb.append("TEL:010-9120-5456\n");
-		sb.append("쌍용버거 역삼역                               대표:주현석\n");
+		sb.append("쌍용버거 역삼역                                 대표:주현석\n");
 		sb.append("결제수단:").append(paymentMethod).append("\n");
 		sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).append("\n");
-		sb.append("******************************************************\n");
-		sb.append(String.format("%-22s %8s %15s\n", "상품명", "수량", "금액")); // 간격 넓힘
-		sb.append("------------------------------------------------------\n");
+		sb.append("*******************************************************\n");
+		sb.append(String.format("%-22s %7s %18s\n", "상품명", "수량", "금액")); // 간격 넓힘
+		sb.append("-------------------------------------------------------\n");
 
 		for (int i = 0; i < dtm.getRowCount(); i++) {
 			String name = dtm.getValueAt(i, 0).toString().replaceAll(" ", "");
@@ -158,15 +158,15 @@ public class PaymentEvt extends WindowAdapter implements ActionListener {
 			int price = Integer.parseInt(dtm.getValueAt(i, 2).toString());
 			String formattedPrice = String.format("%,d", price);
 
-			sb.append(String.format("%-22s %8s %15s\n", name, quantity, formattedPrice));
+			sb.append(String.format("%-15s\t%8s\t%15s\n", name, quantity, formattedPrice));
 
 		}
 
-		sb.append("------------------------------------------------------\n");
-		sb.append(String.format("%-22s %28s\n", "총액", String.format("%,d", totalPrice)));
-		sb.append(String.format("%-22s %28s\n", "할인", String.format("%,d", umv.getUsingPoints())));
-		sb.append(String.format("%-22s %28s\n", "합계", String.format("%,d", totalPriceAfterDiscount)));
-		sb.append("------------------------------------------------------\n");
+		sb.append("-------------------------------------------------------\n");
+		sb.append(String.format("%-22s %31s\n", "총액", String.format("%,d", totalPrice)));
+		sb.append(String.format("%-22s %31s\n", "할인", String.format("%,d", umv.getUsingPoints())));
+		sb.append(String.format("%-22s %31s\n", "합계", String.format("%,d", totalPriceAfterDiscount)));
+		sb.append("-------------------------------------------------------\n");
 	}// receiptCreate
 
 	@Override
