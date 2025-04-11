@@ -1,14 +1,15 @@
 package kr.co.kiosk.adminView;
 
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import kr.co.kiosk.adminEvt.OrderManageEvt;
+import kr.co.kiosk.userEvt.MainPageEvt;
+import kr.co.kiosk.userView.MainPageView;
 
 public class AdminMainButtons extends JPanel {
 	
@@ -26,7 +27,23 @@ public class AdminMainButtons extends JPanel {
 		setLayout(new GridLayout(2, 5));
 		
 		btnLogout = new JButton("로그아웃");
-		btnShutdown = new JButton("운영 종료");
+		btnShutdown = new JButton("운영종료");
+		btnShutdown.addActionListener(e->{
+			if(MainPageEvt.isOpen == false) {
+				btnShutdown.setText("운영종료");
+				JOptionPane.showMessageDialog(null, "영업시작!");
+				MainPageEvt.isOpen = true;
+			} else {
+				btnShutdown.setText("운영시작");
+				JOptionPane.showMessageDialog(null, "영업종료!");
+				MainPageEvt.isOpen = false;
+				System.out.println("hi");
+			}
+			
+		});
+		
+		System.out.println();
+		
 		
 		btnOrder = new JButton("주문 관리");
 		btnMenu = new  JButton("메뉴관리");

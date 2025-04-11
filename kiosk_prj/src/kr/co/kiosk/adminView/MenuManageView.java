@@ -24,7 +24,7 @@ public class MenuManageView extends Panel {
     private String imgName;
 
     public MenuManageView() {
-        add(new JLabel("메뉴명 관리"));
+        add(new JLabel("메뉴명 관리!"));
         setLayout(null);
 
         jtfSearch = new JTextField();

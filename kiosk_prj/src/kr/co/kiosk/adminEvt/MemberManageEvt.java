@@ -310,7 +310,7 @@ public class MemberManageEvt implements ActionListener, MouseListener {
         String StempText = mmv.getJtfStemp().getText().trim();
 
 	    if (StempText.isEmpty()) {
-	        JOptionPane.showMessageDialog(mmv, "스탬프를 입력해주세요.");
+	        JOptionPane.showMessageDialog(mmv, "스탬프를 입력해주세요.!!");
 	        return;
 	    }
 	   

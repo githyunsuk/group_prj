@@ -42,8 +42,6 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 		}
 		
 		if(e.getSource() == amv.getAdminMainButtons().getBtnShutdown()) {
-			System.out.println("키오스크 종료");
-			amv.dispose(); //JVM에는 아직 살아있는데, System.exit(0)을 쓸까 고민중 
 		}
 		
 		if(e.getSource() == amv.getAdminMainButtons().getBtnOrder()) {

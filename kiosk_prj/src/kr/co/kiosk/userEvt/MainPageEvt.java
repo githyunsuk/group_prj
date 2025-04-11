@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import kr.co.kiosk.adminView.AdminLoginView;
 import kr.co.kiosk.adminView.AdminMainView;
 import kr.co.kiosk.dao.MenuDAO;
@@ -18,8 +20,8 @@ import kr.co.kiosk.vo.MenuVO;
 public class MainPageEvt extends WindowAdapter implements ActionListener {
 
 	private MainPageView mpv;
-	private boolean isHall; //매장식사인지 포장주문인지 판단하는 flag 변수
-
+	private boolean isHall; // 매장식사인지 포장주문인지 판단하는 flag 변수
+	public static boolean isOpen = true;
 	public MainPageEvt(MainPageView mpv) {
 		this.mpv = mpv;
 	}
@@ -35,19 +37,27 @@ public class MainPageEvt extends WindowAdapter implements ActionListener {
 		if (e.getSource() == mpv.getBtnAdminView()) { // 관리자모드 버튼 클릭시
 			mpv.dispose();
 			new AdminLoginView().setVisible(true);
-			//new AdminMainView().setVisible(true);
+			// new AdminMainView().setVisible(true);
 		}
 
 		if (e.getSource() == mpv.getBtnHall()) { // 매장식사 버튼 클릭시
 			isHall = true;
-			new UserMainView(isHall);
-			mpv.dispose();
+			if(isOpen == false) {
+				JOptionPane.showMessageDialog(mpv, "영업시간이 종료되었습니다.");
+			} else {
+				new UserMainView(isHall);
+				mpv.dispose();
+			}
 		}
 
 		if (e.getSource() == mpv.getBtnTakeout()) { // 포장주문 버튼 클릭시
 			isHall = false;
-			new UserMainView(isHall);
-			mpv.dispose();
+			if(isOpen == false) {
+				JOptionPane.showMessageDialog(mpv, "영업시간이 종료되었습니다.");
+			} else {
+				new UserMainView(isHall);
+				mpv.dispose();
+			}
 		}
 	}
 

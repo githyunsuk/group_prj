@@ -33,7 +33,7 @@ public class MemberManageView extends Panel  {
 	public MemberManageView() {
 		
 		  // 회원관리 화면의 레이아웃 및 구성 요소 설정
-		add(new JLabel("회원관리"));// 화면 제목 "회원관리" 레이블 추가
+		add(new JLabel("회원관리!"));// 화면 제목 "회원관리" 레이블 추가
 
 		
 		  // 레이아웃을 null로 설정하여 위치를 좌표로 지정

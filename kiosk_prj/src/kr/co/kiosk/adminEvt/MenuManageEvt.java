@@ -72,7 +72,7 @@ public class MenuManageEvt implements ActionListener, MouseListener {
 
     private String categoryIdToName(int id) {
         switch (id) {
-            case 1: return "세트";
+            case 1: return "세트!";
             case 2: return "버거";
             case 3: return "사이드";
             case 4: return "음료";
