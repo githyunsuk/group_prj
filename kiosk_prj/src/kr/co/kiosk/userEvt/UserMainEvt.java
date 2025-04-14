@@ -2,12 +2,14 @@
 package kr.co.kiosk.userEvt;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,6 +33,7 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 		this.umv = umv;
 		this.dtm = umv.getDtm();
 		easterEgg = new ArrayList<String>();
+
 	} // UserMainEvt
 
 	@Override

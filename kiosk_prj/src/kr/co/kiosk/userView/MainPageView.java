@@ -25,6 +25,7 @@ public class MainPageView extends JFrame {
 
 	private JButton btnAdminView;
 	private JButton btnTakeout;
+	private JButton btnImg;
 	private JButton btnHall;
 	String restaurantTitle = "환영합니다!";
 	private JPanel titlePanel;
@@ -53,8 +54,6 @@ public class MainPageView extends JFrame {
 		ImageIcon logo = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogo.png"));
 		
 //컴포넌트 꾸미기. 이쁘게 부탁드려요.
-		//타이틀 네온사인 효과 
-//		neonSignTitleEffect();
 		
 		//관리자 버튼 설정 
 		btnAdminView.setFont(new Font("휴먼엑스포", Font.PLAIN, 12));
@@ -79,10 +78,14 @@ public class MainPageView extends JFrame {
 		
 		neonSignTitleEffect();
 		
-		JLabel jlblImg = new JLabel(resizedLogo);
-//		jlblImg.setBounds(150, 170, 500, 400);
-		jlblImg.setBounds(150, 120, 500,400);
-		add(jlblImg);
+		btnImg = new JButton(resizedLogo);
+		btnImg.setBorderPainted(false);
+		btnImg.setFocusPainted(false);
+		btnImg.setContentAreaFilled(false);
+		btnImg.setOpaque(false);
+		btnImg.setText(null);
+		btnImg.setBounds(150, 120, 500, 400);
+		add(btnImg);
 		
 		JPanel jplButtons = new JPanel();
 		jplButtons.setBackground(Color.white);
@@ -100,6 +103,7 @@ public class MainPageView extends JFrame {
 		btnAdminView.addActionListener(mve);
 		btnHall.addActionListener(mve);
 		btnTakeout.addActionListener(mve);
+		btnImg.addActionListener(mve);
 		
 		setBounds(400,10,800,800);
 		setVisible(true);
@@ -187,6 +191,15 @@ public class MainPageView extends JFrame {
 	public JPanel getTitlePanel() {
 		return titlePanel;
 	}
+
+	public JButton getBtnImg() {
+		return btnImg;
+	}
+
+	public void setBtnImg(JButton btnImg) {
+		this.btnImg = btnImg;
+	}
+	
 	
 	
 	
