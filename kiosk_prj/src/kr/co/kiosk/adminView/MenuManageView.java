@@ -46,9 +46,11 @@ public class MenuManageView extends Panel {
 
         // menuId 컬럼 숨기기
         TableColumnModel columnModel = jtblMenu.getColumnModel();
-        columnModel.getColumn(0).setMinWidth(0);
-        columnModel.getColumn(0).setMaxWidth(0);
-        columnModel.getColumn(0).setWidth(0);
+        //첫 번째 컬럼(menuId)을 숨기기 위해 최소, 최대, 너비를 0으로 설정
+        //컬럼 인덱스 0은 'menuId' 컬럼을 의미
+        columnModel.getColumn(0).setMinWidth(0);// 최소 너비 0으로 설정
+        columnModel.getColumn(0).setMaxWidth(0);// 최대 너비 0으로 설정
+        columnModel.getColumn(0).setWidth(0);// 너비를 0으로 설정하여 화면에서 보이지 않게 함
 
      // 테이블 스크롤 포함해서 추가
         JScrollPane jsp = new JScrollPane(jtblMenu);
@@ -150,14 +152,21 @@ public class MenuManageView extends Panel {
     
     // 선택된 메뉴의 menuId 반환
     public int getSelectedMenuId() {
+    	// 선택된 행의 인덱스를 얻음
     	int selectedRow = jtblMenu.getSelectedRow();
+    	//만약 선택된 행이 없다면(-1이면), -1을 반환
     	if (selectedRow == -1) {
     		return -1;
     	}
+    	
+    	//선택된 행에서 'menuId' 값(0번 컬럼)을 가져옴
     	Object value = tableModel.getValueAt(selectedRow, 0); // 0번 컬럼 = menuId
+    	
+    	//가져온 값을 정수로 변환하여 반환, 변환에 실패하면 -1 반환
     	try {
     		return Integer.parseInt(value.toString());
     	} catch (NumberFormatException e) {
+    		//만약 'menuId'가 정수로 변환되지 않으면 예외 처리하고 -1 반환
     		return -1;
     	}
     }

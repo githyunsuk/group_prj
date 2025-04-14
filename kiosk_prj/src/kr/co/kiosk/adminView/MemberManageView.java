@@ -61,7 +61,7 @@ public class MemberManageView extends Panel  {
 	        
 	        
 	        // 일괄 선택 버튼 추가
-	        jbtnselect=new JButton("일괄 선택");
+	        jbtnselect=new JButton("전체 선택");
 	        jbtnselect.setBounds(280, 500, 100, 30);
 	        add(jbtnselect);
 	        
