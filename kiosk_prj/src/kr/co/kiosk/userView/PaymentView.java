@@ -34,10 +34,11 @@ public class PaymentView extends JFrame {
         setSize(600, 700);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE);
 
         // 상단 텍스트
         JLabel titleLabel = new JLabel("결제 수단을 선택해 주세요", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        titleLabel.setFont(new Font("휴먼엑스포", Font.PLAIN, 18));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(titleLabel, BorderLayout.NORTH);
 
@@ -48,9 +49,19 @@ public class PaymentView extends JFrame {
 
         creditcardBtn = createButton("신용카드");
         creditcardBtn.setPreferredSize(new Dimension(500, 50));
+        creditcardBtn.setForeground(Color.WHITE);
+        creditcardBtn.setBackground(Color.decode("#D8DAD1"));
+        creditcardBtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        creditcardBtn.setBorderPainted(false);   // 테두리 그리지 않기
+        creditcardBtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         creditcardBtn.setMaximumSize(new Dimension(500, 50));
-
+        
         giftcardBtn = createButton("쌍용버거 선불카드");
+        giftcardBtn.setForeground(Color.WHITE);
+        giftcardBtn.setBackground(Color.decode("#C13226"));
+        giftcardBtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        giftcardBtn.setBorderPainted(false);   // 테두리 그리지 않기
+        giftcardBtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         giftcardBtn.setPreferredSize(new Dimension(500, 50));
         giftcardBtn.setMaximumSize(new Dimension(500, 50));
 
@@ -62,9 +73,29 @@ public class PaymentView extends JFrame {
         // 2x2 버튼 패널
         JPanel gridPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         kakaopayBtn = createButton("카카오페이");
+        kakaopayBtn.setForeground(Color.WHITE);
+        kakaopayBtn.setBackground(Color.decode("#D8DAD1"));
+        kakaopayBtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        kakaopayBtn.setBorderPainted(false);   // 테두리 그리지 않기
+        kakaopayBtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         payCoinBtn = createButton("페이 코인");
+        payCoinBtn.setForeground(Color.WHITE);
+        payCoinBtn.setBackground(Color.decode("#D8DAD1"));
+        payCoinBtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        payCoinBtn.setBorderPainted(false);   // 테두리 그리지 않기
+        payCoinBtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         zeropayBtn = createButton("제로페이");
+        zeropayBtn.setForeground(Color.WHITE);
+        zeropayBtn.setBackground(Color.decode("#D8DAD1"));
+        zeropayBtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        zeropayBtn.setBorderPainted(false);   // 테두리 그리지 않기
+        zeropayBtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         otherBtn = createButton("기타");
+        otherBtn.setForeground(Color.WHITE);
+        otherBtn.setBackground(Color.decode("#D8DAD1"));
+        otherBtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        otherBtn.setBorderPainted(false);   // 테두리 그리지 않기
+        otherBtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         
 
         gridPanel.add(kakaopayBtn);
@@ -77,7 +108,7 @@ public class PaymentView extends JFrame {
 
         // 하단 총 결제 금액 라벨
         JLabel amountLabel = new JLabel("총 결제 금액: " + totalPriceAfterDiscount + "원", SwingConstants.CENTER);
-        amountLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        amountLabel.setFont(new Font("휴먼엑스포", Font.PLAIN, 14));
         amountLabel.setOpaque(true);
         amountLabel.setBackground(Color.LIGHT_GRAY);
         amountLabel.setPreferredSize(new Dimension(400, 40));

@@ -1,9 +1,9 @@
 package kr.co.kiosk.userEvt;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userView.AddIngredientsView;
 import kr.co.kiosk.userView.RecommendMenuView;
 import kr.co.kiosk.userView.UserMainView;
@@ -57,23 +56,27 @@ public class RecommendMenuEvt {
 		// 리스트를 섞고 처음 3개 선택
 		Collections.shuffle(recommendList, random);
 		List<MenuVO> randomMenu = recommendList.subList(0, 3);
-
-		for (int i = 0; i < 2; i++) {
+		
+		for (int i = 0; i < 3; i++) {
 			MenuVO menu = randomMenu.get(i);
 			ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogo.png"));
 			if (menu.getImgName() != null) {
 					icon = menu.getImage();
 			}
-			Image scaledImg = icon.getImage().getScaledInstance(300, 180, Image.SCALE_SMOOTH);
+			Image scaledImg = icon.getImage().getScaledInstance(180, 120, Image.SCALE_SMOOTH);
 			ImageIcon img = new ImageIcon(scaledImg);
-			JButton jlblImg = new JButton(img);
+			JLabel jlblImg = new JLabel(img);
 
 			JLabel jlblMenu = new JLabel(("<html>" + menu.getMenuName() + " / " + menu.getPrice() + "</html>"),
 					SwingConstants.CENTER);
-			jlblMenu.setFont(new Font("맑은 고딕", Font.BOLD, 22));
+			jlblMenu.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 
 			JButton btnOrder = new JButton("주문하기");
-			btnOrder.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+			btnOrder.setFont(new Font("휴먼엑스포",Font.BOLD,20));
+			btnOrder.setBackground(Color.decode("#C13226"));
+			btnOrder.setForeground(Color.WHITE);
+			btnOrder.setBorderPainted(false);   // 테두리 그리지 않기
+			btnOrder.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 			btnOrder.addActionListener(e -> orderBtnClicked(menu));
 //			btnOrder.setContentAreaFilled(false); // 버튼의 배경을 투명하게 만듦
 			btnOrder.setBorderPainted(false);

@@ -116,7 +116,6 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 		
 		//수정
 		if(e.getSource() == odv.getJbtnModify()) {
-			System.out.println("수정 클릭 ");
 			String status = null;
 			int orderId = Integer.parseInt( odv.getJtfOrderId().getText().toString());
 			
@@ -147,7 +146,6 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 						String quantityStr = menuAndQty[1];
 						int menuId = oms.getMenuId(menuName);
 						int quantity = Integer.parseInt(quantityStr);
-					    System.out.println("saveStock() 실행 :"+ menuName +"/"+ menuId +"/"+quantity );
 					    sms.saveStock(menuId, quantity, false);//차감: 여기서quantity는 수량임 
 					}
 					
@@ -165,7 +163,6 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 		
 		//삭제 
 		if(e.getSource() == odv.getJbtnDelete()) {
-			System.out.println("삭제 클릭 ");
 			int orderId = Integer.parseInt( odv.getJtfOrderId().getText().toString());
 			String status = null;
 			if(odv.getJrbMaking().isSelected()) { //주문이 조리중일때만 status값을 조리중으로 변경 
@@ -190,14 +187,12 @@ public class OrderManageEvt extends WindowAdapter implements ActionListener, Mou
 		
 		//목록 갱신
 		if(e.getSource() == odv.getJbtnNewList()) {
-			System.out.println("목록갱신 클릭 ");
 			List<TotalOrderVO> voList = oms.totalOrderVOList(0);
 			omv.updateTable(voList);
 		}
 		
 		//전체주문 리스트 
 		if(e.getSource() == odv.getJbtnGuitar()) {
-			System.out.println("전체주문 클릭");
 			List<TotalOrderVO> voList = oms.totalOrderVOList(1);
 			omv.updateTable(voList);
 		}

@@ -45,15 +45,12 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 
 		if(selectedRowNum != -1) {
 			this.menuIdStr = sdv.getJtblStockStatus().getValueAt(selectedRowNum, 0).toString(); //숨겨놨음
-			System.out.println("선택한 메뉴ID : " + menuIdStr);
 			
 			this.menuName = sdv.getJtblStockStatus().getValueAt(selectedRowNum, 2).toString();
-			System.out.println("선택한 메뉴 이름 : " + menuName);
 		}
 		
 		//리스트에서 클릭한 날짜 값 
 		this.orderDate = iodv.getJlDate().getSelectedValue();
-		System.out.println("orderDate : " + orderDate);
 		List<StockSummaryVO> voList = sms.selectStockUpAll(orderDate);
 		smv.getScp().getIodtView().updateTable(voList);
 		
@@ -88,7 +85,6 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 		
 		
 		if(e.getSource() == smv.getStockDetail()) {
-			System.out.println("재고현황 클릭");
 			List<StockVO> voList = sms.stockVOList();
 			smv.getScp().showPanel("STOCKDETAIL");
 			
@@ -97,7 +93,6 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 		}
 		
 		if(e.getSource() == smv.getInOutDetail()) {
-			System.out.println("입출고내역 클릭 ");
 			smv.getScp().showPanel("INOUTDETAIL");
 			List<StockSummaryVO> voList = sms.selectStockUpAll("All");
 			smv.getScp().getIodtView().updateTable(voList);
@@ -107,7 +102,6 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 		}
 		
 		if(e.getSource() == sdv.getSaveStock()) {
-			System.out.println("재료 입고 버튼 클릭 ");
 			
 			 if (menuIdStr == null || menuName == null) {
 			        JOptionPane.showMessageDialog(null, "먼저 테이블에서 재고 항목을 선택해주세요.");

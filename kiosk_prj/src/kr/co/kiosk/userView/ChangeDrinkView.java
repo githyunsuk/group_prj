@@ -22,13 +22,14 @@ public class ChangeDrinkView extends JDialog {
 
 		setLayout(new BorderLayout());
 
-		menuPanel = new JPanel(new GridLayout(0, 3, 10, 10));
+		menuPanel = new JPanel(new GridLayout(3, 3, 10, 10));
 		add(menuPanel);
 		
 		ChangeDrinkEvt cde = new ChangeDrinkEvt(this, menuName, menuPrice, umv);
 		cde.addMenuItem();
 
-		setBounds(300, 300, 772, 546);
+		setBounds(300, 300, 772, 346);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}

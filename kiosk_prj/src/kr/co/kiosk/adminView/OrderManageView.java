@@ -93,7 +93,6 @@ public class OrderManageView extends JPanel {
 	}
 	
 	public void updateTable(List<TotalOrderVO> voList) {
-		System.out.println("omv. updateTable() 실행 ");
 		dtm.setRowCount(0); //기존테이블 초기화
 		
 	    SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm");

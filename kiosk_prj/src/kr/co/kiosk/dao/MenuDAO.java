@@ -13,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -134,7 +136,8 @@ public class MenuDAO {
 			if (!mVO.getImgName().isEmpty()) {
 				File file = new File(mVO.getImgName());
 				if (file.exists()) {
-					fis = new FileInputStream(file);
+					ImageResize.resizeImage(file.getAbsolutePath(), 125, 110);
+					fis = new FileInputStream(file.getParent()+File.separator+"rs_"+file.getName());
 					pstmt.setBinaryStream(++bindIdx, fis, file.length());
 					pstmt.setString(++bindIdx, file.getName());
 				}
@@ -402,7 +405,36 @@ public class MenuDAO {
 		}
 
 		return availableCnt;
-	}
+	}//selectAvailableCount
 	
+	public Map<Integer, Integer> selectAllAvailableCounts() throws SQLException {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    DbConnection dbCon = DbConnection.getInstance();
+
+	    Map<Integer, Integer> map = new HashMap<>();
+
+	    try {
+	        con = dbCon.getConn();
+	        String query = "SELECT m.MENU_ID, TRUNC(s.QUANTITY / m.WEIGHT) AS availableCount " +
+	                       "FROM STOCK s JOIN MENU m ON s.menu_id = m.menu_id";
+
+	        pstmt = con.prepareStatement(query);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            int menuId = rs.getInt("MENU_ID");
+	            int availableCount = rs.getInt("availableCount");
+	            map.put(menuId, availableCount);
+	        }
+
+	    } finally {
+	        dbCon.closeDB(rs, pstmt, con);
+	    }
+
+	    return map;
+	}//selectAllAvailableCounts
+
 
 }// class

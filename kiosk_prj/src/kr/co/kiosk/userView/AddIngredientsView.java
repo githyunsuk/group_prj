@@ -31,7 +31,8 @@ public class AddIngredientsView extends JDialog {
 		AddIngredientsEvt aie = new AddIngredientsEvt(this, menuName, menuPrice, umv);
 		aie.addMenuItem();
 
-		setBounds(300, 300, 772, 346);
+		setBounds(410,350, 772, 346);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}

@@ -88,7 +88,6 @@ public class StockDetailView extends JPanel {
 	}
 	
 	public void updateTable(List<StockVO> voList) {
-		System.out.println("sdv.updateTable() 실행");
 		dtm.setRowCount(0); //초기화 
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

@@ -1,6 +1,8 @@
 package kr.co.kiosk.userView;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -28,7 +30,17 @@ public class SideMenuView extends JPanel {
 		// 페이지 이동 버튼 추가
 		JPanel jpnlBtn = new JPanel();
 		btnPrev = new JButton("이전");
+		btnPrev.setFont(new Font("휴먼엑스포",Font.BOLD,15));
+		btnPrev.setBackground(Color.decode("#C13226"));
+		btnPrev.setForeground(Color.WHITE);
+		btnPrev.setBorderPainted(false);   // 테두리 그리지 않기
+		btnPrev.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		btnNext = new JButton("다음");
+		btnNext.setFont(new Font("휴먼엑스포",Font.BOLD,15));
+		btnNext.setBackground(Color.decode("#C13226"));
+		btnNext.setForeground(Color.WHITE);
+		btnNext.setBorderPainted(false);   // 테두리 그리지 않기
+		btnNext.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 
 		SideMenuEvt sme = new SideMenuEvt(this, umv);
 		sme.loadMenu();

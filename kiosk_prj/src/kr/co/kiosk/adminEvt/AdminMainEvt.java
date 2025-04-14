@@ -36,7 +36,6 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if(e.getSource() == amv.getAdminMainButtons().getBtnLogout()) {
-			System.out.println("로그아웃 버튼 클릭");
 			amv.dispose(); //해당창 종료 	
 			new MainPageView().setVisible(true); //초기화면 이동 
 		}
@@ -45,7 +44,6 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 		}
 		
 		if(e.getSource() == amv.getAdminMainButtons().getBtnOrder()) {
-			System.out.println("주문관리 버튼 클릭");
 			acp.showPanel("ORDER");
 			List<TotalOrderVO> voList = oms.totalOrderVOList(0);
 			omv.updateTable(voList);
@@ -53,17 +51,14 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 			
 		}
 		if(e.getSource() == amv.getAdminMainButtons().getBtnMenu()) {
-			System.out.println("메뉴관리 버튼 클릭");
 			acp.showPanel("MENU");
 			
 		}
 		if(e.getSource() == amv.getAdminMainButtons().getBtnFinancial()) {
-			System.out.println("정산관리 버튼 클릭");
 			acp.showPanel("FINANCIAL");
 			
 		}
 		if(e.getSource() == amv.getAdminMainButtons().getBtnStock()) {
-			System.out.println("재고관리 버튼 클릭");
 			acp.showPanel("STOCK");
 			amv.getAdminCenterPanel().getStockPage().getScp().showPanel("STOCKDETAIL");
 			List<StockVO> list = sms.stockVOList();
@@ -71,7 +66,6 @@ public class AdminMainEvt extends WindowAdapter implements ActionListener {
 			
 		}
 		if(e.getSource() == amv.getAdminMainButtons().getBtnMember()) {
-			System.out.println("회원관리 버튼 클릭");
 			acp.showPanel("MEMBER");
 			
 		}

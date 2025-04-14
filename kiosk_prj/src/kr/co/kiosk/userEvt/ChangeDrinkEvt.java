@@ -28,7 +28,6 @@ public class ChangeDrinkEvt {
 	private StringBuilder menuName;
 	private AtomicInteger menuPrice;
 	private List<MenuVO> drinkList;
-	private final Map<Integer, Integer> stockMap = new HashMap<>();
 	private int basicPrice; // 세트 기본 메뉴의 가격
 
 	public ChangeDrinkEvt(ChangeDrinkView cdv, StringBuilder menuName, AtomicInteger menuPrice, UserMainView umv) {
@@ -38,7 +37,6 @@ public class ChangeDrinkEvt {
 		this.menuPrice = menuPrice;
 		this.menuPanel = cdv.getMenuPanel();
 		this.drinkList = getDrinkMenu();
-		getStockInfo();
 	}
 
 	private List<MenuVO> getDrinkMenu() {
@@ -52,14 +50,6 @@ public class ChangeDrinkEvt {
 		return drinkList;
 	}// getDrinkMenu
 	
-	private void getStockInfo() {
-		MenuService ms = new MenuService();
-		for (MenuVO menu : drinkList) {
-			int availableCnt = ms.getAvailableCount(menu.getMenuId());
-			stockMap.put(menu.getMenuId(), availableCnt);
-		}
-	}
-
 	public void addMenuItem() {
 
 		ImageIcon icon = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/noChange.jpg"));
@@ -89,7 +79,7 @@ public class ChangeDrinkEvt {
 			/**
 			 * 재고소진에 따른 주문 가능 횟수 표기			 
 			 * */
-			int availableCnt = stockMap.get(mv.getMenuId());
+			int availableCnt = umv.getStockMap().get(mv.getMenuId());
 			String alertText = "";
 			if (availableCnt <= 0) {
 			    alertText = "<font color='red'><b>Sold Out!</b></font>";

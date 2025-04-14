@@ -1,5 +1,6 @@
 package kr.co.kiosk.userView;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -31,6 +32,8 @@ public class UsePointView extends JDialog {
         // 프레임 설정
         setLayout(null);
         setBounds(600, 100, 400, 600);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(Color.WHITE);
         
         JLabel jlblTitle = new JLabel("적립금 사용", JLabel.CENTER);
         jlblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 15));
@@ -63,18 +66,41 @@ public class UsePointView extends JDialog {
         	if(i != 0) {
                 jpBtn.add(arrNumpad[i]);	
         	}//end if
+        	arrNumpad[i].setForeground(Color.WHITE);
+            arrNumpad[i].setBackground(Color.decode("#D8DAD1"));
+            arrNumpad[i].setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+            arrNumpad[i].setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         	arrNumpad[i].addActionListener(ipe);
         	
         }//end for
         JButton jbtn = new JButton("");
         jpBtn.add(jbtn);
         jpBtn.add(arrNumpad[0]);
+        jbtn.setForeground(Color.WHITE);
+        jbtn.setBackground(Color.decode("#D8DAD1"));
+        jbtn.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtn.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         // 추가 버튼 (지우기, 확인 등)
         jbtnClear = new JButton("clear");
+        jbtnClear.setForeground(Color.WHITE);
+        jbtnClear.setBackground(Color.decode("#D8DAD1"));
+        jbtnClear.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnClear.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         jpBtn.add(jbtnClear);
         
         jbtnCancel = new JButton("취소");
+        jbtnCancel.setForeground(Color.WHITE);
+        jbtnCancel.setBackground(Color.decode("#D8DAD1"));
+        jbtnCancel.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnCancel.setBorderPainted(false);   // 테두리 그리지 않기
+        jbtnCancel.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         jbtnUse = new JButton("사용");
+        jbtnUse.setForeground(Color.WHITE);
+        jbtnUse.setBackground(Color.decode("#C13226"));
+        jbtnUse.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnUse.setBorderPainted(false);   // 테두리 그리지 않기
+        jbtnUse.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+        
         
         jbtnCancel.setBounds(50,470,110,60);
         jbtnUse.setBounds(240,470,110,60);

@@ -30,7 +30,6 @@ public class BurgerMenuEvt implements ActionListener {
 	private JPanel menuPanel;
 	private DefaultTableModel dtm;
 	private List<MenuVO> burgerList; // 버거 메뉴를 담는 VO 리스트
-	private final Map<Integer, Integer> stockMap = new HashMap<>(); //버거 재고 관리위한 Map
 
 	private int maxPage = 9; // 한 페이지당 최대 메뉴 개수
 	private int currentPage = 0; // 현재 페이지 번호
@@ -42,7 +41,6 @@ public class BurgerMenuEvt implements ActionListener {
 		this.menuPanel = bmv.getMenuPanel();
 		this.dtm = umv.getDtm();
 		this.burgerList = getBurgerMenu();
-		getStockInfo();
 	}// BurgerMenuEvt
 
 	// 버거 메뉴를 가져오는 method
@@ -56,14 +54,6 @@ public class BurgerMenuEvt implements ActionListener {
 		}
 		return burgerList;
 	}// getBurgerMenu
-
-	private void getStockInfo() {
-		MenuService ms = new MenuService();
-		for (MenuVO menu : burgerList) {
-			int availableCnt = ms.getAvailableCount(menu.getMenuId());
-			stockMap.put(menu.getMenuId(), availableCnt);
-		}
-	}//getStockInfo
 	
 	// 데이터를 가져와서 메뉴판을 채우는 method
 	public void loadMenu() {
@@ -102,7 +92,7 @@ public class BurgerMenuEvt implements ActionListener {
 		/**
 		 * 재고소진에 따른 주문 가능 횟수 표기			 
 		 * */
-		int availableCnt = stockMap.getOrDefault(burgerList.getMenuId(),0);
+		int availableCnt = umv.getStockMap().getOrDefault(burgerList.getMenuId(),0);
 		String alertText = "";
 		if (availableCnt <= 0 && burgerList.getCategoryId() != 1) {
 		    alertText = "<font color='red'><b>Sold Out!</b></font>";

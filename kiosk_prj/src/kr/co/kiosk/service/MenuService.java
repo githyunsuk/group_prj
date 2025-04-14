@@ -3,7 +3,9 @@ package kr.co.kiosk.service;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kr.co.kiosk.dao.AdminStockDAO;
 import kr.co.kiosk.dao.MenuDAO;
@@ -117,6 +119,18 @@ public class MenuService {
 			e.printStackTrace();
 		}
 		return availableCnt;  
-	}    
+	}//getAvailableCount
+	
+	public Map<Integer, Integer> getAllAvailableCounts() {
+		Map<Integer, Integer> map = new HashMap<>();
+		MenuDAO mDAO = MenuDAO.getInstance();
+	
+		try {
+			map = mDAO.selectAllAvailableCounts();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
 	
 }//class

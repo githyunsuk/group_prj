@@ -163,9 +163,13 @@ public class PaymentEvt extends WindowAdapter implements ActionListener {
 		}
 
 		sb.append("-------------------------------------------------------\n");
-		sb.append(String.format("%-22s %31s\n", "총액", String.format("%,d", totalPrice)));
-		sb.append(String.format("%-22s %31s\n", "할인", String.format("%,d", umv.getUsingPoints())));
-		sb.append(String.format("%-22s %31s\n", "합계", String.format("%,d", totalPriceAfterDiscount)));
+		sb.append(String.format("%-15s\t%31s\n", "판매액", String.format("%,d", totalPriceAfterDiscount)));
+		sb.append("-------------------------------------------------------\n");
+		int priceWithoutVAT = (int)(totalPriceAfterDiscount * 0.9); // 부가세 제외 금액
+		int vat = totalPriceAfterDiscount - priceWithoutVAT;    
+		sb.append(String.format("%-15s\t%31s\n", "부가세제외총계", String.format("%,d", priceWithoutVAT)));
+		sb.append(String.format("%-15s\t%31s\n", "부가세", String.format("%,d", vat)));
+		sb.append(String.format("%-15s\t%31s\n", "합계", String.format("%,d", totalPriceAfterDiscount)));
 		sb.append("-------------------------------------------------------\n");
 	}// receiptCreate
 

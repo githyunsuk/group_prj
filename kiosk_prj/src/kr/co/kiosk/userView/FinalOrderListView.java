@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import kr.co.kiosk.userEvt.FinalOrderListEvt;
 
@@ -28,11 +29,12 @@ public class FinalOrderListView extends JFrame {
     
     public FinalOrderListView(UserMainView umv) {
         setLayout(null);
-        
+        getContentPane().setBackground(Color.WHITE);
         // ----------------------나의 주문 리스트 타이틀----------------------
         JLabel jlblTitle = new JLabel("나의 주문 리스트", JLabel.CENTER);
-        jlblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+        jlblTitle.setFont(new Font("휴먼엑스포", Font.BOLD, 20));
         jlblTitle.setBounds(0, 40, 730, 30);
+        
         add(jlblTitle);
 
         // ----------------------테이블 설정----------------------
@@ -56,6 +58,11 @@ public class FinalOrderListView extends JFrame {
 		jt.getColumnModel().getColumn(3).setPreferredWidth(0);
 //      jt.setBorder(new LineBorder(Color.BLACK, 1));
         jt.setRowHeight(30);
+
+        JTableHeader header = jt.getTableHeader();
+        header.setBackground(Color.decode("#C13226")); // 배경색
+        header.setForeground(Color.WHITE);     // 글씨색
+        header.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
         
         JScrollPane jscJt = new JScrollPane(jt);
         jscJt.setBounds(50, 80, 630, 470); 
@@ -63,7 +70,7 @@ public class FinalOrderListView extends JFrame {
         add(jscJt);
 
         // ----------------------합계, 할인, 총 결제 금액 영역----------------------
-        Font font = new Font("맑은 고딕", Font.BOLD, 17);
+        Font font = new Font("휴먼엑스포", Font.BOLD, 17);
         
         // 합계 패널
         JPanel jpTotal = new JPanel(null);
@@ -119,17 +126,30 @@ public class FinalOrderListView extends JFrame {
         // ----------------------버튼 설정----------------------
         jbtnCancel = new JButton("취소");
         jbtnCancel.setBounds(50, 740, 150, 60);
-        jbtnCancel.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+        jbtnCancel.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnCancel.setForeground(Color.WHITE);
+        jbtnCancel.setBackground(Color.decode("#D8DAD1"));
+        jbtnCancel.setBorderPainted(false);   // 테두리 그리지 않기
+        jbtnCancel.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         add(jbtnCancel);
 
         jbtnDiscount = new JButton("할인");
         jbtnDiscount.setBounds(290, 740, 150, 60);
-        jbtnDiscount.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+        jbtnDiscount.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnDiscount.setForeground(Color.WHITE);
+        jbtnDiscount.setBackground(Color.decode("#D8DAD1"));
+        jbtnDiscount.setBorderPainted(false);   // 테두리 그리지 않기
+        jbtnDiscount.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         add(jbtnDiscount);
 
+        
         jbtnPay = new JButton("결제");
         jbtnPay.setBounds(530, 740, 150, 60);
-        jbtnPay.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+        jbtnPay.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnPay.setBackground(Color.decode("#C13226")); // 배경색
+        jbtnPay.setForeground(Color.WHITE);     // 글씨색
+        jbtnPay.setBorderPainted(false);   // 테두리 그리지 않기
+        jbtnPay.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
         add(jbtnPay);
         
         // ----------------------이벤트 등록-------------------------
@@ -143,6 +163,7 @@ public class FinalOrderListView extends JFrame {
         addWindowListener(fole);
         // ----------------------프레임 설정----------------------
         setBounds(600, 100, 730, 900);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

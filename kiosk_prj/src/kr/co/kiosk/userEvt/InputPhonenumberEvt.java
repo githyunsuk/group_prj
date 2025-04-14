@@ -32,66 +32,40 @@ public class InputPhonenumberEvt extends WindowAdapter implements ActionListener
 		ipv.dispose();
 	}// windowClosing
 
-
 	public void chkMember() {
 		String formattedNumber = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 7) + "-"
 				+ phoneNumber.substring(7);
 
 		MemberService ms = new MemberService();
 		MemberVO mVO = ms.searchMemberWithPhone(formattedNumber);
-		
-		//회원이면
+
+		// 회원이면
 		if (mVO != null) {
-		    ipv.dispose();
-		    umv.setMemberId(mVO.getMemberId());
+			ipv.dispose();
+			umv.setMemberId(mVO.getMemberId());
 
-		    if (caller.equals("stamp")) { //스탬프에서 실행됐으면
-		        new UseStampView(umv, mVO);
-		    } else if (caller.equals("point")) { //할인에서 실행됐으면
-		        new UsePointView(umv, mVO);
-		    } else { //적립에서 실행됐으면
-		    }
-		} else { //회원이 아니면 회원가입 진행
-		    JOptionPane.showMessageDialog(ipv, "회원가입이 완료되었습니다.");
-		    mVO = new MemberVO(formattedNumber);
-		    ms.addMember(mVO);
-		    ipv.dispose();
-		    umv.setMemberId(mVO.getMemberId());
+			if (caller.equals("stamp")) { // 스탬프에서 실행됐으면
+				new UseStampView(umv, mVO);
+			} else if (caller.equals("point")) { // 할인에서 실행됐으면
+				new UsePointView(umv, mVO);
+			} else { 
+				// 적립에서 실행됐으면 회원 적용만 하고 딱히 암것도 하지 않음
+			}
+		} else { // 회원이 아니면 회원가입 진행
+			int result = JOptionPane.showConfirmDialog(null, "입력하신 번호가 존재하지 않습니다. 회원가입을 진행하시겠습니까?", "회원가입",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				JOptionPane.showMessageDialog(null, "회원가입 완료");
+				mVO = new MemberVO(formattedNumber);
+				ms.addMember(mVO);
+				ipv.dispose();
+				umv.setMemberId(mVO.getMemberId());
+			} else {
+				ipv.dispose();
+			}
 
-		    if (caller.equals("stamp")) {
-		        new UseStampView(umv, mVO);
-		    } else if (caller.equals("point")) {
-		        new UsePointView(umv, mVO);
-		    } else {
-		    }
 		}
-		
-//		//회원이라면
-//		if (mVO != null) {
-//			ipv.dispose();
-//			if(caller.equals("stamp")) {
-//				new UseStampView(umv, mVO);
-//			}else if(caller.equals("point")) {
-//				new UsePointView(umv, mVO);
-//			}else {
-//				//적립하기만 눌렀을 때
-//				
-//			}
-//		} else { //회원이 아니라면 회원가입진행
-//			JOptionPane.showMessageDialog(ipv, "회원가입이 완료되었습니다.");
-//			mVO = new MemberVO(formattedNumber);
-//			ms.addMember(mVO);
-//			ipv.dispose();
-//			if(caller.equals("stamp")) {
-//				new UseStampView(umv,mVO);
-//			}else if(caller.equals("point")) {
-//				new UsePointView(umv, mVO);
-//			}else {
-//				//적립하기만 눌렀을 때
-//				
-//			}
-//		}
-//		umv.setMemberId(mVO.getMemberId());
+
 	}// chkMember
 
 	/**

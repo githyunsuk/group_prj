@@ -101,7 +101,6 @@ public class InOutDetailView extends JPanel {
 	
 	//dtmData에 데이터 추가
 	public void updateTable(List<StockSummaryVO> voList) {
-		System.out.println("iodv.updateTable() 실행");
 		dtmData.setRowCount(0); //초기화 
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

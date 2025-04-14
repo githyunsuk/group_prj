@@ -1,5 +1,6 @@
 package kr.co.kiosk.userView;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -29,6 +30,8 @@ public class UseStampView extends JDialog {
 		// 프레임 설정
 		setLayout(null);
 		setBounds(600, 100, 400, 700);
+		setLocationRelativeTo(null);
+
 
 		// 제목
 		JLabel jlblTitle = new JLabel("스탬프 사용", JLabel.CENTER);
@@ -52,6 +55,26 @@ public class UseStampView extends JDialog {
 		jbtnStamp3 = new JButton("쌍용버거                             필요 스탬프 : 7");
 		jbtnStamp4 = new JButton("HTML버거                             필요 스탬프 : 10");
 
+//		jbtnStamp1.setForeground(Color.decode("#C13226"));
+		jbtnStamp1.setBackground(Color.decode("#D8DAD1"));
+//		jbtnStamp1.setFont(new Font("휴먼엑스포", Font.BOLD, 10));
+		jbtnStamp1.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		
+//		jbtnStamp2.setForeground(Color.decode("#C13226"));
+		jbtnStamp2.setBackground(Color.decode("#D8DAD1"));
+//		jbtnStamp2.setFont(new Font("휴먼엑스포", Font.BOLD, 10));
+		jbtnStamp2.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		
+//		jbtnStamp3.setForeground(Color.decode("#C13226"));
+		jbtnStamp3.setBackground(Color.decode("#D8DAD1"));
+//		jbtnStamp3.setFont(new Font("휴먼엑스포", Font.BOLD, 10));
+		jbtnStamp3.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		
+//		jbtnStamp4.setForeground(Color.decode("#C13226"));
+		jbtnStamp4.setBackground(Color.decode("#D8DAD1"));
+//		jbtnStamp4.setFont(new Font("휴먼엑스포", Font.BOLD, 10));
+		jbtnStamp4.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		
 		jbtnStamp1.setEnabled(false);
 		jbtnStamp2.setEnabled(false);
 		jbtnStamp3.setEnabled(false);
@@ -78,7 +101,17 @@ public class UseStampView extends JDialog {
 
 		// 기존 버튼 설정 (취소, 사용 버튼)
 		jbtnCancel = new JButton("취소");
+		jbtnCancel.setForeground(Color.WHITE);
+        jbtnCancel.setBackground(Color.decode("#D8DAD1"));
+        jbtnCancel.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+        jbtnCancel.setBorderPainted(false);   // 테두리 그리지 않기
+        jbtnCancel.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		jbtnConfirm = new JButton("사용");
+		jbtnConfirm.setForeground(Color.WHITE);
+		jbtnConfirm.setBackground(Color.decode("#C13226"));
+		jbtnConfirm.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+		jbtnConfirm.setBorderPainted(false);   // 테두리 그리지 않기
+		jbtnConfirm.setFocusPainted(false);    //
 
 		// 취소, 사용 버튼 위치 설정
 		jbtnCancel.setBounds(50, 510, 110, 60);

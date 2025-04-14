@@ -26,29 +26,41 @@ public class MainPageView extends JFrame {
 	private JButton btnAdminView;
 	private JButton btnTakeout;
 	private JButton btnHall;
-	String restaurantTitle = "쌍용버거";
+	String restaurantTitle = "환영합니다!";
 	private JPanel titlePanel;
 	
 	public MainPageView() {
 	 
 //컴포넌트 모음  
+		getContentPane().setBackground(Color.WHITE);
 		titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout());
 		
 		btnAdminView = new JButton("관리자모드");
+		btnAdminView.setBorderPainted(false);   // 테두리 그리지 않기
+		btnAdminView.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		btnAdminView.setContentAreaFilled(false); // 버튼 내부 배경 제거 (선택사항)
+		
 		btnTakeout = new JButton("포장주문");
+		btnTakeout.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		btnTakeout.setBackground(Color.decode("#C13226"));
+		btnTakeout.setForeground(Color.WHITE);
+		
 		btnHall = new JButton("매장식사");
+		btnHall.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		btnHall.setBackground(Color.decode("#C13226"));
+		btnHall.setForeground(Color.WHITE);
 		ImageIcon logo = new ImageIcon(getClass().getResource("/kr/co/kiosk/assets/BrandLogo.png"));
 		
 //컴포넌트 꾸미기. 이쁘게 부탁드려요.
 		//타이틀 네온사인 효과 
-		neonSignTitleEffect();
+//		neonSignTitleEffect();
 		
 		//관리자 버튼 설정 
-		btnAdminView.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+		btnAdminView.setFont(new Font("휴먼엑스포", Font.PLAIN, 12));
 		
-		btnTakeout.setFont(new Font("맑은 고딕", Font.BOLD, 40));
-		btnHall.setFont(new Font("맑은 고딕", Font.BOLD, 40));
+		btnTakeout.setFont(new Font("휴먼엑스포", Font.BOLD, 40));
+		btnHall.setFont(new Font("휴먼엑스포", Font.BOLD, 40));
 		
 		//로고이미지 사이즈 변경 
 		Image originImg = logo.getImage();
@@ -62,20 +74,25 @@ public class MainPageView extends JFrame {
 		btnAdminView.setBounds(10,10,100,30);
 		add(btnAdminView);
 		
-		titlePanel.setBounds(100, 70, 600, 100);
+		titlePanel.setBounds(100, 10, 600, 100);
 		add(titlePanel);
 		
+		neonSignTitleEffect();
+		
 		JLabel jlblImg = new JLabel(resizedLogo);
-		jlblImg.setBounds(150, 170, 500, 400);
+//		jlblImg.setBounds(150, 170, 500, 400);
+		jlblImg.setBounds(150, 120, 500,400);
 		add(jlblImg);
 		
 		JPanel jplButtons = new JPanel();
-		jplButtons.setLayout(new GridLayout(1, 2));
+		jplButtons.setBackground(Color.white);
+		jplButtons.setLayout(new GridLayout(1, 2, 50, 0));
 		jplButtons.add(btnTakeout);
 		jplButtons.add(btnHall);
 		jplButtons.setBounds(100,570, 600, 150);
 		add(jplButtons);
 		
+		titlePanel.setBackground(Color.WHITE);
 		//이벤트 생성
 		MainPageEvt mve = new MainPageEvt(this);
 		addWindowListener(mve);

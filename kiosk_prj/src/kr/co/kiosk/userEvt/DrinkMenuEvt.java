@@ -30,7 +30,6 @@ public class DrinkMenuEvt implements ActionListener {
 	private JPanel menuPanel;
 	private DefaultTableModel dtm;
 	private List<MenuVO> drinkList; // 음료 메뉴를 담는 VO 리스트
-	private final Map<Integer, Integer> stockMap = new HashMap<>();
 
 	private int maxPage = 9; // 한 페이지당 최대 메뉴 개수
 	private int currentPage = 0; // 현재 페이지 번호
@@ -42,7 +41,6 @@ public class DrinkMenuEvt implements ActionListener {
 		this.menuPanel = dmv.getMenuPanel();
 		this.dtm = umv.getDtm();
 		this.drinkList = getDrinkMenu();
-		getStockInfo();
 	}// DrinkMenuEvt
 
 	// 메뉴를 가져오는 method
@@ -57,14 +55,6 @@ public class DrinkMenuEvt implements ActionListener {
 		return drinkList;
 	}//getDrinkMenu
 	
-	private void getStockInfo() {
-		MenuService ms = new MenuService();
-		for (MenuVO menu : drinkList) {
-			int availableCnt = ms.getAvailableCount(menu.getMenuId());
-			stockMap.put(menu.getMenuId(), availableCnt);
-		}
-	}
-
 	// 데이터를 가져와서 메뉴판을 채우는 method
 	public void loadMenu() {
 		menuPanel.removeAll(); // 기존 메뉴 삭제
@@ -102,7 +92,7 @@ public class DrinkMenuEvt implements ActionListener {
 		/**
 		 * 재고소진에 따른 주문 가능 횟수 표기			 
 		 * */
-		int availableCnt = stockMap.get(drinkList.getMenuId());
+		int availableCnt = umv.getStockMap().get(drinkList.getMenuId());
 		String alertText = "";
 		if (availableCnt <= 0) {
 		    alertText = "<font color='red'><b>Sold Out!</b></font>";

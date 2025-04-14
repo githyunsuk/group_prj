@@ -42,7 +42,6 @@ public class AdminMainButtons extends JPanel {
 			
 		});
 		
-		System.out.println();
 		
 		
 		btnOrder = new JButton("주문 관리");

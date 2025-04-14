@@ -77,10 +77,10 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 	public void checkEasterEgg() {
 		List<String> easterEggCode = List.of("PLUS", "PLUS", "MINUS", "MINUS", "CANCEL");
 		if (easterEggUsed) {
-	        easterEgg.clear();
-	        return; // 이미 사용했으면 아무 일도 안 함
-	    }
-		
+			easterEgg.clear();
+			return; // 이미 사용했으면 아무 일도 안 함
+		}
+
 		if (easterEgg.equals(easterEggCode) && umv.getMemberId() != -1) {
 			JOptionPane.showMessageDialog(null, "축하합니다!!!\n 10000포인트 획득하셨습니다!", "이스터에그 발견",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -102,16 +102,26 @@ public class UserMainEvt extends WindowAdapter implements ActionListener {
 	}// openStampView
 
 	public void resetButtonColors() {
-		umv.getBtnRecommendView().setBackground(null);
-		umv.getBtnBurgerView().setBackground(null);
-		umv.getBtnSideView().setBackground(null);
-		umv.getBtnDrinkView().setBackground(null);
+		umv.getBtnRecommendView().setBackground(Color.decode("#C13226"));
+		umv.getBtnBurgerView().setBackground(Color.decode("#D8DAD1"));
+		umv.getBtnSideView().setBackground(Color.decode("#D8DAD1"));
+		umv.getBtnDrinkView().setBackground(Color.decode("#D8DAD1"));
 	}// resetButtonColors
 
 	private void switchPanel(String panelName, javax.swing.JButton btn) {
-		resetButtonColors();
 		umv.getCl().show(umv.getJpnlMain(), panelName);
-		btn.setBackground(Color.decode("#2196F3"));
+
+		// 먼저 모든 버튼을 기본 색상으로 초기화
+		resetButtonColors();
+
+		// 선택된 버튼만 색상 변경
+		if (umv.getBtnRecommendView() == btn) {
+			btn.setBackground(Color.decode("#C85566"));
+			btn.setForeground(Color.WHITE);
+		} else {
+			btn.setBackground(Color.WHITE);
+			btn.setForeground(Color.decode("#C13226"));
+		}
 	}// switchPanel
 
 	public void cancelAll() {

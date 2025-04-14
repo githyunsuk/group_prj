@@ -2,10 +2,10 @@ package kr.co.kiosk.userView;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import kr.co.kiosk.service.MenuService;
 import kr.co.kiosk.userEvt.UserMainEvt;
@@ -43,23 +44,26 @@ public class UserMainView extends JFrame {
 	private SideMenuView smv;
 	private DrinkMenuView dmv;
 
-	//스탬프 아이디 포인트 처리하기가 너무 힘들어서 모든 view가 상속받는 UserMainView의 전역 변수로 설정..
-	private int memberId = -1; //회원아이디
-	private int usingPoints; //사용한 포인트
-	private int usingStamps; //사용한 스탬프
-	
+	// 스탬프 아이디 포인트 처리하기가 너무 힘들어서 모든 view가 상속받는 UserMainView의 전역 변수로 설정..
+	private int memberId = -1; // 회원아이디
+	private int usingPoints; // 사용한 포인트
+	private int usingStamps; // 사용한 스탬프
+
 	private boolean isHall;
 	private List<MenuVO> allMenuList;
+	private Map<Integer, Integer> stockMap;
 
 	public UserMainView(boolean isHall) {
+		long st = System.currentTimeMillis();
 		this.isHall = isHall;
 		MenuService ms = new MenuService();
 		allMenuList = ms.searchAllMenu();
-
-		
+		stockMap = ms.getAllAvailableCounts();
 
 		frame = new JFrame();
 		frame.setBounds(400, 10, 800, 950);
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -70,28 +74,43 @@ public class UserMainView extends JFrame {
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
 		// JLabel에 적용
-		JLabel jlblSsangyongBurger = new JLabel(resizedIcon,  JLabel.LEFT);
-		jlblSsangyongBurger.setFont(new Font("굴림", Font.PLAIN, 18));
-		jlblSsangyongBurger.setBounds(12, 10, 115, 45);
+		JLabel jlblSsangyongBurger = new JLabel(resizedIcon, JLabel.LEFT);
+		jlblSsangyongBurger.setFont(new Font("휴먼엑스포", Font.PLAIN, 18));
+		jlblSsangyongBurger.setBounds(12, 0, 115, 45);
 		frame.getContentPane().add(jlblSsangyongBurger);
 
 		btnHome = new JButton("HOME");
-		btnHome.setBounds(662, 10, 115, 45);
+		btnHome.setBorderPainted(false); // 테두리 그리지 않기
+		btnHome.setFocusPainted(false); // 포커스 테두리 제거 (선택사항)
+		btnHome.setContentAreaFilled(false); // 버튼 내부 배경 제거 (선택사항)
+		btnHome.setForeground(Color.decode("#C13226"));
+		btnHome.setBounds(662, 0, 115, 45);
 		frame.getContentPane().add(btnHome);
 
 		btnOrder = new JButton("주 문");
-		btnOrder.setFont(new Font("굴림", Font.PLAIN, 18));
+		btnOrder.setFont(new Font("휴먼엑스포", Font.BOLD, 20));
+		btnOrder.setBackground(Color.decode("#C13226"));
+		btnOrder.setForeground(Color.WHITE);
+		btnOrder.setBorderPainted(false); // 테두리 그리지 않기
+		btnOrder.setFocusPainted(false); // 포커스 테두리 제거 (선택사항)
 		btnOrder.setBounds(657, 804, 115, 97);
 		frame.getContentPane().add(btnOrder);
-	
 
 		btnStamp = new JButton("스탬프");
-		btnStamp.setFont(new Font("굴림", Font.PLAIN, 18));
+		btnStamp.setFont(new Font("휴먼엑스포", Font.BOLD, 20));
+		btnStamp.setForeground(Color.WHITE);
+		btnStamp.setBackground(Color.decode("#FF8000"));
+		btnStamp.setBorderPainted(false); // 테두리 그리지 않기
+		btnStamp.setFocusPainted(false); // 포커스 테두리 제거 (선택사항)
 		btnStamp.setBounds(530, 804, 115, 97);
 		frame.getContentPane().add(btnStamp);
 
-		btnCancelAll = new JButton("전체 취소");
-		btnCancelAll.setFont(new Font("굴림", Font.PLAIN, 18));
+		btnCancelAll = new JButton("<html>전체<br>취소</html>");
+		btnCancelAll.setForeground(Color.WHITE);
+		btnCancelAll.setFont(new Font("휴먼엑스포", Font.BOLD, 20));
+		btnCancelAll.setBackground(Color.decode("#454545"));
+		btnCancelAll.setBorderPainted(false); // 테두리 그리지 않기
+		btnCancelAll.setFocusPainted(false); // 포커스 테두리 제거 (선택사항)
 		btnCancelAll.setBounds(403, 804, 115, 97);
 		frame.getContentPane().add(btnCancelAll);
 
@@ -108,16 +127,15 @@ public class UserMainView extends JFrame {
 		frame.getContentPane().add(jtfTotalPrice);
 
 		JLabel jlblTotalQuantity = new JLabel("수 량");
-		jlblTotalQuantity.setFont(new Font("굴림", Font.PLAIN, 20));
+		jlblTotalQuantity.setFont(new Font("휴먼엑스포", Font.BOLD, 20));
 		jlblTotalQuantity.setBounds(65, 804, 85, 35);
 		frame.getContentPane().add(jlblTotalQuantity);
 
 		JLabel jlblTotalPrice = new JLabel("금 액");
-		jlblTotalPrice.setFont(new Font("굴림", Font.PLAIN, 20));
+		jlblTotalPrice.setFont(new Font("휴먼엑스포", Font.BOLD, 20));
 		jlblTotalPrice.setBounds(65, 864, 85, 35);
 		frame.getContentPane().add(jlblTotalPrice);
 
-		
 		// dtm 설정
 		String[] columnName = { "메뉴", "수량", "가격", "메뉴id" };
 		dtm = new DefaultTableModel(columnName, 0);
@@ -135,6 +153,11 @@ public class UserMainView extends JFrame {
 		table.getColumnModel().getColumn(3).setWidth(0);
 		table.getColumnModel().getColumn(3).setPreferredWidth(0);
 
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(Color.decode("#C13226")); // 배경색
+		header.setForeground(Color.WHITE); // 글씨색
+		header.setFont(new Font("휴먼엑스포", Font.BOLD, 18));
+
 		// 행의크기 설정.
 		table.setRowHeight(38);
 
@@ -144,15 +167,29 @@ public class UserMainView extends JFrame {
 
 		btnMinus = new JButton("-");
 		btnMinus.setBounds(307, 754, 50, 30);
+		btnMinus.setFont(new Font("휴먼엑스포",Font.BOLD,15));
+		btnMinus.setForeground(Color.WHITE);
+		btnMinus.setBackground(Color.decode("#D8DAD1"));
+		btnMinus.setBorderPainted(false);   // 테두리 그리지 않기
+		btnMinus.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		frame.getContentPane().add(btnMinus);
 		btnPlus = new JButton("+");
+		btnPlus.setFont(new Font("휴먼엑스포",Font.BOLD,15));
+		btnPlus.setForeground(Color.WHITE);
+		btnPlus.setBackground(Color.decode("#C13226"));
+		btnPlus.setBorderPainted(false);   // 테두리 그리지 않기
+		btnPlus.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		btnPlus.setBounds(367, 754, 50, 30);
 		frame.getContentPane().add(btnPlus);
 		btnCancel = new JButton("x");
+		btnCancel.setFont(new Font("휴먼엑스포",Font.BOLD,15));
+		btnCancel.setForeground(Color.WHITE);
+		btnCancel.setBackground(Color.decode("#454545"));
+		btnCancel.setBorderPainted(false);   // 테두리 그리지 않기
+		btnCancel.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		btnCancel.setBounds(427, 754, 50, 30);
 		frame.getContentPane().add(btnCancel);
-		
-		/////////////////////////////////////////////////////////////////////////////////////
+
 		// 상단 메뉴바
 		jpnlBtn = new JPanel();
 		jpnlBtn.setBounds(0, 45, 784, 114);
@@ -161,18 +198,37 @@ public class UserMainView extends JFrame {
 
 		btnRecommendView = new JButton("추천 메뉴");
 		btnRecommendView.setBounds(0, 22, 195, 66);
-		btnRecommendView.setBackground(Color.decode("#2196F3"));
+		btnRecommendView.setBackground(Color.decode("#C13226"));
+		btnRecommendView.setFont(new Font("휴먼엑스포",Font.BOLD,20));
+		btnRecommendView.setBorderPainted(false);   // 테두리 그리지 않기
+		btnRecommendView.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
+		btnRecommendView.setForeground(Color.WHITE);
 		jpnlBtn.add(btnRecommendView);
 
 		btnBurgerView = new JButton("버거 / 세트 ");
+		btnBurgerView.setBackground(Color.decode("#D8DAD1"));
+		btnBurgerView.setFont(new Font("휴먼엑스포",Font.PLAIN,20));
+		btnBurgerView.setForeground(Color.decode("#C13226"));
+		btnBurgerView.setBorderPainted(false);   // 테두리 그리지 않기
+		btnBurgerView.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		btnBurgerView.setBounds(196, 22, 195, 66);
 		jpnlBtn.add(btnBurgerView);
 
 		btnSideView = new JButton("사이드 메뉴");
+		btnSideView.setBackground(Color.decode("#D8DAD1"));
+		btnSideView.setFont(new Font("휴먼엑스포",Font.PLAIN,20));
+		btnSideView.setForeground(Color.decode("#C13226"));
+		btnSideView.setBorderPainted(false);   // 테두리 그리지 않기
+		btnSideView.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		btnSideView.setBounds(392, 22, 195, 66);
 		jpnlBtn.add(btnSideView);
 
 		btnDrinkView = new JButton("음료");
+		btnDrinkView.setBackground(Color.decode("#D8DAD1"));
+		btnDrinkView.setFont(new Font("휴먼엑스포",Font.PLAIN,20));
+		btnDrinkView.setForeground(Color.decode("#C13226"));
+		btnDrinkView.setBorderPainted(false);   // 테두리 그리지 않기
+		btnDrinkView.setFocusPainted(false);    // 포커스 테두리 제거 (선택사항)
 		btnDrinkView.setBounds(589, 22, 195, 66);
 		jpnlBtn.add(btnDrinkView);
 
@@ -184,9 +240,6 @@ public class UserMainView extends JFrame {
 		// 카드레이아웃 패널 생성
 		rmv = new RecommendMenuView(this);
 		bmv = new BurgerMenuView(this);
-		long st=System.currentTimeMillis();
-		long et=System.currentTimeMillis();
-		System.out.println( (et - st) +" ms");
 		smv = new SideMenuView(this);
 		dmv = new DrinkMenuView(this);
 
@@ -209,6 +262,8 @@ public class UserMainView extends JFrame {
 		btnCancel.addActionListener(ume);
 		btnHome.addActionListener(ume);
 		btnStamp.addActionListener(ume);
+		long et = System.currentTimeMillis();
+		System.out.println((et - st) + " ms");
 
 		frame.setVisible(true);
 
@@ -445,6 +500,13 @@ public class UserMainView extends JFrame {
 	public void setUsingStamps(int usingStamps) {
 		this.usingStamps = usingStamps;
 	}
-	
-}//class
 
+	public Map<Integer, Integer> getStockMap() {
+		return stockMap;
+	}
+
+	public void setStockMap(Map<Integer, Integer> stockMap) {
+		this.stockMap = stockMap;
+	}
+
+}// class

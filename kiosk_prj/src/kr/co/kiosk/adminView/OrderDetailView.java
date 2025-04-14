@@ -195,7 +195,6 @@ public class OrderDetailView extends JPanel{
 	}
 	
 	public void updateTable(List<String[]> menuList) {
-		System.out.println("odv. updateTable() 실행 ");
 		dtmOrderDetail.setRowCount(0); //기존테이블 초기화
 		
 	    for (int i = 0; i < menuList.size(); i++) {
