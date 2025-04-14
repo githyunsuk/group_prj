@@ -115,13 +115,9 @@ public class StockManageEvt extends WindowAdapter implements ActionListener, Mou
 					JOptionPane.PLAIN_MESSAGE
 					);
 			if (input == null) {
-			    System.out.println("취소를 눌렀습니다");
 			    return;
 			} else if (input.isBlank()) {
-			    System.out.println("입력이 비어 있습니다");
 			    return;
-			} else {
-			    System.out.println("입력된 값: " + input);
 			}
 			
 			try {

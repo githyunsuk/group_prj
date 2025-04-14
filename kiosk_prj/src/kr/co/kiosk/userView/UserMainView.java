@@ -54,7 +54,6 @@ public class UserMainView extends JFrame {
 	private Map<Integer, Integer> stockMap;
 
 	public UserMainView(boolean isHall) {
-		long st = System.currentTimeMillis();
 		this.isHall = isHall;
 		MenuService ms = new MenuService();
 		allMenuList = ms.searchAllMenu();
@@ -262,8 +261,6 @@ public class UserMainView extends JFrame {
 		btnCancel.addActionListener(ume);
 		btnHome.addActionListener(ume);
 		btnStamp.addActionListener(ume);
-		long et = System.currentTimeMillis();
-		System.out.println((et - st) + " ms");
 
 		frame.setVisible(true);
 

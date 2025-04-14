@@ -205,7 +205,7 @@ public class OrderDetailView extends JPanel{
 	            String value = rowData[1];
 	            dtmOrderDetail.addRow(new String[]{name, value});
 	        } else {
-	            System.out.println("rowData 길이가 2보다 작음: " + Arrays.toString(rowData));
+	            //System.out.println("rowData 길이가 2보다 작음: " + Arrays.toString(rowData));
 	        }
 
 	    }

@@ -37,7 +37,6 @@ public class AdminMainButtons extends JPanel {
 				btnShutdown.setText("운영시작");
 				JOptionPane.showMessageDialog(null, "영업종료!");
 				MainPageEvt.isOpen = false;
-				System.out.println("hi");
 			}
 			
 		});

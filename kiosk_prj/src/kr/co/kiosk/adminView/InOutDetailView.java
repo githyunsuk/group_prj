@@ -125,7 +125,6 @@ public class InOutDetailView extends JPanel {
 	
 	//주문이 있는 날짜만 가져온다, 설마 휴무일도 없는건 아니겠지  
 	public void updateList(List<String> dateList) {
-		System.out.println("iodv.updateTable() 실행");
 		dlmDate.setSize(0);
 		dlmDate.addElement("All");
 		for(int i = 0; i < dateList.size(); i++) {
