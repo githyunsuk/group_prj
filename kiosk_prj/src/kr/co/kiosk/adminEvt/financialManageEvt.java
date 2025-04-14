@@ -63,6 +63,7 @@ public class financialManageEvt extends JFrame {
                     + "where extract(month from order_datetime)=?";
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, month);
+                jta.append(month+"월 총매출\n");
             } else {
                 sql = "select quantity, menu_name, menu.price as price from menu_order "
                     + "join total_order using (order_id) "
@@ -72,6 +73,8 @@ public class financialManageEvt extends JFrame {
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, selectedDay);
                 pstmt.setInt(2, month);
+                jta.append(month+"월 " + selectedDay + "일 매출\n");
+
             }
 
             rs = pstmt.executeQuery();
@@ -106,7 +109,7 @@ public class financialManageEvt extends JFrame {
                 Integer value = entry.getValue();
                 jta.append(key+":"+value+"개 / "+(map2.get(key)*value)+"원\n");
             }
-
+            jta.setCaretPosition(0);
         } finally {
             db.closeDB(rs, pstmt, conn);
         }
