@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/dev/drivers/ojdbc8.jar"/>
+	<classpathentry kind="lib" path="C:/eGovFrame-4.2.0/ojdbc8-23.5.0.24.07.jar"/>
 	<classpathentry kind="lib" path="C:/dev/sist_util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
